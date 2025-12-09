@@ -1,10 +1,10 @@
 module.exports = {
-  displayName: 'major-guide',
+  displayName: 'configuration',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/major-guide',
+  coverageDirectory: '../../coverage/libs/configuration',
 };

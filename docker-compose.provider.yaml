@@ -1,0 +1,9 @@
+name: major-guide
+
+
+# services: 
+#   mongodb:
+#     image: mongo   
+#     container_name: mongo_server
+#     ports: 
+
