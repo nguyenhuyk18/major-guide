@@ -1,0 +1,17 @@
+{
+  "name": "major-guide-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "implicitDependencies": ["major-guide"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "options": {
+        "jestConfig": "apps/major-guide-e2e/jest.config.cts",
+        "passWithNoTests": true
+      },
+      "dependsOn": ["major-guide:build", "major-guide:serve"]
+    }
+  }
+}
