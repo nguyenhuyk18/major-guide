@@ -1,9 +1,43 @@
 name: major-guide
 
+networks:
+  major_guide_nw:
+    driver: bridge
+    name: major_guide_nw
 
-# services: 
-#   mongodb:
-#     image: mongo   
-#     container_name: mongo_server
-#     ports: 
+services: 
 
+  mongodb:
+    image : mongo
+    container_name: mongodb_major_guide 
+    ports: 
+      - 27021:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes :
+      - ./docker/docker_data/mongodb_data:/data/db
+    restart: unless-stopped
+    networks:
+      - major_guide_nw
+
+  redis: 
+    image: redis
+    container_name: redis_major_guide
+    ports: 
+      - '6380:6379'
+    networks:
+      - major_guide_nw
+    restart: unless-stopped
+    volumes:
+      - ./docker/docker_data/redis_data:/data/db
+
+  redis_insight:
+    image: redis/redisinsight:latest
+    container_name: redis-ui-major-guide
+    ports:
+      - "5541:5540"
+    volumes:
+      - ./docker/docker_data/redisinsight_data:/data
+    networks:
+      - major_guide_nw
