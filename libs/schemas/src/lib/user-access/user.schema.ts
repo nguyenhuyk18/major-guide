@@ -1,0 +1,42 @@
+import { Prop, Schema } from '@nestjs/mongoose'
+import { Model } from 'mongoose';
+import { Base, createSchema } from '../common/base.schema';
+import { ObjectId } from 'mongodb'
+
+@Schema({ collection: 'user' })
+export class User extends Base {
+    @Prop({ type: String, unique: true })
+    username: string
+
+    @Prop({ type: String })
+    name: string
+
+    @Prop({ type: String, unique: true })
+    email: string
+
+    @Prop({ type: String })
+    fileAvartarUrl: string
+
+    @Prop({ type: ObjectId, ref: 'Ward' })
+    ward_id: ObjectId
+
+    @Prop({ type: String })
+    profile: string
+
+    @Prop({ type: String })
+    userId: string
+}
+
+
+
+export const UserSchema = createSchema(User)
+
+export const UserModelName = User.name
+
+export const UserDestination = {
+    name: UserModelName,
+    schema: UserSchema
+}
+
+export type UserModel = Model<User>;
+

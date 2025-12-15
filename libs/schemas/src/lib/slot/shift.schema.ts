@@ -5,16 +5,16 @@ import { Base, createSchema } from '../common/base.schema';
 
 @Schema({ collection: 'shift' })
 export class Shift extends Base {
-    @Prop()
+    @Prop({ type: String })
     name_shift: string
 
-    @Prop()
+    @Prop({ type: String })
     information: string
 
-    @Prop()
+    @Prop({ type: String })
     start_time: string
 
-    @Prop()
+    @Prop({ type: String })
     end_time: string
 }
 

@@ -1,0 +1,1 @@
+export * from './ward-response.interface'

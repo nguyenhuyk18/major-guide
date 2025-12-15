@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
@@ -13,8 +13,16 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const globalPrefix = AppModule.CONFIGURATION.GLOBAL_PREFIX;
 
+    // validate mấy cái config đã được thêm chưa
+    AppModule.CONFIGURATION.validate();
+
+    // set up đường route api để chuẩn hóa
     app.setGlobalPrefix(globalPrefix);
 
+    // set up validate dto
+    app.useGlobalPipes(new ValidationPipe({ transform: true }))
+
+    // set up swagger
     const config = new DocumentBuilder()
       .setTitle('E-bff API')
       .setDescription('The E-bff API description')
@@ -36,7 +44,7 @@ async function bootstrap() {
     const documentFactory = () => SwaggerModule.createDocument(app, config);
     SwaggerModule.setup(`${globalPrefix}/docs`, app, documentFactory);
 
-
+    // set up port cho module này nó chạy
     const port = AppModule.CONFIGURATION.APP_CONFIG.PORT || 3000;
 
     await app.listen(port);

@@ -7,6 +7,7 @@ import { LoggerMiddleware } from '@common/middlewares/logger.middlewares';
 import { SlotModule } from './modules/slot/slot.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ExceptionInterceptor } from '@common/interceptors/exception.interceptor';
+import { UserAccessModule } from './modules/user-access/user-access.module';
 
 @Module({
   imports: [ConfigModule.forRoot(
@@ -15,9 +16,11 @@ import { ExceptionInterceptor } from '@common/interceptors/exception.interceptor
       load: [() => CONFIGURATION]
     }
   ),
-    SlotModule
+    SlotModule,
+    UserAccessModule
   ],
   controllers: [],
+
   providers: [{
     provide: APP_INTERCEPTOR,
     useClass: ExceptionInterceptor,

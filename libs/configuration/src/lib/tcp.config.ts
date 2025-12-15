@@ -4,13 +4,28 @@ import { IsNotEmpty, IsObject } from 'class-validator';
 
 export enum TCP_SERVICE {
     SLOT_SERVICE = 'TCP_SLOT_SERVICE',
-
+    USER_ACCESS_SERVICE = 'TCP_USER_ACCESS_SERVICE',
+    MEDIA_SERVICE = 'TCP_MEDIA_SERVICE',
+    AUTHORIZER_SERVICE = 'TCP_AUTHORIZER_SERVICE'
 }
 
 export class TcpConfiguration {
     @IsNotEmpty()
     @IsObject()
     TCP_SLOT_SERVICE: TcpClientOptions;
+
+    @IsNotEmpty()
+    @IsObject()
+    TCP_USER_ACCESS_SERVICE: TcpClientOptions;
+
+    @IsNotEmpty()
+    @IsObject()
+    TCP_MEDIA_SERVICE: TcpClientOptions;
+
+    @IsNotEmpty()
+    @IsObject()
+    TCP_AUTHORIZER_SERVICE: TcpClientOptions;
+
 
     constructor() {
         Object.entries(TCP_SERVICE).forEach(([key, serviceName]) => {
