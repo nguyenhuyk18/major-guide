@@ -10,7 +10,8 @@ export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
     GET_PROVINCE_BY_ID = 'useraccess.get_province_by_id',
     GET_ALL_WARD = 'useraccess.get_all_ward',
     GET_WARD_BY_ID = 'useraccess.get_ward_by_id',
-    CREATE_NEW_USER = 'useraccess.create_new_user'
+    CREATE_NEW_USER = 'useraccess.create_new_user',
+    GET_USER_BY_ID = 'useraccess.get_user_by_id'
 }
 
 export enum TCP_MEDIA_SERVICE_MESSAGE {
@@ -19,6 +20,8 @@ export enum TCP_MEDIA_SERVICE_MESSAGE {
 
 
 export enum TCP_AUTHORIZER_SERVICE_MESSAGE {
-    CREATE_USER = 'authorizer.register_user'
+    CREATE_USER = 'authorizer.register_user',
+    LOGIN_USER = 'authorizer.login',
+    VERIFY_USER = 'autrhorizer.verify_user'
 }
 

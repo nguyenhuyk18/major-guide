@@ -57,7 +57,7 @@ export class KeycloakHttpService {
                 email,
                 username: username,
                 enabled: true,
-                emailVerified: true,
+                emailVerified: false,
                 credentials: [{ type: 'password', value: password, temporary: false }],
                 requiredActions: [
                     "VERIFY_EMAIL"
@@ -70,11 +70,19 @@ export class KeycloakHttpService {
             },
         );
 
+
+
         const userId = headers['location']?.split('/')?.pop();
 
         if (!userId) {
             throw new InternalServerErrorException('Không thể thêm tài khoản vào thời điểm này !!');
         }
+
+        await this.axiosInstance.put(`/admin/realms/MAJOR-GUIDE/users/${userId}/execute-actions-email`, ["VERIFY_EMAIL"], {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        },)
 
         this.logger.debug('Created user with id: ', userId);
 

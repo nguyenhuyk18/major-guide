@@ -3,6 +3,7 @@ import { AppConfiguration } from '@common/configuration/app.config';
 import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer'
 import { TcpConfiguration } from '@common/configuration/tcp.config';
+import { RedisConfiguration } from '@common/configuration/redis.config';
 
 
 export class Configuration extends BaseConfiguration {
@@ -13,6 +14,10 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => TcpConfiguration)
     TCP_SERV = new TcpConfiguration()
+
+    @ValidateNested()
+    @Type(() => RedisConfiguration)
+    REDIS_CONFIG = new RedisConfiguration()
 }
 
 

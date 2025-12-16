@@ -24,8 +24,8 @@ async function bootstrap() {
 
     // set up swagger
     const config = new DocumentBuilder()
-      .setTitle('E-bff API')
-      .setDescription('The E-bff API description')
+      .setTitle('MAJOR GUIDE API')
+      .setDescription('The MAJOR GUIDE API description')
       .setVersion('1.0.0')
       .addBearerAuth({
         description: 'Default JWT Authorization',

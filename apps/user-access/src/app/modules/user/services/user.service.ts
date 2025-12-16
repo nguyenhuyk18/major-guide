@@ -4,8 +4,8 @@ import { UserRequestTcp } from "@common/interfaces/tcp/user";
 import { mapperCreateUser } from "../mapper";
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
-import { firstValueFrom, map } from "rxjs";
-import { TCP_MEDIA_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
+// import { firstValueFrom, map } from "rxjs";
+// import { TCP_MEDIA_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 
 
 @Injectable()
@@ -28,6 +28,10 @@ export class UserService {
 
 
         return this.userRepository.create(newData);
+    }
+
+    getByIdUser(userId: string) {
+        return this.userRepository.getByUserId(userId);
     }
 
 

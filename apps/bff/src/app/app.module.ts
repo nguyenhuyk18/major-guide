@@ -5,9 +5,13 @@ import { ConfigModule } from '@nestjs/config';
 import { CONFIGURATION, TConfiguration } from '../configuration';
 import { LoggerMiddleware } from '@common/middlewares/logger.middlewares';
 import { SlotModule } from './modules/slot/slot.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExceptionInterceptor } from '@common/interceptors/exception.interceptor';
 import { UserAccessModule } from './modules/user-access/user-access.module';
+import { RedisProvider } from '@common/configuration/redis.config';
+import { UserGuard } from '@common/guards/check-token.guard';
+import { ClientsModule } from '@nestjs/microservices';
+import { TCP_SERVICE, TcpProvider } from '@common/configuration/tcp.config';
 
 @Module({
   imports: [ConfigModule.forRoot(
@@ -17,14 +21,21 @@ import { UserAccessModule } from './modules/user-access/user-access.module';
     }
   ),
     SlotModule,
-    UserAccessModule
+    UserAccessModule,
+    RedisProvider,
+  ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.AUTHORIZER_SERVICE)])
   ],
   controllers: [],
 
   providers: [{
     provide: APP_INTERCEPTOR,
     useClass: ExceptionInterceptor,
-  },],
+  },
+  {
+    provide: APP_GUARD,
+    useClass: UserGuard,
+  },
+  ],
 })
 export class AppModule implements NestModule {
   static CONFIGURATION: TConfiguration = CONFIGURATION;

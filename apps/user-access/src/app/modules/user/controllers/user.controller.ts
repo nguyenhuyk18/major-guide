@@ -29,4 +29,12 @@ export class UserController {
     }
 
 
+    @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_ID)
+    async getById(@RequestParams() param: string) {
+        // console.log('ÁDASFSDGSDGDGSDGERGWERTG')
+        const rs = await this.userService.getByIdUser(param);
+        return ResponseTcp.success<User>(rs)
+    }
+
+
 }

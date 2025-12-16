@@ -29,7 +29,7 @@ async function bootstrap() {
   AppModule.CONFIGURATION.validate()
 
   const port = process.env['AUTHORIZER_PORT'] || 3000;
-
+  await app.startAllMicroservices();
   await app.listen(port);
 
   Logger.log(

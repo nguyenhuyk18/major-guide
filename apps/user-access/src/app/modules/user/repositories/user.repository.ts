@@ -17,4 +17,10 @@ export class UserRepository {
     }
 
 
+    getByUserId(userId: string) {
+        const rs = this.userModel.findOne({ userId: userId });
+        return rs;
+    }
+
+
 }

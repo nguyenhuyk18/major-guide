@@ -11,4 +11,6 @@ export class UserRequestTcp {
     email: string
 
     ward_id: string
+
+    userId: string
 }

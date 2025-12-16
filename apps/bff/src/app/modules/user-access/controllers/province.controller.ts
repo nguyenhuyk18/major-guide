@@ -7,6 +7,7 @@ import { ProvinceResponseDto } from '@common/interfaces/gateway/province'
 import { ProcessId } from "@common/decorators/processid.decorator";
 import { firstValueFrom, map } from "rxjs";
 import { TCP_USER_ACCESS_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
+import { Authorization } from '@common/decorators/authorizer.decorator';
 
 @Controller('province')
 @ApiTags('Province')
@@ -15,6 +16,7 @@ export class ProvinceController {
 
     @Get()
     @ApiOperation({ summary: 'Lấy toàn bộ các tỉnh thành !!!' })
+    @Authorization({ secured: true })
     @ApiOkResponse({ type: ResponseDto<ProvinceResponseDto> })
     async getAll(@ProcessId() processId: string) {
         // console.log('sdadasd')
