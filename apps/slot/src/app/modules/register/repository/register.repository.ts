@@ -28,6 +28,24 @@ export class RegisterRepository {
     }
 
     getByIdExpert(id_expert: string) {
-        return this.registerModel.findOne({ id_expert: id_expert })
+        return this.registerModel.findOne({ id_expert: id_expert }).populate({
+            path: 'day',
+            select: 'day',
+            populate: {
+                path: 'shift_id',
+                select: 'name_shift information start_time end_time'
+            },
+        })
+    }
+
+
+    async isExistIdExpert(id_expert: string) {
+        const rs = await this.registerModel.findOne({ id_expert: id_expert });
+
+        if (rs) {
+            return false;
+        }
+
+        return true;
     }
 }

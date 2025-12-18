@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { RegisterRepository } from "../repository/register.repository";
 import { Register } from "@common/schemas/slot/register.schema";
 import { RegisterTcpRequest } from "@common/interfaces/tcp/register";
 import { mapperRegister } from "../mapper";
+import { RpcException } from "@nestjs/microservices";
 
 
 @Injectable()
@@ -10,7 +11,15 @@ export class RegisterService {
     constructor(private readonly registerRepository: RegisterRepository) { }
 
 
-    create(data: Partial<RegisterTcpRequest>) {
+    async create(data: Partial<RegisterTcpRequest>) {
+
+        // check
+        const check = await this.registerRepository.isExistIdExpert(data.id_expert);
+        console.log(check)
+        if (!check) {
+            throw new BadRequestException('Bạn đã đăng ký lịch , không thể tiếp tục đăng ký thêm !!!')
+        }
+
         const newData = mapperRegister(data)
         return this.registerRepository.create(newData);
     }
@@ -34,4 +43,7 @@ export class RegisterService {
     getByIdExpert(id_expert: string) {
         return this.registerRepository.getByIdExpert(id_expert);
     }
+
+
+
 }

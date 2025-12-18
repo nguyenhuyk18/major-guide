@@ -15,7 +15,8 @@ import { ExchangeUserTokenResponse } from "@common/interfaces/common/exchange-to
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
 export class AuthorizerController {
-    constructor(private readonly authorizerService: AuthorizerService
+    constructor(
+        private readonly authorizerService: AuthorizerService
 
     ) { }
 

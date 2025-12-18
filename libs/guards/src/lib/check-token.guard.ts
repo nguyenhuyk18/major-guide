@@ -6,11 +6,11 @@ import { TCP_SERVICE } from '@common/configuration/tcp.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { Reflector } from '@nestjs/core';
 import { MetaDataKeys } from '@common/constant/common.constant';
-import { getToken } from '@common/utils/common/get-token.util';
+import { getToken, grantUserToRequest } from '@common/utils/common/get-token.util';
 import { createHash } from 'crypto';
 import { Cache } from 'cache-manager';
 import { getProcessId } from '@common/utils/string.util';
-import { AuthorizerResponse } from '@common/interfaces/gateway/authorizer/authorizer-request.interface';
+import { AuthorizerResponse, MetaDataOfAuThorizer } from '@common/interfaces/gateway/authorizer/authorizer-request.interface';
 import { TCP_AUTHORIZER_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-pattern.constant';
 
 @Injectable()
@@ -28,9 +28,7 @@ export class UserGuard implements CanActivate {
     ): boolean | Promise<boolean> | Observable<boolean> {
         const isSecured = this.reflector.get(MetaDataKeys.SECURED, context.getHandler());
         const request = context.switchToHttp().getRequest();
-        // console.log('sdfsdfsfsdfsdfsdf')
-        // console.log(request.headers['authorization'])
-        // console.log(isSecured)
+
         if (!isSecured) {
             return true
         }
@@ -42,27 +40,37 @@ export class UserGuard implements CanActivate {
 
 
     async verifyToken(token: string, request: any) {
-        const keyRedis = this.generateTokenKey(token);
-        // console.log('3546465uerytjrthjedrthe5rtyjrgthrtyjetytjmdtyje5yje56jn')
-        const caching = await this.cacheManager.get(keyRedis);
+        try {
+            const keyRedis = this.generateTokenKey(token);
 
-        if (caching) {
+            const caching: MetaDataOfAuThorizer | undefined = await this.cacheManager.get(keyRedis);
+
+
+            if (caching) {
+                grantUserToRequest(request, caching.user)
+                return true;
+            }
+
+            // get process Id 
+
+            const processId = request[MetaDataKeys.PROCESS_ID] || getProcessId();
+            const rs = await this.verifyUserToken(token, processId);
+
+            if (!rs?.valid) {
+                throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây !!!')
+            }
+
+
+            const newHashKey: string = this.generateTokenKey(token);
+            this.cacheManager.set(newHashKey, rs.metadata, 30 * 60 * 1000);
+            grantUserToRequest(request, rs.metadata.user)
+
             return true;
-        }
-
-        // get process Id 
-
-        const processId = request[MetaDataKeys.PROCESS_ID] || getProcessId();
-        const rs = await this.verifyUserToken(token, processId);
-
-        if (!rs?.valid) {
+        } catch (error) {
+            console.log(error);
             throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây !!!')
         }
 
-        const newHashKey: string = this.generateTokenKey(token);
-        this.cacheManager.set(newHashKey, rs.metadata, 30 * 60 * 1000);
-
-        return true;
     }
 
     async verifyUserToken(token: string, processId: string) {

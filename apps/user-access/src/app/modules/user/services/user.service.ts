@@ -1,11 +1,12 @@
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { UserRepository } from '../repositories/user.repository';
-import { UserRequestTcp } from "@common/interfaces/tcp/user";
+import { UpdateAvatarRequestTcp, UserRequestTcp } from "@common/interfaces/tcp/user";
 import { mapperCreateUser } from "../mapper";
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
-// import { firstValueFrom, map } from "rxjs";
-// import { TCP_MEDIA_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
+import { TCP_MEDIA_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
+import { firstValueFrom, map } from "rxjs";
+
 
 
 @Injectable()
@@ -36,7 +37,18 @@ export class UserService {
 
 
 
+    async updateAvatar(data: UpdateAvatarRequestTcp, processId) {
+        const fileurl = await firstValueFrom(this.mediaClient.send<string, { buff: string, filename: string }>(TCP_MEDIA_SERVICE_MESSAGE.UPLOAD_AVARTAR_USER, {
+            processId, data:
+            {
+                buff: data.buffer,
+                filename: data.fileName
+            }
+        }).pipe(map(row => row.data)))
 
+        return this.userRepository.updateUserById(data.id_user, { fileAvartarUrl: fileurl })
+
+    }
 
 
 }

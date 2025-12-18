@@ -6,6 +6,8 @@ import { RequestParams } from "@common/decorators/request-params.decorator";
 import { RegisterTcpRequest, RegisterTcpResponse } from '@common/interfaces/tcp/register';
 import { ResponseTcp } from "@common/interfaces/tcp/common/response-tcp.interface";
 import { TcpLoggingInterceptor } from "@common/interceptors/tcpLogging.interceptors";
+import { UserInfo } from '../../../../../../../libs/decorators/src/lib/get-user.decorator';
+import { User } from "@common/schemas/user-access/user.schema";
 
 
 @Controller()
@@ -15,6 +17,7 @@ export class RegisterController {
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.CREATE_REGISTER_EXPERT)
     async create(@RequestParams() param: RegisterTcpRequest) {
+
         const rs = await this.registerService.create(param)
         return ResponseTcp.success<RegisterTcpResponse>(rs)
     }

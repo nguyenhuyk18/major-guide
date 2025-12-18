@@ -4,6 +4,7 @@ import { MongoProvider } from '@common/configuration/mongo.config';
 import { ConfigModule } from '@nestjs/config';
 import { CONFIGURATION, TConfiguration } from '../configuration';
 import { RegisterModule } from './modules/register/register.module';
+import { ShiftInWeekModule } from './modules/shift-in-week/shift-in-week.module';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { RegisterModule } from './modules/register/register.module';
     ),
     ShiftModule,
     RegisterModule,
+    ShiftInWeekModule,
     MongoProvider
   ],
   controllers: [],

@@ -1,7 +1,8 @@
 export enum MetaDataKeys {
     PROCESS_ID = 'processId',
     START_TIME = 'startTime',
-    SECURED = 'secured'
+    SECURED = 'secured',
+    USER_INFO = 'user_info'
 }
 
 

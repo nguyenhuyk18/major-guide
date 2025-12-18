@@ -3,6 +3,7 @@ import { ClientsModule } from '@nestjs/microservices'
 import { TCP_SERVICE, TcpProvider } from '@common/configuration/tcp.config';
 import { ShiftController } from "./controllers/shift.controller";
 import { RegisterController } from "./controllers/register.controller";
+import { ShiftInDayController } from "./controllers/shift-in-day.controller";
 
 @Module({
     imports: [
@@ -10,7 +11,7 @@ import { RegisterController } from "./controllers/register.controller";
     ],
     // providers: [],
     // exports: [],
-    controllers: [ShiftController, RegisterController]
+    controllers: [ShiftController, RegisterController, ShiftInDayController]
 })
 export class SlotModule {
 

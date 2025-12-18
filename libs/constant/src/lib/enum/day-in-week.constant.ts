@@ -4,5 +4,6 @@ export enum DAY_IN_WEEK {
     WEDNESDAY = 'wednesday',
     THURSDAY = 'thursday',
     FRIDAY = 'friday',
-    SATURDAY = 'saturday'
+    SATURDAY = 'saturday',
+    SUNDAY = 'sunday'
 }
