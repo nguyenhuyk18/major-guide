@@ -9,6 +9,7 @@ import { ShiftService } from "./services/shift.service";
     controllers: [ShiftController],
     providers: [ShiftRepository, ShiftService],
     imports: [MongooseModule.forFeature([ShiftDestination])],
+    exports: [ShiftRepository]
 })
 export class ShiftModule {
 

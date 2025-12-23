@@ -23,6 +23,7 @@ export class RegisterController {
     }
 
 
+
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID_EXPERT)
     async findRegisterByIdExpert(@RequestParams() param: string) {
         const rs = await this.registerService.getByIdExpert(param);

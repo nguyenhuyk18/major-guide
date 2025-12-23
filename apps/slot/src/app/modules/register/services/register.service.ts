@@ -45,5 +45,10 @@ export class RegisterService {
     }
 
 
+    // getIdShiftInDay(id_shift_in_day: string) {
+    //     return this.registerRepository.get
+    // }
+
+
 
 }

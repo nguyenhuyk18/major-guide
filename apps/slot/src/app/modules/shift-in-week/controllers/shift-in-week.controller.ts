@@ -5,6 +5,7 @@ import { TCP_SLOT_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-patt
 import { ResponseTcp } from "@common/interfaces/tcp/common/response-tcp.interface";
 import { RequestParams } from "@common/decorators/request-params.decorator";
 import { ShiftInDayTcpResponse } from '@common/interfaces/tcp/shift-in-day/shift-in-day-response-tcp.interface';
+import { ShiftInDayAmount } from '@common/interfaces/tcp/shift-in-day/shift-in-day-amount-employ-tcp.interface';
 
 @Controller()
 export class ShiftInWeekController {
@@ -12,10 +13,11 @@ export class ShiftInWeekController {
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY)
     async getAll() {
-        console.log('hahahaahahahaha')
+        // console.log('hahahaahahaahaha')
         const rs = await this.shiftInWeekService.getAll();
-        return ResponseTcp.success<ShiftInDayTcpResponse[]>(rs);
+        return ResponseTcp.success<ShiftInDayAmount[]>(rs);
     }
+
 
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY_BY_ID)

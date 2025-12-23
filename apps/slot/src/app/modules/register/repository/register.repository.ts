@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Register, RegisterModel, RegisterModelName } from '@common/schemas/slot/register.schema';
-
+import { ObjectId } from "mongodb";
 
 @Injectable()
 export class RegisterRepository {
@@ -9,6 +9,13 @@ export class RegisterRepository {
 
     create(data: Partial<Register>) {
         return this.registerModel.create(data);
+    }
+
+    async getByIdShiftInDay(id_shift_in_day: ObjectId) {
+        const rs = this.registerModel.find({
+            day: { $in: [id_shift_in_day] }
+        }).lean()
+        return rs;
     }
 
     update(id: string, data: Partial<Register>) {

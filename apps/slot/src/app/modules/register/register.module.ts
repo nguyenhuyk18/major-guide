@@ -9,7 +9,8 @@ import { RegisterDestination } from "@common/schemas/slot/register.schema";
 @Module({
     imports: [MongooseModule.forFeature([RegisterDestination])],
     controllers: [RegisterController],
-    providers: [RegisterRepository, RegisterService]
+    providers: [RegisterRepository, RegisterService],
+    exports: [RegisterRepository]
 })
 export class RegisterModule {
 
