@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { User, UserModel, UserModelName } from '@common/schemas/user-access/user.schema';
 
+
+
 @Injectable()
 export class UserRepository {
     constructor(@InjectModel(UserModelName) private readonly userModel: UserModel) { }
@@ -19,6 +21,11 @@ export class UserRepository {
 
     getByUserId(userId: string) {
         const rs = this.userModel.findOne({ userId: userId });
+        return rs;
+    }
+
+    getById(id: string) {
+        const rs = this.userModel.findById(id);
         return rs;
     }
 

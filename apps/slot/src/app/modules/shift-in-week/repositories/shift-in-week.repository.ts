@@ -12,7 +12,7 @@ export class ShiftInWeekRepository {
     }
 
     getById(id: string) {
-        return this.shiftInWeekModel.findById(id);
+        return this.shiftInWeekModel.findById(id).populate('shift_id');
     }
 
 

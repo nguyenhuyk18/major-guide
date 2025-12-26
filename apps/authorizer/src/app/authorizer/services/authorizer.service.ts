@@ -92,7 +92,12 @@ export class AuthorizerService {
     }
 
     async getUser(userId: string, processId: string) {
-        const rs = await firstValueFrom(this.authorizerClient.send<UserResponseTcp, string>(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_ID, { processId, data: userId }).pipe(map(row => row.data)))
+        const rs = await firstValueFrom(this.authorizerClient.send<UserResponseTcp, { id_user: string, isKeycloak: boolean }>(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_ID, {
+            processId, data: {
+                id_user: userId,
+                isKeycloak: true
+            }
+        }).pipe(map(row => row.data)))
         return rs;
     }
 

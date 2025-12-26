@@ -5,6 +5,8 @@ import { ShiftInWeekController } from "./controllers/shift-in-week.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ShiftInWeekDestination } from "@common/schemas/slot/shift-of-day.schema";
 import { RegisterModule } from "../register/register.module";
+// import { ClientsModule } from "@nestjs/microservices";
+// import { TCP_SERVICE, TcpProvider } from "@common/configuration/tcp.config";
 // import { ShiftModule } from "../shift/shift.module";
 
 @Module({

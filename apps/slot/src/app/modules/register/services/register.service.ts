@@ -3,12 +3,15 @@ import { RegisterRepository } from "../repository/register.repository";
 import { Register } from "@common/schemas/slot/register.schema";
 import { RegisterTcpRequest } from "@common/interfaces/tcp/register";
 import { mapperRegister } from "../mapper";
-import { RpcException } from "@nestjs/microservices";
+
 
 
 @Injectable()
 export class RegisterService {
-    constructor(private readonly registerRepository: RegisterRepository) { }
+    constructor(private readonly registerRepository: RegisterRepository,
+
+
+    ) { }
 
 
     async create(data: Partial<RegisterTcpRequest>) {
@@ -36,8 +39,13 @@ export class RegisterService {
         return this.registerRepository.getAll()
     }
 
-    getById(id: string) {
-        return this.registerRepository.getById(id);
+
+    async getById(id: string) {
+        // lấy thông tin đơn đăng ký
+        const registerInfo: Register = await this.registerRepository.getById(id);
+
+        return registerInfo
+
     }
 
     getByIdExpert(id_expert: string) {
@@ -45,9 +53,7 @@ export class RegisterService {
     }
 
 
-    // getIdShiftInDay(id_shift_in_day: string) {
-    //     return this.registerRepository.get
-    // }
+
 
 
 

@@ -2,6 +2,7 @@ import { Prop, Schema } from '@nestjs/mongoose'
 import { Model } from 'mongoose';
 import { Base, createSchema } from '../common/base.schema';
 import { ObjectId } from 'mongodb'
+import { Schema as MongooseSchema } from 'mongoose';
 
 @Schema({ collection: 'user' })
 export class User extends Base {
@@ -20,7 +21,7 @@ export class User extends Base {
     @Prop({ type: ObjectId, ref: 'Ward' })
     ward_id: ObjectId
 
-    @Prop({ type: String })
+    @Prop({ type: MongooseSchema.Types.Mixed })
     profile: string
 
     @Prop({ type: String })

@@ -4,34 +4,46 @@ import { RegisterRepository } from "../../register/repository/register.repositor
 import { ShiftInDayAmount } from "@common/interfaces/tcp/shift-in-day/shift-in-day-amount-employ-tcp.interface";
 import { ObjectId } from "mongodb";
 
+import { Register } from "@common/schemas/slot/register.schema";
+import { RegisterTcpWithUserResponse } from "@common/interfaces/tcp/register";
+import { ShiftInWeek } from "@common/schemas/slot/shift-of-day.schema";
+import { ShiftInDayTcpByIdResponse } from "@common/interfaces/tcp/shift-in-day";
+
 @Injectable()
 export class ShiftInWeekService {
     constructor(private readonly shiftInWeekRepoitory: ShiftInWeekRepository,
-        private readonly registerRepository: RegisterRepository,
-        // private readonly shiftRepository: ShiftRepository
+        private readonly registerRepository: RegisterRepository
     ) { }
 
 
     async getAll() {
         const rs = await this.shiftInWeekRepoitory.getAll();
 
-        // KẾT QUẢ TRẢ VỀ
-        const kq: ShiftInDayAmount[] = [];
+        const convertData = rs.map(async row => {
+            const amountEmployee = await this.registerRepository.getByIdShiftInDay(new ObjectId(row._id));
 
-        for (const shiftInDay of rs) {
-            const amountEmployee = await this.registerRepository.getByIdShiftInDay(new ObjectId(shiftInDay._id));
-
-            kq.push({
-                day: shiftInDay.day,
+            return {
+                day: row.day,
                 amount: amountEmployee?.length || 0,
-                shiftInfo: shiftInDay.shift_id
-            });
-        }
+                shiftInfo: row.shift_id,
+                id: row.id
+            }
+        })
+
+
+        const kq: ShiftInDayAmount[] = await Promise.all(convertData)
 
         return kq;
     }
 
-    getById(id: string) {
-        return this.shiftInWeekRepoitory.getById(id);
+    async getById(id: string): Promise<ShiftInDayTcpByIdResponse> {
+        const allRegister: (RegisterTcpWithUserResponse[] | Register[]) = await this.registerRepository.getByIdShiftInDay(new ObjectId(id), true);
+
+        const shiftInDayInfo: ShiftInWeek = await this.shiftInWeekRepoitory.getById(id);
+
+        return {
+            register: allRegister,
+            shiftInfo: shiftInDayInfo
+        };
     }
 }

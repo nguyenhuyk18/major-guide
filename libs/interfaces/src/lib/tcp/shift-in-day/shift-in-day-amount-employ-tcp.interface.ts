@@ -11,4 +11,6 @@ export class ShiftInDayAmount {
 
 
     amount: number
+
+    id: string
 }

@@ -4,7 +4,7 @@ export enum TCP_SLOT_SERVICE_MESSAGE {
     CREATE_REGISTER_EXPERT = 'slot.create_register_expert',
     GET_REGISTER_BY_ID_EXPERT = 'slot.get_register_by_id_expert',
     GET_SHIFT_IN_DAY = 'slot.get_shift_in_day',
-    GET_SHIFT_IN_DAY_BY_ID = 'slot.get_shift_in_day_by_id'
+    GET_SHIFT_IN_DAY_BY_ID = 'slot.get_shift_in_day_by_id',
 }
 
 export enum TCP_USER_ACCESS_SERVICE_MESSAGE {

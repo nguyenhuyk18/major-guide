@@ -3,7 +3,7 @@ import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
 import { Controller, Get, Inject, Param } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { firstValueFrom, map } from "rxjs";
-import { ShiftInDayTcpResponse } from '@common/interfaces/tcp/shift-in-day/shift-in-day-response-tcp.interface';
+import { ShiftInDayTcpByIdResponse } from '@common/interfaces/tcp/shift-in-day/shift-in-day-response-tcp.interface';
 import { TCP_SLOT_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 import { ProcessId } from "@common/decorators/processid.decorator";
 import { ResponseDto } from "@common/interfaces/gateway/response-gateway.dto";
@@ -24,17 +24,15 @@ export class ShiftInDayController {
     }
 
 
-
     @Get(':id')
-    @ApiOkResponse({ type: ResponseDto<ShiftInDayTcpResponse> })
+    @ApiOkResponse({ type: ResponseDto<ShiftInDayTcpByIdResponse> })
     @ApiOperation({ summary: 'Api này để xem được các ca trong 1 ngày nhắm giúp dễ truy vấn số chuyên gia trong ca đấy' })
     async getById(@ProcessId() processId: string, @Param('id') id: string) {
-
-        console.log(id);
-        const rs = await firstValueFrom(this.shiftInDayClient.send<ShiftInDayTcpResponse, string>(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY_BY_ID, { data: id, processId }).pipe(map(row => row.data)));
-        return new ResponseDto<ShiftInDayTcpResponse>({ data: rs })
+        const rs = await firstValueFrom(this.shiftInDayClient.send<ShiftInDayTcpByIdResponse, string>(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY_BY_ID, { data: id, processId }).pipe(map(row => row.data)));
+        return new ResponseDto<ShiftInDayTcpByIdResponse>({ data: rs })
     }
 
 
     // @Get('')
+
 }

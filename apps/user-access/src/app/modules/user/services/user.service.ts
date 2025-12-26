@@ -36,6 +36,11 @@ export class UserService {
     }
 
 
+    getById(id: string) {
+        return this.userRepository.getById(id);
+    }
+
+
 
     async updateAvatar(data: UpdateAvatarRequestTcp, processId) {
         const fileurl = await firstValueFrom(this.mediaClient.send<string, { buff: string, filename: string }>(TCP_MEDIA_SERVICE_MESSAGE.UPLOAD_AVARTAR_USER, {

@@ -18,7 +18,7 @@ import { LoginTcpRequest } from '@common/interfaces/tcp/authorizer';
 import { ExchangeUserTokenResponse } from '@common/interfaces/common/exchange-token-user-password.interface';
 import { FileUploadDto } from '@common/interfaces/common/file-upload.interface';
 import { FileInterceptor } from "@nestjs/platform-express";
-
+import path from 'path'
 // Tạo một class DTO tạm thời chỉ để phục vụ hiển thị Swagger (kế thừa từ DTO gốc)
 // class FileUploadDto extends UserRequestDto {
 //     @ApiProperty({ type: 'string', format: 'binary' })
@@ -62,11 +62,16 @@ export class UserController {
         }
     ))
     async updateAvatarUser(@UploadedFile() file: UploadedImage, @ProcessId() processId: string, @Param("id") id_user: string) {
+        console.log(file.originalname)
+
+        const ext = path.extname(file.originalname); // .png, .jpg
+        const baseName = path.basename(file.originalname, ext);
+
         const rs = await firstValueFrom(
             this.userAccessServie.send<string, UpdateAvatarRequestTcp>(TCP_USER_ACCESS_SERVICE_MESSAGE.UPDATE_AVATAR_USER, {
                 data: {
                     buffer: file.buffer.toString('base64'),
-                    fileName: file.originalname,
+                    fileName: baseName,
                     id_user: id_user
                 }, processId
             }).pipe(map(row => new ResponseDto(row)))
