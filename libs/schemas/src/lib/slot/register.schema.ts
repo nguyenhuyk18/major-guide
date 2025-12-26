@@ -5,17 +5,9 @@ import { ObjectId } from 'mongodb'
 import { STATUS_REGISTER_ADVISE } from '@common/constant/enum/status-register-advise.constant';
 
 
-// export class ShiftInCharge {
-//     @Prop({ type: String, enum: DAY_IN_WEEK })
-//     day: DAY_IN_WEEK
-
-//     @Prop({ type: ObjectId, ref: 'Shift' })
-//     shift_id: ObjectId
-// }
-
 @Schema({ collection: 'register' })
 export class Register extends Base {
-    @Prop({ type: String, unique: true })
+    @Prop({ type: String })
     id_expert: string
 
     @Prop({ type: [ObjectId], ref: 'ShiftInWeek' })
@@ -24,6 +16,14 @@ export class Register extends Base {
 
     @Prop({ type: String, enum: STATUS_REGISTER_ADVISE, default: STATUS_REGISTER_ADVISE.UNREVIEWED })
     status: STATUS_REGISTER_ADVISE
+
+
+    @Prop({ type: Date })
+    available_date: Date
+
+
+    @Prop({ type: Date })
+    unavailable_date: Date
 }
 
 

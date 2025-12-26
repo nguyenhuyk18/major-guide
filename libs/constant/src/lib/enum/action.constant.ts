@@ -1,3 +1,5 @@
-export enum ACTION {
-
+export enum ROLE {
+    ADMIN = 'admin',
+    EXPERT = 'expert',
+    MEMBER = 'member'
 }

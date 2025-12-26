@@ -6,8 +6,6 @@ import { RequestParams } from "@common/decorators/request-params.decorator";
 import { RegisterTcpRequest, RegisterTcpResponse } from '@common/interfaces/tcp/register';
 import { ResponseTcp } from "@common/interfaces/tcp/common/response-tcp.interface";
 import { TcpLoggingInterceptor } from "@common/interceptors/tcpLogging.interceptors";
-// import { UserInfo } from '../../../../../../../libs/decorators/src/lib/get-user.decorator';
-// import { User } from "@common/schemas/user-access/user.schema";
 
 
 @Controller()
@@ -22,7 +20,10 @@ export class RegisterController {
         return ResponseTcp.success<RegisterTcpResponse>(rs)
     }
 
-
+    @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.APPROVE_THE_REGISTER)
+    async approveRegisterById(@RequestParams() param: string) {
+        return 1;
+    }
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID_EXPERT)
     async findRegisterByIdExpert(@RequestParams() param: string) {

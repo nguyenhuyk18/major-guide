@@ -1,8 +1,5 @@
 // import { RegisterRequestDto } from "../../gateway/register/register-request.interface";
 
-export class RegisterTcpRequest {
+import { RegisterRequestDto } from "../../gateway/register";
 
-    id_expert?: string
-
-    day?: string[]
-};
+export type RegisterTcpRequest = RegisterRequestDto

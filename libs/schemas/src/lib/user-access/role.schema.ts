@@ -7,8 +7,6 @@ import { Base, createSchema } from '../common/base.schema';
 export class Role extends Base {
     @Prop({ type: String })
     name: string
-
-    // action?: 
 }
 
 export const RoleSchema = createSchema(Role)

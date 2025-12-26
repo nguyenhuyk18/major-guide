@@ -8,21 +8,11 @@ import { mapperRegister } from "../mapper";
 
 @Injectable()
 export class RegisterService {
-    constructor(private readonly registerRepository: RegisterRepository,
-
-
+    constructor(private readonly registerRepository: RegisterRepository
     ) { }
 
 
     async create(data: Partial<RegisterTcpRequest>) {
-
-        // check
-        const check = await this.registerRepository.isExistIdExpert(data.id_expert);
-        console.log(check)
-        if (!check) {
-            throw new BadRequestException('Bạn đã đăng ký lịch , không thể tiếp tục đăng ký thêm !!!')
-        }
-
         const newData = mapperRegister(data)
         return this.registerRepository.create(newData);
     }
@@ -50,6 +40,12 @@ export class RegisterService {
 
     getByIdExpert(id_expert: string) {
         return this.registerRepository.getByIdExpert(id_expert);
+    }
+
+
+    async approveTheRegister(id: string, data: Partial<RegisterTcpRequest>) {
+        const newData = mapperRegister(data)
+        const info = this.registerRepository.update(id, {})
     }
 
 

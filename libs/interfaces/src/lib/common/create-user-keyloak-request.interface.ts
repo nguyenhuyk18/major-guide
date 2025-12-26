@@ -32,4 +32,10 @@ export class CreateKeyCloakUserRequest {
     @IsString()
     @IsNotEmpty()
     ward_id: string
+
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    role_name: string
 }   

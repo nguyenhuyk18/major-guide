@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { Base, createSchema } from '../common/base.schema';
 import { ObjectId } from 'mongodb'
 import { Schema as MongooseSchema } from 'mongoose';
+import { ROLE } from '@common/constant/enum/action.constant';
 
 @Schema({ collection: 'user' })
 export class User extends Base {
@@ -26,6 +27,10 @@ export class User extends Base {
 
     @Prop({ type: String })
     userId: string
+
+
+    @Prop({ type: ObjectId, enum: ROLE })
+    role_name: ROLE;
 }
 
 

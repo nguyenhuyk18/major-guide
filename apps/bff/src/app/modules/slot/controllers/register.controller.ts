@@ -1,6 +1,6 @@
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
-import { Body, Controller, Get, Inject, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, Put } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { RegisterRequestDto } from '@common/interfaces/gateway/register/register-request.interface'
 import { RegisterResponseDto } from '@common/interfaces/gateway/register/register-response.interface';
@@ -11,6 +11,7 @@ import { firstValueFrom, map } from "rxjs";
 import { UserInfo } from '@common/decorators/get-user.decorator';
 import { User } from "@common/schemas/user-access/user.schema";
 import { Authorization } from "@common/decorators/authorizer.decorator";
+import { STATUS_REGISTER_ADVISE } from "@common/constant/enum/status-register-advise.constant";
 
 @Controller('register')
 @ApiTags('Register')
@@ -29,6 +30,15 @@ export class RegisterController {
         return rs;
     }
 
+    @Put('/accept-register/:id')
+    @ApiOkResponse({ type: ResponseDto<string> })
+    @ApiOperation({ summary: 'Chấp nhận đơn đăng ký lịch mới của chuyên gia' })
+    async updateRegister(@ProcessId() processId: string) {
+
+        const rs = await firstValueFrom(this.registerClient.send<string, string>(TCP_SLOT_SERVICE_MESSAGE.APPROVE_THE_REGISTER, { processId, data: STATUS_REGISTER_ADVISE.APPROVE }).pipe(map(row => new ResponseDto<string>({ data: row.data }))))
+
+        return rs;
+    }
 
 
 
