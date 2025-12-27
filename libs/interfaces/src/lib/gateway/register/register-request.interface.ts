@@ -16,13 +16,13 @@ export class RegisterRequestDto {
     day?: string[]
 
 
-    @ApiProperty({
-        type: String,
-        format: 'date-time',
-        example: '2025-01-15T00:00:00.000Z',
-    })
-    @IsNotEmpty()
-    @Type(() => Date)
-    @IsDate()
-    available_date?: Date
+    // @ApiProperty({
+    //     type: String,
+    //     format: 'date-time',
+    //     example: '2025-01-15T00:00:00.000Z',
+    // })
+    // @IsNotEmpty()
+    // @Type(() => Date)
+    // @IsDate()
+    // available_date?: Date
 }

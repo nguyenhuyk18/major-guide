@@ -21,8 +21,13 @@ export class RegisterController {
     }
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.APPROVE_THE_REGISTER)
-    async approveRegisterById(@RequestParams() param: string) {
-        return 1;
+    async approveRegisterById(@RequestParams() param: { id: string }) {
+        const rs = await this.registerService.approveTheRegister(param.id);
+
+        if (!rs) {
+            return ResponseTcp.success<string>('Cập nhật trạng thái đăng ký lịch thất bại !!!!');
+        }
+        return ResponseTcp.failer<string>('Cập nhật trạng thái đăng ký lịch thành công !!!!');
     }
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID_EXPERT)

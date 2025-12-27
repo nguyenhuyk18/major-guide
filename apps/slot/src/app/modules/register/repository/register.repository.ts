@@ -21,13 +21,31 @@ export class RegisterRepository {
         return this.registerModel.create(data);
     }
 
-    async getByIdShiftInDay(id_shift_in_day: ObjectId, isGetUserInfo = false): Promise<(Register[]) | (RegisterTcpWithUserResponse)[]> {
+    async getByIdShiftInDay(id_shift_in_day: ObjectId, isGetUserInfo = false, startTime: Date = null, endTime: Date = null, specifyTime: Date = null): Promise<(Register[]) | (RegisterTcpWithUserResponse)[]> {
         // lấy thông tin register theo id ngày ca đó
-        const rs = await this.registerModel.find({
+        let rs = await this.registerModel.find({
             day: { $in: [id_shift_in_day] },
-            status: STATUS_REGISTER_ADVISE.APPROVE
+            status: STATUS_REGISTER_ADVISE.APPROVE,
+            available_date: { $lt: startTime },
+            $or: [
+                { unavailable_date: { $gt: endTime } },
+                { unavailable_date: { $exists: false } }
+            ]
         }).lean();
 
+        console.log(id_shift_in_day)
+
+        if (specifyTime) {
+            rs = await this.registerModel.find({
+                day: { $in: [id_shift_in_day] },
+                status: STATUS_REGISTER_ADVISE.APPROVE,
+                available_date: { $lt: specifyTime },
+                $or: [
+                    { unavailable_date: { $gt: specifyTime } },
+                    { unavailable_date: { $exists: false } }
+                ]
+            }).lean();
+        }
 
         if (!isGetUserInfo) {
             return rs;
@@ -56,8 +74,11 @@ export class RegisterRepository {
         return this.registerModel.findByIdAndDelete(id);
     }
 
-    getAll() {
-        return this.registerModel.find()
+    getAll(cond: Partial<Register> = {}, isSort = null) {
+        if (!isSort) {
+            return this.registerModel.find(cond)
+        }
+        return this.registerModel.find(cond).sort(isSort);
     }
 
     getById(id: string) {

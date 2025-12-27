@@ -31,11 +31,12 @@ export class RegisterController {
     }
 
     @Put('/accept-register/:id')
+    @Authorization({ secured: true })
     @ApiOkResponse({ type: ResponseDto<string> })
     @ApiOperation({ summary: 'Chấp nhận đơn đăng ký lịch mới của chuyên gia' })
-    async updateRegister(@ProcessId() processId: string) {
+    async updateRegister(@ProcessId() processId: string, @Param('id') id: string) {
 
-        const rs = await firstValueFrom(this.registerClient.send<string, string>(TCP_SLOT_SERVICE_MESSAGE.APPROVE_THE_REGISTER, { processId, data: STATUS_REGISTER_ADVISE.APPROVE }).pipe(map(row => new ResponseDto<string>({ data: row.data }))))
+        const rs = await firstValueFrom(this.registerClient.send<string, { id: string }>(TCP_SLOT_SERVICE_MESSAGE.APPROVE_THE_REGISTER, { processId, data: { id } }).pipe(map(row => new ResponseDto<string>({ data: row.data }))))
 
         return rs;
     }

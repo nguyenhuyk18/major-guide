@@ -16,11 +16,11 @@ export class ShiftInWeekService {
     ) { }
 
 
-    async getAll() {
+    async getAll(startTime: Date, endTime: Date) {
         const rs = await this.shiftInWeekRepoitory.getAll();
 
         const convertData = rs.map(async row => {
-            const amountEmployee = await this.registerRepository.getByIdShiftInDay(new ObjectId(row._id));
+            const amountEmployee = await this.registerRepository.getByIdShiftInDay(new ObjectId(row._id), false, startTime, endTime);
 
             return {
                 day: row.day,
@@ -36,11 +36,11 @@ export class ShiftInWeekService {
         return kq;
     }
 
-    async getById(id: string): Promise<ShiftInDayTcpByIdResponse> {
-        const allRegister: (RegisterTcpWithUserResponse[] | Register[]) = await this.registerRepository.getByIdShiftInDay(new ObjectId(id), true);
+    async getById(id: string, specifyTime: Date): Promise<ShiftInDayTcpByIdResponse> {
+        const allRegister: (RegisterTcpWithUserResponse[] | Register[]) = await this.registerRepository.getByIdShiftInDay(new ObjectId(id), true, null, null, specifyTime);
 
         const shiftInDayInfo: ShiftInWeek = await this.shiftInWeekRepoitory.getById(id);
-
+        console.log(shiftInDayInfo)
         return {
             register: allRegister,
             shiftInfo: shiftInDayInfo
