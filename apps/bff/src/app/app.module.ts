@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { CONFIGURATION, TConfiguration } from '../configuration';
 import { LoggerMiddleware } from '@common/middlewares/logger.middlewares';
@@ -13,6 +11,7 @@ import { UserGuard } from '@common/guards/check-token.guard';
 import { ClientsModule } from '@nestjs/microservices';
 import { TCP_SERVICE, TcpProvider } from '@common/configuration/tcp.config';
 import { PermissionGuard } from '@common/guards/permission.guard';
+import { AuthorizerModule } from './modules/authorizer/authorizer.module';
 
 @Module({
   imports: [ConfigModule.forRoot(
@@ -23,6 +22,7 @@ import { PermissionGuard } from '@common/guards/permission.guard';
   ),
     SlotModule,
     UserAccessModule,
+    AuthorizerModule,
     RedisProvider,
   ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.AUTHORIZER_SERVICE)])
   ],
