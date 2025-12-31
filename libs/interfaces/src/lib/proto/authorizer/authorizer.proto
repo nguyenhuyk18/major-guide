@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package GRPC_AUTHORIZE_SERVICE;
+
+service AuthorizerService {
+    rpc verifyUserToken (VerifyTokenRequest) returns (AuthorizerResponse);
+}
+
+message VerifyTokenRequest {
+    string token = 1;
+    string processId = 2;
+}
+
+message JwtPayload {
+    string iss = 1;
+    string aud = 2;
+    int32 iat = 3;
+    int32 exp = 4;
+    string sub = 5;
+    string at_hash = 6;
+    string sid = 7;
+    string nonce = 8;
+    bool isExpired = 9;
+}
+
+message User {
+    string id = 1;
+    string email = 2;
+    string fileAvartarUrl= 3;
+    string name= 4;
+    string role_name= 5;
+    string ward_id= 6;
+}
+
+message MetaDataOfAuThorizer {
+    JwtPayload jwt = 1;
+    User user = 2;
+    string userId = 3;
+}
+
+message AuthorizerResponse {
+    bool valid = 1;
+    MetaDataOfAuThorizer metadata = 2;
+}

@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { User, UserModel, UserModelName } from '@common/schemas/user-access/user.schema';
+import { ObjectId } from "mongodb";
 
 
 
@@ -26,6 +27,15 @@ export class UserRepository {
 
     getById(id: string) {
         const rs = this.userModel.findById(id);
+        return rs;
+    }
+
+    getByIds(ids: string[]) {
+        const newId = ids.map(row => new ObjectId(row))
+        console.log(newId);
+        const rs = this.userModel.find({
+            _id: { $in: newId }
+        });
         return rs;
     }
 

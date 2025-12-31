@@ -55,7 +55,7 @@ export class AuthorizerService {
 
     async verifyUserToken(token: string, processid: string): Promise<AuthorizerResponse> {
         const decoded = jwt.decode(token, { complete: true }) as Jwt;
-        // console.log(decoded, ' ', token)
+        console.log(decoded, ' ', token)
         if (!decoded || !decoded.header || !decoded.header.kid) {
             throw new UnauthorizedException('Invalid token structure')
         }
@@ -72,7 +72,14 @@ export class AuthorizerService {
                 valid: true,
                 metadata: {
                     jwt: payload,
-                    user: user,
+                    user: {
+                        id: user.id,
+                        email: user.email,
+                        fileAvartarUrl: user.fileAvartarUrl,
+                        name: user.name,
+                        role_name: user.role_name,
+                        ward_id: user.ward_id
+                    },
                     userId: user.id
                 }
             }

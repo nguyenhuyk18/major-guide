@@ -6,6 +6,7 @@ import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { TCP_MEDIA_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 import { firstValueFrom, map } from "rxjs";
+import { User } from "@common/schemas/user-access/user.schema";
 
 
 
@@ -36,8 +37,25 @@ export class UserService {
     }
 
 
+
+
     getById(id: string) {
         return this.userRepository.getById(id);
+    }
+
+
+    async getByIds(id: string[]) {
+        // console.log(id)
+        const rs = await this.userRepository.getByIds(id);
+        // console.log('chocho')
+        // console.log(rs);
+        const mapRs = new Map<string, User>()
+
+        rs.forEach(row => {
+            mapRs.set(row.id, row);
+        })
+        const resultObj = Object.fromEntries(mapRs);
+        return resultObj;
     }
 
 

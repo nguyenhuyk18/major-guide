@@ -1,5 +1,5 @@
 
-import { Injectable, CanActivate, ExecutionContext, Inject, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, Inject, UnauthorizedException, OnModuleInit } from '@nestjs/common';
 import { firstValueFrom, map, Observable } from 'rxjs';
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { TCP_SERVICE } from '@common/configuration/tcp.config';
@@ -13,15 +13,29 @@ import { getProcessId } from '@common/utils/string.util';
 import { AuthorizerResponse, MetaDataOfAuThorizer } from '@common/interfaces/gateway/authorizer/authorizer-request.interface';
 import { TCP_AUTHORIZER_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-pattern.constant';
 
+import { AuthorizerService } from '@common/interfaces/grpc/authorizer';
+import { GRPC_SERVICES } from '../../../configuration/src/lib/grpc.config';
+import { ClientGrpc } from '@nestjs/microservices';
+
 @Injectable()
-export class UserGuard implements CanActivate {
+export class UserGuard implements CanActivate, OnModuleInit {
+
+    private authorizerService: AuthorizerService;
+
+
 
     constructor(
         private reflector: Reflector,
         @Inject(TCP_SERVICE.AUTHORIZER_SERVICE) private readonly authClient: TcpClient,
-        @Inject(CACHE_MANAGER) private cacheManager: Cache
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
+        @Inject(GRPC_SERVICES.AUTHORIZE_SERVICE) private authorizeClient: ClientGrpc
     ) { }
 
+    onModuleInit() {
+        // cái ở trong dấu nháy là lấy từ tên service của file proto 
+        // còn cái chỗ generic là lấy cái authoriz trong interface
+        this.authorizerService = this.authorizeClient.getService<AuthorizerService>('AuthorizerService');
+    }
 
     canActivate(
         context: ExecutionContext,
@@ -57,7 +71,7 @@ export class UserGuard implements CanActivate {
             const rs = await this.verifyUserToken(token, processId);
 
             if (!rs?.valid) {
-                throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây !!!')
+                throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây 1 !!!')
             }
 
 
@@ -68,15 +82,15 @@ export class UserGuard implements CanActivate {
             return true;
         } catch (error) {
             console.log(error);
-            throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây !!!')
+            throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây 2 !!!')
         }
 
     }
 
     async verifyUserToken(token: string, processId: string) {
         // get processId 
-        const rs = await firstValueFrom(this.authClient.send<AuthorizerResponse, string>(TCP_AUTHORIZER_SERVICE_MESSAGE.VERIFY_USER, { processId, data: token }).pipe(map(row => row.data)))
-
+        const rs = await firstValueFrom(this.authorizerService.verifyUserToken({ token, processId }))
+        // console.log(rs);
         return rs;
     }
 

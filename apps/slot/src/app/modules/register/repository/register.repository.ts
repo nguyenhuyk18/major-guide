@@ -33,7 +33,7 @@ export class RegisterRepository {
             ]
         }).lean();
 
-        console.log(id_shift_in_day)
+        // console.log(id_shift_in_day)
 
         if (specifyTime) {
             rs = await this.registerModel.find({
@@ -79,6 +79,13 @@ export class RegisterRepository {
             return this.registerModel.find(cond)
         }
         return this.registerModel.find(cond).sort(isSort);
+    }
+
+
+
+    getToPagination(cond: Partial<Register> = {}, limit: number, skip: number) {
+        const rs = this.registerModel.find(cond).skip(skip).limit(limit).lean().exec();
+        return rs;
     }
 
     getById(id: string) {

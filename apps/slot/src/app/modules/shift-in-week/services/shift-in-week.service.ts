@@ -40,7 +40,7 @@ export class ShiftInWeekService {
         const allRegister: (RegisterTcpWithUserResponse[] | Register[]) = await this.registerRepository.getByIdShiftInDay(new ObjectId(id), true, null, null, specifyTime);
 
         const shiftInDayInfo: ShiftInWeek = await this.shiftInWeekRepoitory.getById(id);
-        console.log(shiftInDayInfo)
+        // console.log(shiftInDayInfo)
         return {
             register: allRegister,
             shiftInfo: shiftInDayInfo

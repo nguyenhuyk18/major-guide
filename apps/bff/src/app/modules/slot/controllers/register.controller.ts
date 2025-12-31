@@ -1,7 +1,7 @@
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
-import { Body, Controller, Get, Inject, Param, Post, Put } from "@nestjs/common";
-import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Inject, Param, Post, Put, Query } from "@nestjs/common";
+import { ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { RegisterRequestDto } from '@common/interfaces/gateway/register/register-request.interface'
 import { RegisterResponseDto } from '@common/interfaces/gateway/register/register-response.interface';
 import { ResponseDto } from "@common/interfaces/gateway/response-gateway.dto";
@@ -11,7 +11,9 @@ import { firstValueFrom, map } from "rxjs";
 import { UserInfo } from '@common/decorators/get-user.decorator';
 import { User } from "@common/schemas/user-access/user.schema";
 import { Authorization } from "@common/decorators/authorizer.decorator";
-import { STATUS_REGISTER_ADVISE } from "@common/constant/enum/status-register-advise.constant";
+import { Register } from "@common/schemas/slot/register.schema";
+// import { STATUS_REGISTER_ADVISE } from "@common/constant/enum/status-register-advise.constant";
+import { PaginationResponse } from '@common/interfaces/tcp/common/pagegination-tcp.interface';
 
 @Controller('register')
 @ApiTags('Register')
@@ -42,6 +44,19 @@ export class RegisterController {
     }
 
 
+    @Get()
+    @ApiOkResponse({ type: ResponseDto<(Register & User)[]> })
+    @ApiQuery({ name: 'page', required: false, type: Number })
+    @ApiQuery({ name: 'status', required: false, type: String })
+    @ApiOperation({ summary: 'Api lấy toàn bộ đơn đăng ký (có phân trang)' })
+    async getAllRegister(@ProcessId() processId: string, @Query('page') page?: number, @Query('status') status?: string) {
+        const pageSend = page || 1;
+        const statusSend = status || '';
+
+        const rs = await firstValueFrom(this.registerClient.send<PaginationResponse<Register & User>, { pageSend: number, statusSend: string }>(TCP_SLOT_SERVICE_MESSAGE.GET_ALL_REGISTER, { processId, data: { pageSend, statusSend } }).pipe(map(row => row.data)));
+
+        return new ResponseDto<PaginationResponse<Register & User>>({ data: rs });
+    }
 
 
     @Get(':id_expert')

@@ -26,6 +26,18 @@ async function bootstrap() {
   )
 
 
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE.transport,
+      options: {
+        package: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE.name,
+        protoPath: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE.options.protoPath,
+        url: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE.options.url
+      },
+    },
+  )
+
+
   AppModule.CONFIGURATION.validate()
 
   const port = process.env['AUTHORIZER_PORT'] || 3000;

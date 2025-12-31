@@ -3,7 +3,7 @@ import { JwtPayload } from 'jsonwebtoken';
 
 export class MetaDataOfAuThorizer {
     jwt: JwtPayload;
-    user: Partial<User>;
+    user: User;
     userId: string;
 }
 
@@ -11,3 +11,4 @@ export class AuthorizerResponse {
     valid: boolean;
     metadata: MetaDataOfAuThorizer;
 }
+

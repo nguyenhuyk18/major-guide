@@ -34,9 +34,6 @@ export class UserController {
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_ID)
     async getById(@RequestParams() param: { id_user: string, isKeycloak: boolean }) {
         // console.log(param)
-
-
-
         if (param.isKeycloak) {
             const rs = await this.userService.getByIdUser(param.id_user);
             return ResponseTcp.success<User>(rs)
@@ -47,6 +44,14 @@ export class UserController {
         }
         // console.log(rs);
 
+    }
+
+
+    @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_IDS)
+    async getByIds(@RequestParams() param: { ids: string[] }) {
+        console.log('sdsdsdsds')
+        const rs = await this.userService.getByIds(param.ids);
+        return ResponseTcp.success<{ [k: string]: User }>(rs);
     }
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.UPDATE_AVATAR_USER)

@@ -13,6 +13,8 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const globalPrefix = AppModule.CONFIGURATION.GLOBAL_PREFIX;
 
+    console.log(AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE)
+
     // validate mấy cái config đã được thêm chưa
     AppModule.CONFIGURATION.validate();
 
