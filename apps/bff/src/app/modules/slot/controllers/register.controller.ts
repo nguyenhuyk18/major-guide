@@ -43,9 +43,19 @@ export class RegisterController {
         return rs;
     }
 
+    @Put('/cancle-register/:id')
+    @Authorization({ secured: true })
+    @ApiOkResponse({ type: ResponseDto<string> })
+    @ApiOperation({ summary: 'Hủy đơn đăng ký của chuyên gia' })
+    async disapproveRegister(@ProcessId() processId: string, @Param('id') id: string) {
+
+        const rs = await firstValueFrom(this.registerClient.send<string, { id: string }>(TCP_SLOT_SERVICE_MESSAGE.CANCLE_THE_REGISTER, { processId, data: { id } }).pipe(map(row => new ResponseDto<string>({ data: row.data }))))
+
+        return rs;
+    }
 
     @Get()
-    @ApiOkResponse({ type: ResponseDto<(Register & User)[]> })
+    @ApiOkResponse({ type: ResponseDto<(Register & Partial<User>)[]> })
     @ApiQuery({ name: 'page', required: false, type: Number })
     @ApiQuery({ name: 'status', required: false, type: String })
     @ApiOperation({ summary: 'Api lấy toàn bộ đơn đăng ký (có phân trang)' })
@@ -53,13 +63,13 @@ export class RegisterController {
         const pageSend = page || 1;
         const statusSend = status || '';
 
-        const rs = await firstValueFrom(this.registerClient.send<PaginationResponse<Register & User>, { pageSend: number, statusSend: string }>(TCP_SLOT_SERVICE_MESSAGE.GET_ALL_REGISTER, { processId, data: { pageSend, statusSend } }).pipe(map(row => row.data)));
+        const rs = await firstValueFrom(this.registerClient.send<PaginationResponse<Register & Partial<User>>, { pageSend: number, statusSend: string }>(TCP_SLOT_SERVICE_MESSAGE.GET_ALL_REGISTER, { processId, data: { pageSend, statusSend } }).pipe(map(row => row.data)));
 
-        return new ResponseDto<PaginationResponse<Register & User>>({ data: rs });
+        return new ResponseDto<PaginationResponse<Register & Partial<User>>>({ data: rs });
     }
 
 
-    @Get(':id_expert')
+    @Get('/expert/:id_expert')
     @ApiOkResponse({ type: ResponseDto<RegisterResponseDto> })
     @ApiOperation({ summary: 'Lấy đơn đăng ký theo mã chuyên gia !!!' })
     async findRegisterByIdExpert(@ProcessId() processId: string, @Param('id_expert') id: string) {
@@ -68,4 +78,16 @@ export class RegisterController {
         )
         return rs;
     }
+
+
+    @Get(':id')
+    @ApiOkResponse({ type: ResponseDto<RegisterResponseDto> })
+    @ApiOperation({ summary: 'Lấy đơn đăng ký theo mã id!!!' })
+    async findRegisterById(@Param('id') id: string, @ProcessId() processId: string) {
+
+        const rs = await firstValueFrom(this.registerClient.send<Register, { id: string }>(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID, { processId, data: { id } }).pipe(map(row => row.data)));
+
+        return new ResponseDto<Register>({ data: rs });
+    }
+
 }

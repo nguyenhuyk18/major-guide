@@ -1,7 +1,7 @@
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
-import { BadRequestException, Controller, Inject, Param, Put, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { BadRequestException, Controller, Get, Inject, Param, Put, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ResponseDto } from '@common/interfaces/gateway/response-gateway.dto';
 import { firstValueFrom, map } from "rxjs";
 import { TCP_USER_ACCESS_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
@@ -11,6 +11,7 @@ import { UploadedImage } from '@common/interfaces/gateway/common/upload-image.in
 import { FileUploadDto } from '@common/interfaces/common/file-upload.interface';
 import { FileInterceptor } from "@nestjs/platform-express";
 import path from 'path'
+import { User } from "@common/schemas/user-access/user.schema";
 
 
 @Controller('user')
@@ -62,7 +63,15 @@ export class UserController {
     }
 
 
+    @Get('/:id')
+    @ApiOperation({ summary: 'Api tìm user theo id' })
+    @ApiOkResponse({ type: ResponseDto<User> })
+    async findUserById(@Param('id') id: string, @ProcessId() processId: string) {
+        const rs = await firstValueFrom(this.userAccessServie.send<User, { id_user: string, isKeycloak: boolean }>(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_ID, { data: { id_user: id, isKeycloak: false }, processId }).pipe(map(row => row.data)));
 
+        return new ResponseDto<User>({ data: rs })
+
+    }
 
 
 

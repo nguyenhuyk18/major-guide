@@ -19,7 +19,7 @@ export class RegisterController {
     constructor(private readonly registerService: RegisterService) { }
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_ALL_REGISTER)
-    async getAll(@RequestParams() params: { pageSend: number, statusSend: string }, @ProcessId() processId: string): Promise<ResponseTcp<PaginationResponse<Register & User>>> {
+    async getAll(@RequestParams() params: { pageSend: number, statusSend: string }, @ProcessId() processId: string): Promise<ResponseTcp<PaginationResponse<Register & Partial<User>>>> {
 
         const page = params.pageSend;
 
@@ -37,7 +37,7 @@ export class RegisterController {
         }
 
         const rs = await this.registerService.getAll(page, cond, processId);
-        return ResponseTcp.success<PaginationResponse<Register & User>>(rs)
+        return ResponseTcp.success<PaginationResponse<Register & Partial<User>>>(rs)
     }
 
 
@@ -58,6 +58,14 @@ export class RegisterController {
         return ResponseTcp.failer<string>('Cập nhật trạng thái đăng ký lịch thành công !!!!');
     }
 
+
+    @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.CANCLE_THE_REGISTER)
+    async cancleRegisterById(@RequestParams() param: { id: string }) {
+        await this.registerService.update(param.id, { status: STATUS_REGISTER_ADVISE.CANCLE });
+
+        return ResponseTcp.success<string>('Đã hủy đơn đăng ký của chuyên gia này !!!');
+    }
+
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID_EXPERT)
     async findRegisterByIdExpert(@RequestParams() param: string) {
         const rs = await this.registerService.getByIdExpert(param);
@@ -67,5 +75,12 @@ export class RegisterController {
         }
 
         return ResponseTcp.success<RegisterTcpResponse>(rs);
+    }
+
+
+    @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID)
+    async findRegisterById(@RequestParams() param: { id: string }) {
+        const rs = await this.registerService.getById(param.id);
+        return ResponseTcp.success<Register>(rs);
     }
 }

@@ -49,7 +49,7 @@ export class UserController {
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_IDS)
     async getByIds(@RequestParams() param: { ids: string[] }) {
-        console.log('sdsdsdsds')
+        // console.log('sdsdsdsds')
         const rs = await this.userService.getByIds(param.ids);
         return ResponseTcp.success<{ [k: string]: User }>(rs);
     }

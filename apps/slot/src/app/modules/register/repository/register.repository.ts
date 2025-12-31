@@ -89,7 +89,14 @@ export class RegisterRepository {
     }
 
     getById(id: string) {
-        return this.registerModel.findById(id);
+        return this.registerModel.findById(id).populate({
+            path: 'day',
+            select: 'day',
+            populate: {
+                path: 'shift_id',
+                select: 'name_shift information start_time end_time'
+            },
+        });
     }
 
     getByIdExpert(id_expert: string) {

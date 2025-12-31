@@ -56,17 +56,17 @@ export class RegisterService {
         // console.log('sdfsfdf');
         const userMap = await firstValueFrom(this.userAccessClient.send<{ [k: string]: User }, { ids: string[] }>(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_IDS, { data: { ids: ids }, processId }).pipe(map(row => row.data)));
 
-        console.log(userMap)
+        // console.log(userMap)
 
         const amountRegister = await this.registerRepository.getAll(cond, null);
         const totalPage = Math.ceil(amountRegister.length / 6)
         // console.log(totalPage, 'con cu');
 
-        const kq: (Register & User)[] = rs.map(row => {
+        const kq: (Register & Partial<User>)[] = rs.map(row => {
             return {
                 ...row,
-                ...userMap[row.id_expert],
-
+                fileAvartarUrl: userMap[row.id_expert].fileAvartarUrl,
+                name: userMap[row.id_expert].name,
             }
         });
 
@@ -105,6 +105,8 @@ export class RegisterService {
         const dateExpire = new Date();
         dateExpire.setDate(dateExpire.getDate() + 14);
         const finalDateExpire = getCurrentWeek(dateExpire);
+        console.log(finalDateExpire)
+        console.log(new Date(dateExpire))
         const mondayInWeekAfter = finalDateExpire[0].setDate(finalDateExpire[0].getDate() - 1);
 
         console.log(getRegisterExpert.length);

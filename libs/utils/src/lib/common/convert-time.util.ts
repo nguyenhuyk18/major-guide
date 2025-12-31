@@ -7,12 +7,18 @@ export const convertTimeToInteger = (time: string) => {
 
 export const getCurrentWeek = (date = new Date()) => {
     const current = new Date(date);
+
+    // ✅ ÉP VỀ 12H TRƯA TRƯỚC
+    current.setHours(12, 0, 0, 0);
     const day = current.getDay(); // 0 (CN) -> 6 (T7)
+    // 🔥 FIX: ép về 12h trưa local
+    current.setHours(12, 0, 0, 0);
 
     const diff = day === 0 ? -6 : 1 - day;
     const monday = new Date(current);
     monday.setDate(current.getDate() + diff);
-
+    console.log(new Date(monday));
+    console.log(diff, ' ', current.getDate())
     // Lấy 7 ngày trong tuần
     return Array.from({ length: 7 }, (_, i) => {
         const d = new Date(monday);
