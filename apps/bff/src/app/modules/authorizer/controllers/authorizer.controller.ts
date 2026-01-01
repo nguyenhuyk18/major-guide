@@ -32,7 +32,17 @@ export class AuthorizerController {
     @ApiOkResponse({ type: ResponseDto<ExchangeUserTokenResponse> })
     @ApiOperation({ summary: 'Đăng nhập lấy quyền truy cập token' })
     async loginUser(@Body() data: LoginRequestDto, @ProcessId() processId: string) {
-        const rs = await firstValueFrom(this.authorizerService.send<ExchangeUserTokenResponse, LoginTcpRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.LOGIN_USER, { processId, data }).pipe(map(row => row.data)))
+        const rs = await firstValueFrom(this.authorizerService.send<ExchangeUserTokenResponse, LoginTcpRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.LOGIN_USER, { processId, data: { ...data } }).pipe(map(row => row.data)))
         return new ResponseDto<ExchangeUserTokenResponse>({ data: rs })
     }
+
+
+
+    // @Post('login-client')
+    // @ApiOkResponse({ type: ResponseDto<ExchangeUserTokenResponse> })
+    // @ApiOperation({ summary: 'Đăng nhập lấy quyền truy cập token' })
+    // async loginClient(@Body() data: LoginRequestDto, @ProcessId() processId: string) {
+    //     const rs = await firstValueFrom(this.authorizerService.send<ExchangeUserTokenResponse, LoginTcpRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.LOGIN_USER, { processId, data: { ...data, isAdmin: false } }).pipe(map(row => row.data)))
+    //     return new ResponseDto<ExchangeUserTokenResponse>({ data: rs })
+    // }
 }

@@ -1,6 +1,6 @@
 import { Controller, UseInterceptors } from "@nestjs/common";
 import { UserService } from "../services/user.service";
-import { MessagePattern } from "@nestjs/microservices";
+import { GrpcMethod, MessagePattern } from "@nestjs/microservices";
 import { TCP_USER_ACCESS_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 import { RequestParams } from "@common/decorators/request-params.decorator";
 import { UpdateAvatarRequestTcp, UserRequestTcp } from '@common/interfaces/tcp/user';
@@ -8,19 +8,12 @@ import { ResponseTcp } from '@common/interfaces/tcp/common/response-tcp.interfac
 import { User } from "@common/schemas/user-access/user.schema";
 import { ProcessId } from '@common/decorators/processid.decorator'
 import { TcpLoggingInterceptor } from "@common/interceptors/tcpLogging.interceptors";
+import { GRPC_MESSAGE_USER_ACCESS } from '@common/constant/enum/grpc-message-pattern.constant';
 
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
 export class UserController {
     constructor(private readonly userService: UserService) { }
-
-
-    // @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.CREATE_NEW_USER)
-    // async create(@RequestParams() param: (UserRequestTcp & { buff: string, fileName: string }), @ProcessId() processId: string) {
-    //     // console.log('ÁDASFSDGSDGDGSDGERGWERTG')
-    //     const rs = await this.userService.createUser(param, processId);
-    //     return ResponseTcp.success<User>(rs)
-    // }
 
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.CREATE_NEW_USER)
@@ -31,8 +24,23 @@ export class UserController {
     }
 
 
+    @GrpcMethod(GRPC_MESSAGE_USER_ACCESS.GET_USER_BY_ID.service_name, GRPC_MESSAGE_USER_ACCESS.GET_USER_BY_ID.method)
+    async getById(param: { idUser: string, isKeycloak: boolean }) {
+        // console.log(param, ' ', param.idUser);
+        if (param.isKeycloak) {
+            const rs = await this.userService.getByIdUser(param.idUser);
+            // console.log(rs);
+            return { id: rs.id, email: rs.email, fileAvartarUrl: rs.fileAvartarUrl, name: rs.name, role_name: rs.role_name, ward_id: rs.ward_id } as Partial<User>
+        }
+        else {
+            const rs = await this.userService.getById(param.idUser);
+            return { id: rs.id, email: rs.email, fileAvartarUrl: rs.fileAvartarUrl, name: rs.name, role_name: rs.role_name, ward_id: rs.ward_id } as Partial<User>
+        }
+    }
+
+
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_ID)
-    async getById(@RequestParams() param: { id_user: string, isKeycloak: boolean }) {
+    async getByIdTcp(@RequestParams() param: { id_user: string, isKeycloak: boolean }) {
         // console.log(param)
         if (param.isKeycloak) {
             const rs = await this.userService.getByIdUser(param.id_user);

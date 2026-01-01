@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+
+package GRPC_USER_ACCESS_SERVICE;
+
+service UserAccessService {
+    rpc findUserById (UserInfo) returns (User);
+}
+
+message UserInfo {
+    string idUser = 1;
+    bool isKeycloak = 2;
+}
+
+message User {
+    string id = 1;
+    string email = 2;
+    string fileAvartarUrl = 3;
+    string name = 4;
+    string role_name = 5;
+    string ward_id = 6;
+}

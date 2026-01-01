@@ -17,8 +17,8 @@ export const getCurrentWeek = (date = new Date()) => {
     const diff = day === 0 ? -6 : 1 - day;
     const monday = new Date(current);
     monday.setDate(current.getDate() + diff);
-    console.log(new Date(monday));
-    console.log(diff, ' ', current.getDate())
+    // console.log(new Date(monday));
+    // console.log(diff, ' ', current.getDate())
     // Lấy 7 ngày trong tuần
     return Array.from({ length: 7 }, (_, i) => {
         const d = new Date(monday);

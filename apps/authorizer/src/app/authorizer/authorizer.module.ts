@@ -4,10 +4,13 @@ import { AuthorizerController } from "./controllers/authorizer.controller";
 import { AuthorizerService } from "./services/authorizer.service";
 import { ClientsModule } from "@nestjs/microservices";
 import { TCP_SERVICE, TcpProvider } from "@common/configuration/tcp.config";
+import { GRPC_SERVICES, GrpcProvider } from "@common/configuration/grpc.config";
 
 @Module({
     imports: [KeycloakModule,
-        ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.USER_ACCESS_SERVICE)])],
+        ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.USER_ACCESS_SERVICE)]),
+        ClientsModule.registerAsync([GrpcProvider(GRPC_SERVICES.USER_ACCESS_SERVICE)])
+    ],
     controllers: [AuthorizerController],
     providers: [AuthorizerService]
 })

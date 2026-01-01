@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { Inject, Injectable, Logger, OnModuleInit, UnauthorizedException } from "@nestjs/common";
 import { KeycloakHttpService } from "../../keycloak/services/keycloak-http.service";
 import { CreateKeyCloakUserRequest } from "@common/interfaces/common/create-user-keyloak-request.interface";
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
@@ -12,18 +12,24 @@ import jwksRsa, { JwksClient } from 'jwks-rsa';
 
 import { ConfigService } from "@nestjs/config";
 import { AuthorizerResponse } from '@common/interfaces/gateway/authorizer';
+import { UserAccessService } from '@common/interfaces/grpc/user-access';
+import { ClientGrpc } from "@nestjs/microservices";
+import { GRPC_SERVICES } from "@common/configuration/grpc.config";
 
 @Injectable()
-export class AuthorizerService {
+export class AuthorizerService implements OnModuleInit {
     private readonly logger = new Logger(AuthorizerService.name);
     private jwksClient: JwksClient;
+    private userAccessService: UserAccessService
 
     // private userService: UserService;
+
 
     constructor(
         private readonly configService: ConfigService,
         private readonly keycloakService: KeycloakHttpService,
-        @Inject(TCP_SERVICE.USER_ACCESS_SERVICE) private readonly authorizerClient: TcpClient
+        @Inject(TCP_SERVICE.USER_ACCESS_SERVICE) private readonly authorizerClient: TcpClient,
+        @Inject(GRPC_SERVICES.USER_ACCESS_SERVICE) private client: ClientGrpc
     ) {
         this.jwksClient = jwksRsa({
             jwksUri: `${this.configService.get('KEYCLOAK_CONFIG.HOST')}/realms/${this.configService.get('KEYCLOAK_CONFIG.REALM')}/protocol/openid-connect/certs`,
@@ -32,6 +38,9 @@ export class AuthorizerService {
         })
     }
 
+    onModuleInit() {
+        this.userAccessService = this.client.getService<UserAccessService>('UserAccessService');
+    }
 
     async loginUser(data: LoginTcpRequest) {
         const rs = await this.keycloakService.exchangeUserToken(data)
@@ -55,7 +64,6 @@ export class AuthorizerService {
 
     async verifyUserToken(token: string, processid: string): Promise<AuthorizerResponse> {
         const decoded = jwt.decode(token, { complete: true }) as Jwt;
-        console.log(decoded, ' ', token)
         if (!decoded || !decoded.header || !decoded.header.kid) {
             throw new UnauthorizedException('Invalid token structure')
         }
@@ -68,6 +76,8 @@ export class AuthorizerService {
 
 
             const user = await this.validateGetUser(payload.sub, processid);
+
+            console.log(user)
             return {
                 valid: true,
                 metadata: {
@@ -98,13 +108,12 @@ export class AuthorizerService {
         return rs;
     }
 
+
+    // ========================================= //
     async getUser(userId: string, processId: string) {
-        const rs = await firstValueFrom(this.authorizerClient.send<UserResponseTcp, { id_user: string, isKeycloak: boolean }>(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_ID, {
-            processId, data: {
-                id_user: userId,
-                isKeycloak: true
-            }
-        }).pipe(map(row => row.data)))
+        console.log(processId);
+        const rs = await firstValueFrom(this.userAccessService.findUserById({ idUser: userId, isKeycloak: true }))
+        console.log(rs);
         return rs;
     }
 

@@ -23,6 +23,18 @@ async function bootstrap() {
       },
     },
   )
+
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_USER_ACCESS_SERVICE.transport,
+      options: {
+        package: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_USER_ACCESS_SERVICE.name,
+        protoPath: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_USER_ACCESS_SERVICE.options.protoPath,
+        url: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_USER_ACCESS_SERVICE.options.url
+      },
+    },
+  )
+
   const port = process.env.USER_ACCESS_PORT || 3000;
   AppModule.CONFIGURATION.validate();
   await app.startAllMicroservices();

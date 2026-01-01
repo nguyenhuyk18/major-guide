@@ -4,6 +4,7 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer'
 import { MongoConfiguration } from '@common/configuration/mongo.config';
 import { TcpConfiguration } from '@common/configuration/tcp.config';
+import { GrpcConfiguration } from '@common/configuration/grpc.config';
 
 export class Configuration extends BaseConfiguration {
 
@@ -19,6 +20,10 @@ export class Configuration extends BaseConfiguration {
     @Type(() => TcpConfiguration)
     TCP_SERV = new TcpConfiguration()
 
+
+    @ValidateNested()
+    @Type(() => GrpcConfiguration)
+    GRPC_CONFIG = new GrpcConfiguration()
 }
 
 

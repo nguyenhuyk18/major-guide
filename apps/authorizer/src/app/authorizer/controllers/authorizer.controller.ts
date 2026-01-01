@@ -43,8 +43,6 @@ export class AuthorizerController {
 
     @GrpcMethod(GRPC_MESSAGE_AUTHORIZER.VERIFY_TOKEN_USER.service_name, GRPC_MESSAGE_AUTHORIZER.VERIFY_TOKEN_USER.method)
     async verifyTokenUser(param: VerifyTokenRequest): Promise<AuthorizerResponse> {
-        // console.log(param.token, ' ', param.processId, 'yoyoyo')
-        // console.log('con cặc')
         const rs = await this.authorizerService.verifyUserToken(param.token, param.processId);
         return rs;
     }
