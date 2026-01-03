@@ -8,7 +8,7 @@ export const mapperCreateUser = (data: UserRequestTcp): Partial<User> => {
         username: data.username,
         name: data.firstname + ' ' + data.lastname,
         email: data.email,
-        ward_id: new ObjectId(data.ward_id),
+        wardId: new ObjectId(data.ward_id),
         fileAvartarUrl: AvartarDefault.AVARTAR_DEFAULT,
         userId: data.userId
     }

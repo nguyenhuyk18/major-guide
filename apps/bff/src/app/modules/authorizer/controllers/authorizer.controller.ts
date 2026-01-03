@@ -29,20 +29,21 @@ export class AuthorizerController {
 
 
     @Post('login')
-    @ApiOkResponse({ type: ResponseDto<ExchangeUserTokenResponse> })
-    @ApiOperation({ summary: 'Đăng nhập lấy quyền truy cập token' })
+    @ApiOkResponse({ type: ResponseDto<ExchangeUserTokenResponse & Partial<User>> })
+    @ApiOperation({ summary: 'Đăng nhập lấy quyền truy cập token ở trang admin' })
     async loginUser(@Body() data: LoginRequestDto, @ProcessId() processId: string) {
-        const rs = await firstValueFrom(this.authorizerService.send<ExchangeUserTokenResponse, LoginTcpRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.LOGIN_USER, { processId, data: { ...data } }).pipe(map(row => row.data)))
-        return new ResponseDto<ExchangeUserTokenResponse>({ data: rs })
+        // console.log(data, 'dfdf');
+        const rs = await firstValueFrom(this.authorizerService.send<ExchangeUserTokenResponse & Partial<User>, LoginTcpRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.LOGIN_USER, { processId, data: { ...data, isAdminSite: true } }).pipe(map(row => row.data)))
+        return new ResponseDto<ExchangeUserTokenResponse & Partial<User>>({ data: rs })
     }
 
 
 
-    // @Post('login-client')
-    // @ApiOkResponse({ type: ResponseDto<ExchangeUserTokenResponse> })
-    // @ApiOperation({ summary: 'Đăng nhập lấy quyền truy cập token' })
-    // async loginClient(@Body() data: LoginRequestDto, @ProcessId() processId: string) {
-    //     const rs = await firstValueFrom(this.authorizerService.send<ExchangeUserTokenResponse, LoginTcpRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.LOGIN_USER, { processId, data: { ...data, isAdmin: false } }).pipe(map(row => row.data)))
-    //     return new ResponseDto<ExchangeUserTokenResponse>({ data: rs })
-    // }
+    @Post('login-client')
+    @ApiOkResponse({ type: ResponseDto<ExchangeUserTokenResponse> })
+    @ApiOperation({ summary: 'Đăng nhập lấy quyền truy cập token ở máy khách' })
+    async loginClient(@Body() data: LoginRequestDto, @ProcessId() processId: string) {
+        const rs = await firstValueFrom(this.authorizerService.send<ExchangeUserTokenResponse, LoginTcpRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.LOGIN_USER, { processId, data: { ...data, isAdminSite: false } }).pipe(map(row => row.data)))
+        return new ResponseDto<ExchangeUserTokenResponse>({ data: rs })
+    }
 }

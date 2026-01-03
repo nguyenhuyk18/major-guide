@@ -71,9 +71,11 @@ export class UserGuard implements CanActivate, OnModuleInit {
             const rs = await this.verifyUserToken(token, processId);
 
             if (!rs?.valid) {
-                throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây 1 !!!')
+                throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây !!!')
             }
 
+
+            // console.log(rs.metadata, 'dfsdfsdfsdfsdfsdf')
 
             const newHashKey: string = this.generateTokenKey(token);
             this.cacheManager.set(newHashKey, rs.metadata, 30 * 60 * 1000);
@@ -82,7 +84,7 @@ export class UserGuard implements CanActivate, OnModuleInit {
             return true;
         } catch (error) {
             console.log(error);
-            throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây 2 !!!')
+            throw new UnauthorizedException('Bạn không có thẩm quyền để đi vào đây !!!')
         }
 
     }

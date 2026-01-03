@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, OnModuleInit, UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, Inject, Injectable, Logger, OnModuleInit, UnauthorizedException } from "@nestjs/common";
 import { KeycloakHttpService } from "../../keycloak/services/keycloak-http.service";
 import { CreateKeyCloakUserRequest } from "@common/interfaces/common/create-user-keyloak-request.interface";
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
@@ -14,7 +14,10 @@ import { ConfigService } from "@nestjs/config";
 import { AuthorizerResponse } from '@common/interfaces/gateway/authorizer';
 import { UserAccessService } from '@common/interfaces/grpc/user-access';
 import { ClientGrpc } from "@nestjs/microservices";
+import { ObjectId } from "mongodb";
 import { GRPC_SERVICES } from "@common/configuration/grpc.config";
+import { ExchangeUserTokenResponse } from "@common/interfaces/common/exchange-token-user-password.interface";
+import { User } from "@common/schemas/user-access/user.schema";
 
 @Injectable()
 export class AuthorizerService implements OnModuleInit {
@@ -43,8 +46,32 @@ export class AuthorizerService implements OnModuleInit {
     }
 
     async loginUser(data: LoginTcpRequest) {
-        const rs = await this.keycloakService.exchangeUserToken(data)
-        return rs;
+        // console.log('1234')
+        const rs = await this.keycloakService.exchangeUserToken(data);
+        // console.log('1234')
+        const accessToken = rs.access_token;
+        const decoded = jwt.decode(accessToken, { complete: true }) as Jwt;
+        // console.log('1234')
+        // console.log(decoded.payload.sub);
+
+        // call grpc để lấy role tại đây
+        const userInfo = await firstValueFrom(this.userAccessService.findUserById({ idUser: String(decoded.payload.sub), isKeycloak: true }))
+        // console.log(userInfo);
+
+        if (data.isAdminSite == true && userInfo.roleName === 'member') {
+            throw new ForbiddenException('Bạn không có quyền đăng nhập vào hệ thống admin , vui lòng thoát ra ngay trước khi lãnh hậu quả !!!')
+        }
+        else if (data.isAdminSite == false && userInfo.roleName !== 'member') {
+            throw new ForbiddenException('Đây không phải là nơi bạn thuộc về , Badbye =(((( ')
+        }
+        // console.log('1234')
+        return {
+            ...rs,
+            fileAvartarUrl: userInfo.fileAvartarUrl,
+            name: userInfo.name,
+            roleName: userInfo.roleName,
+            email: userInfo.email
+        } as ExchangeUserTokenResponse & Partial<User>;
     }
 
 
@@ -77,7 +104,7 @@ export class AuthorizerService implements OnModuleInit {
 
             const user = await this.validateGetUser(payload.sub, processid);
 
-            console.log(user)
+            // console.log(user)
             return {
                 valid: true,
                 metadata: {
@@ -87,8 +114,8 @@ export class AuthorizerService implements OnModuleInit {
                         email: user.email,
                         fileAvartarUrl: user.fileAvartarUrl,
                         name: user.name,
-                        role_name: user.role_name,
-                        ward_id: user.ward_id
+                        roleName: user.roleName,
+                        wardId: new ObjectId(user.wardId)
                     },
                     userId: user.id
                 }
@@ -113,7 +140,7 @@ export class AuthorizerService implements OnModuleInit {
     async getUser(userId: string, processId: string) {
         console.log(processId);
         const rs = await firstValueFrom(this.userAccessService.findUserById({ idUser: userId, isKeycloak: true }))
-        console.log(rs);
+        // console.log(rs);
         return rs;
     }
 

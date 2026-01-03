@@ -105,11 +105,11 @@ export class RegisterService {
         const dateExpire = new Date();
         dateExpire.setDate(dateExpire.getDate() + 14);
         const finalDateExpire = getCurrentWeek(dateExpire);
-        console.log(finalDateExpire)
-        console.log(new Date(dateExpire))
+        // console.log(finalDateExpire)
+        // console.log(new Date(dateExpire))
         const mondayInWeekAfter = finalDateExpire[0].setDate(finalDateExpire[0].getDate() - 1);
 
-        console.log(getRegisterExpert.length);
+        // console.log(getRegisterExpert.length);
 
         // kiểm tra có đơn cũ không nếu có thì lấy cái đơn gần mới nhất ra để cập nhật cái ngày đơn đó sẽ cút
         if (getRegisterExpert.length) {
@@ -122,7 +122,7 @@ export class RegisterService {
             newDate.setDate(newDate.getDate());
             const finalDateExpire = getCurrentWeek(newDate);
             const mondayInWeekAfter = finalDateExpire[0].setDate(finalDateExpire[0].getDate() - 1);
-            console.log(new Date(mondayInWeekAfter));
+            // console.log(new Date(mondayInWeekAfter));
             const info = await this.registerRepository.update(id, { status: STATUS_REGISTER_ADVISE.APPROVE, available_date: new Date(mondayInWeekAfter) });
             return info
         }

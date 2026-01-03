@@ -28,8 +28,8 @@ message User {
     string email = 2;
     string fileAvartarUrl= 3;
     string name= 4;
-    string role_name= 5;
-    string ward_id= 6;
+    string roleName= 5;
+    string wardId= 6;
 }
 
 message MetaDataOfAuThorizer {

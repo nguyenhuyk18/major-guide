@@ -11,4 +11,6 @@ export class LoginRequestDto {
     @IsString()
     @IsNotEmpty()
     password: string;
+
+    isAdminSite: boolean;
 }

@@ -12,6 +12,7 @@ import { FileUploadDto } from '@common/interfaces/common/file-upload.interface';
 import { FileInterceptor } from "@nestjs/platform-express";
 import path from 'path'
 import { User } from "@common/schemas/user-access/user.schema";
+import { Authorization } from "@common/decorators/authorizer.decorator";
 
 
 @Controller('user')
@@ -29,6 +30,7 @@ export class UserController {
         description: 'Thông tin user kèm file ảnh',
         type: FileUploadDto,
     })
+    @Authorization({ secured: true })
     @UseInterceptors(FileInterceptor('file',
         {
             fileFilter: (req, file, cb) => {
@@ -44,7 +46,7 @@ export class UserController {
         }
     ))
     async updateAvatarUser(@UploadedFile() file: UploadedImage, @ProcessId() processId: string, @Param("id") id_user: string) {
-        console.log(file.originalname)
+        // console.log(file.originalname)
 
         const ext = path.extname(file.originalname); // .png, .jpg
         const baseName = path.basename(file.originalname, ext);

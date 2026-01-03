@@ -13,6 +13,7 @@ import { ExchangeUserTokenResponse } from "@common/interfaces/common/exchange-to
 import { GRPC_MESSAGE_AUTHORIZER } from '@common/constant/enum/grpc-message-pattern.constant';
 import { AuthorizerResponse } from "@common/interfaces/gateway/authorizer";
 import { VerifyTokenRequest } from '@common/interfaces/grpc/authorizer';
+import { User } from "@common/schemas/user-access/user.schema";
 
 
 @Controller()
@@ -36,8 +37,9 @@ export class AuthorizerController {
 
     @MessagePattern(TCP_AUTHORIZER_SERVICE_MESSAGE.LOGIN_USER)
     async login(@RequestParams() param: LoginTcpRequest) {
+        // console.log(param, 'dfdf');
         const rs = await this.authorizerService.loginUser(param);
-        return ResponseTcp.success<ExchangeUserTokenResponse>(rs);
+        return ResponseTcp.success<ExchangeUserTokenResponse & Partial<User>>(rs);
     }
 
 

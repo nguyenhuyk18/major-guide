@@ -20,7 +20,7 @@ export class User extends Base {
     fileAvartarUrl: string
 
     @Prop({ type: ObjectId, ref: 'Ward' })
-    ward_id: ObjectId
+    wardId: ObjectId
 
     @Prop({ type: MongooseSchema.Types.Mixed })
     profile: string
@@ -30,7 +30,7 @@ export class User extends Base {
 
 
     @Prop({ type: ObjectId, enum: ROLE })
-    role_name: ROLE;
+    roleName: ROLE;
 }
 
 

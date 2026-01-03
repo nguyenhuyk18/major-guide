@@ -20,13 +20,16 @@ export class PermissionGuard implements CanActivate {
         const roles = this.reflector.get(Roles, context.getHandler());
 
         if (!roles) {
-            // console.log('Chưa check role nhé')
             return true;
         }
 
-        const user: User = request[MetaDataKeys.USER_INFO];
+        const user: Partial<User> = request[MetaDataKeys.USER_INFO];
 
-        const kq = roles.includes(user.role_name)
+        if (!user?.roleName) {
+            return false;
+        }
+
+        const kq = roles.includes(user.roleName)
 
         return kq;
     }

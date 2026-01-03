@@ -18,7 +18,6 @@ export class UserController {
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.CREATE_NEW_USER)
     async create(@RequestParams() param: UserRequestTcp, @ProcessId() processId: string) {
-        // console.log('ÁDASFSDGSDGDGSDGERGWERTG')
         const rs = await this.userService.createUser(param, processId);
         return ResponseTcp.success<User>(rs)
     }
@@ -30,11 +29,11 @@ export class UserController {
         if (param.isKeycloak) {
             const rs = await this.userService.getByIdUser(param.idUser);
             // console.log(rs);
-            return { id: rs.id, email: rs.email, fileAvartarUrl: rs.fileAvartarUrl, name: rs.name, role_name: rs.role_name, ward_id: rs.ward_id } as Partial<User>
+            return { id: rs.id, email: rs.email, fileAvartarUrl: rs.fileAvartarUrl, name: rs.name, roleName: rs.roleName, wardId: rs.wardId }
         }
         else {
             const rs = await this.userService.getById(param.idUser);
-            return { id: rs.id, email: rs.email, fileAvartarUrl: rs.fileAvartarUrl, name: rs.name, role_name: rs.role_name, ward_id: rs.ward_id } as Partial<User>
+            return { id: rs.id, email: rs.email, fileAvartarUrl: rs.fileAvartarUrl, name: rs.name, roleName: rs.roleName, wardId: rs.wardId }
         }
     }
 

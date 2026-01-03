@@ -32,7 +32,7 @@ export class UserRepository {
 
     getByIds(ids: string[]) {
         const newId = ids.map(row => new ObjectId(row))
-        console.log(newId);
+        // console.log(newId);
         const rs = this.userModel.find({
             _id: { $in: newId }
         });

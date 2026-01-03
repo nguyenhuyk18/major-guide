@@ -9,6 +9,9 @@ import { ProcessId } from "@common/decorators/processid.decorator";
 import { ResponseDto } from "@common/interfaces/gateway/response-gateway.dto";
 import { ShiftInDayAmount } from '@common/interfaces/tcp/shift-in-day/shift-in-day-amount-employ-tcp.interface';
 import { getCurrentWeek } from '@common/utils/common/convert-time.util';
+import { Authorization } from "@common/decorators/authorizer.decorator";
+import { Roles } from "@common/decorators/role.decorator";
+import { ROLE } from "@common/constant/enum/action.constant";
 
 @Controller('shift-in-day')
 @ApiTags('Shift In Day')
@@ -21,6 +24,8 @@ export class ShiftInDayController {
     @ApiQuery({ name: 'start_time', required: false, type: String })
     @ApiQuery({ name: 'end_time', required: false, type: String })
     @ApiOperation({ summary: 'Api này để xem được các ca trong 1 ngày nhắm giúp dễ truy vấn số chuyên gia trong ca đấy' })
+    @Authorization({ secured: true })
+    @Roles([ROLE.ADMIN])
     async getAll(@ProcessId() processId: string, @Query('start_time') startTime?: string, @Query('end_time') endTime?: string) {
         const tmp = getCurrentWeek();
 
@@ -42,6 +47,8 @@ export class ShiftInDayController {
     @Get(':id')
     @ApiOkResponse({ type: ResponseDto<ShiftInDayTcpByIdResponse> })
     @ApiOperation({ summary: 'Api này để xem các chuyên gia có trong ca đó' })
+    @Authorization({ secured: true })
+    @Roles([ROLE.ADMIN])
     async getById(@ProcessId() processId: string, @Param('id') id: string, @Query('specify_time') specifyTime: string) {
         const rs = await firstValueFrom(this.shiftInDayClient.send<ShiftInDayTcpByIdResponse, { id: string, specify_time: string }>(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY_BY_ID, { data: { id, specify_time: specifyTime }, processId }).pipe(map(row => row.data)));
         return new ResponseDto<ShiftInDayTcpByIdResponse>({ data: rs })
