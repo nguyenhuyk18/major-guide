@@ -18,6 +18,7 @@ import { ObjectId } from "mongodb";
 import { GRPC_SERVICES } from "@common/configuration/grpc.config";
 import { ExchangeUserTokenResponse } from "@common/interfaces/common/exchange-token-user-password.interface";
 import { User } from "@common/schemas/user-access/user.schema";
+import { ROLE } from "@common/constant/enum/action.constant";
 
 @Injectable()
 export class AuthorizerService implements OnModuleInit {
@@ -76,12 +77,12 @@ export class AuthorizerService implements OnModuleInit {
 
 
     async createUser(data: CreateKeyCloakUserRequest, processId: string): Promise<UserResponseTcp> {
-        const { email, firstname, lastname, username, ward_id } = data
+        const { email, firstname, lastname, username, ward_id, isExpert, role_name, expertProfile, memberProfile } = data
 
-        const userId = await this.keycloakService.createUser(data);
+        const user_id = await this.keycloakService.createUser(data);
 
         // call tcp tới user-access để thêm thông tin vào
-        const rs = await firstValueFrom(this.authorizerClient.send<UserResponseTcp, UserRequestTcp>(TCP_USER_ACCESS_SERVICE_MESSAGE.CREATE_NEW_USER, { data: { email, firstname, lastname, username, ward_id, userId }, processId: processId }).pipe(map(row => row.data)))
+        const rs = await firstValueFrom(this.authorizerClient.send<UserResponseTcp, UserRequestTcp>(TCP_USER_ACCESS_SERVICE_MESSAGE.CREATE_NEW_USER, { data: { email, firstname, lastname, username, ward_id, user_id, role_name: role_name, memberProfile, expertProfile, isExpert }, processId: processId }).pipe(map(row => row.data)))
 
 
         return rs;

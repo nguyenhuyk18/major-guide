@@ -26,9 +26,9 @@ export class RegisterRepository {
         let rs = await this.registerModel.find({
             day: { $in: [id_shift_in_day] },
             status: STATUS_REGISTER_ADVISE.APPROVE,
-            available_date: { $lt: startTime },
+            available_date: { $lte: startTime },
             $or: [
-                { unavailable_date: { $gt: endTime } },
+                { unavailable_date: { $gte: endTime } },
                 { unavailable_date: { $exists: false } }
             ]
         }).lean();

@@ -19,11 +19,26 @@ export class AuthorizerController {
 
     }
 
+
+    // tạo user thông thường (member)
     @Post()
     @ApiOkResponse({ type: ResponseDto<User> })
     @ApiOperation({ summary: 'Đăng ký tài khoản người dùng !!!' })
     async create(@Body() data: CreateKeyCloakUserRequest, @ProcessId() processId: string) {
+        data.isExpert = false;
         const rs = await firstValueFrom(this.authorizerService.send<UserResponseTcp, CreateKeyCloakUserRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.CREATE_USER, { processId, data: data }).pipe(map(row => row.data)))
+        return new ResponseDto<UserResponseTcp>({ data: rs });
+    }
+
+
+    // tạo user là chuyên gia (expert)
+    @Post('expert')
+    @ApiOkResponse({ type: ResponseDto<User> })
+    @ApiOperation({ summary: 'Đăng ký tài khoản cho chuyên gia (chỉ có admin thêm được thôi) !!!' })
+    async createExpertAccount(@Body() data: CreateKeyCloakUserRequest, @ProcessId() processId: string) {
+        data.isExpert = true;
+        console.log('sdfsdfsdfsdfwegergwrgergergergertger');
+        const rs = await firstValueFrom(this.authorizerService.send<UserResponseTcp, CreateKeyCloakUserRequest>(TCP_AUTHORIZER_SERVICE_MESSAGE.CREATE_USER, { processId, data: data }).pipe(map(row => row.data)));
         return new ResponseDto<UserResponseTcp>({ data: rs });
     }
 

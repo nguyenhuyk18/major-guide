@@ -7,6 +7,8 @@ import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { TCP_MEDIA_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 import { firstValueFrom, map } from "rxjs";
 import { User } from "@common/schemas/user-access/user.schema";
+import { ROLE } from "@common/constant/enum/action.constant";
+import { PaginationResponse } from "@common/interfaces/gateway/common/pagegination-gateway.interface";
 
 
 
@@ -37,6 +39,36 @@ export class UserService {
     }
 
 
+    // name-asc // tăng dần 1 
+    // name-desc // giảm dần -1
+    async getAllUserPagination(limit: number | undefined, page: number | undefined, role: ROLE | undefined, sort: string | undefined): Promise<PaginationResponse<Partial<User>>> {
+        const cond = {};
+        const limiting = limit || 6;
+        const index = page ? page - 1 : 0;
+        let sortigation = null;
+        let roleNeed: ROLE[] = [ROLE.EXPERT, ROLE.MEMBER];
+
+        if (sort) {
+            sortigation = {}
+            const arr = sort.split('-');
+            sortigation[arr[0]] = arr[1] === 'desc' ? -1 : 1;
+        }
+
+        if (role) {
+            roleNeed = [role];
+        }
+
+        const rs = await this.userRepository.fetchAll(cond, limiting, index, roleNeed, sortigation);
+
+        const rsNumber = await this.userRepository.fetchNumber(roleNeed, cond);
+
+        const totalPage = Math.ceil(rsNumber / limiting)
+
+        return {
+            result: rs,
+            totalPage: totalPage
+        } as PaginationResponse<Partial<User>>;
+    }
 
 
     getById(id: string) {

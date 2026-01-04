@@ -25,11 +25,13 @@ export class AuthorizerController {
     ) { }
 
 
-
     @MessagePattern(TCP_AUTHORIZER_SERVICE_MESSAGE.CREATE_USER)
     async register(@RequestParams() param: CreateKeyCloakUserRequest, @ProcessId() processId: string) {
         // console.log(TCP_AUTHORIZER_SERVICE_MESSAGE.CREATE_USER, 'sduidyfaiwyuegfyuiaerghyulervbghyuole')
+
         const rs = await this.authorizerService.createUser(param, processId);
+
+        // console.log(rs, 'ahwhehehehe')
         return ResponseTcp.success<UserResponseTcp>(rs)
     }
 

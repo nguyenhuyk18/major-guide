@@ -9,6 +9,8 @@ import { User } from "@common/schemas/user-access/user.schema";
 import { ProcessId } from '@common/decorators/processid.decorator'
 import { TcpLoggingInterceptor } from "@common/interceptors/tcpLogging.interceptors";
 import { GRPC_MESSAGE_USER_ACCESS } from '@common/constant/enum/grpc-message-pattern.constant';
+import { ROLE } from "@common/constant/enum/action.constant";
+import { PaginationResponse } from '@common/interfaces/gateway/common/pagegination-gateway.interface';
 
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
@@ -65,5 +67,13 @@ export class UserController {
     async updateAvatar(@RequestParams() param: UpdateAvatarRequestTcp, @ProcessId() processId: string) {
         await this.userService.updateAvatar(param, processId)
         return ResponseTcp.success<string>('Thêm ảnh thành công !!')
+    }
+
+
+    @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_ALL_USER)
+    async getAllUser(@RequestParams() param: { limit: number | undefined, page: number | undefined, role: ROLE | undefined, sort: string | undefined }) {
+        const rs = await this.userService.getAllUserPagination(param.limit, param.page, param.role, param.sort)
+        // console.log(rs);
+        return ResponseTcp.success<PaginationResponse<Partial<User>>>(rs);
     }
 }

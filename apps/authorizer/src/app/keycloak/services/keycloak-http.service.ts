@@ -45,9 +45,34 @@ export class KeycloakHttpService {
 
 
     async createUser(data: CreateKeyCloakUserRequest): Promise<string> {
-        const { email, firstname, lastname, password, username } = data;
+        const { email, firstname, lastname, password, username, isExpert } = data;
 
         const { access_token: accessToken } = await this.exchangeClientToken();
+
+        // nếu là chuyên gia thì chỉ cần add không cần verify email
+        if (isExpert) {
+            const { headers } = await this.axiosInstance.post(
+                `/admin/realms/${this.realm}/users`,
+                {
+                    firstName: firstname,
+                    lastName: lastname,
+                    email,
+                    username: username,
+                    enabled: true,
+                    emailVerified: true,
+                    credentials: [{ type: 'password', value: password, temporary: false }]
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                },
+            );
+
+            const userId = headers['location']?.split('/')?.pop();
+
+            return userId;
+        }
 
         const { headers } = await this.axiosInstance.post(
             `/admin/realms/${this.realm}/users`,

@@ -18,9 +18,9 @@ import { ROLE } from "@common/constant/enum/action.constant";
 export class ShiftInDayController {
     constructor(@Inject(TCP_SERVICE.SLOT_SERVICE) private shiftInDayClient: TcpClient) { }
 
+    // lấy ra các ca trong ngày đồng thời đếm luôn ca đó có bao nhiêu chuyên gia thường trực 
     @Get()
     @ApiOkResponse({ type: ResponseDto<ShiftInDayAmount[]> })
-    // Thêm required: false vào đây
     @ApiQuery({ name: 'start_time', required: false, type: String })
     @ApiQuery({ name: 'end_time', required: false, type: String })
     @ApiOperation({ summary: 'Api này để xem được các ca trong 1 ngày nhắm giúp dễ truy vấn số chuyên gia trong ca đấy' })
@@ -30,7 +30,7 @@ export class ShiftInDayController {
         const tmp = getCurrentWeek();
 
         let start = tmp[0];
-        let end = tmp[1];
+        let end = tmp[tmp.length - 1];
 
         if (startTime && endTime) {
             start = new Date(startTime);
@@ -43,7 +43,7 @@ export class ShiftInDayController {
         return new ResponseDto<ShiftInDayAmount[]>({ data: rs })
     }
 
-
+    // liệt kê ca trong ngày đó có bao nhiêu chuyên gia
     @Get(':id')
     @ApiOkResponse({ type: ResponseDto<ShiftInDayTcpByIdResponse> })
     @ApiOperation({ summary: 'Api này để xem các chuyên gia có trong ca đó' })

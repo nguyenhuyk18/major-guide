@@ -19,7 +19,8 @@ export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
     CREATE_NEW_USER = 'useraccess.create_new_user',
     GET_USER_BY_ID = 'useraccess.get_user_by_id',
     UPDATE_AVATAR_USER = 'useraccess.update_avatar_user',
-    GET_USER_BY_IDS = 'useraccess.get_user_by_ids'
+    GET_USER_BY_IDS = 'useraccess.get_user_by_ids',
+    GET_ALL_USER = 'useraccess.get_all_user'
 }
 
 export enum TCP_MEDIA_SERVICE_MESSAGE {

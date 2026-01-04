@@ -22,11 +22,13 @@ import { ROLE } from "@common/constant/enum/action.constant";
 export class RegisterController {
     constructor(@Inject(TCP_SERVICE.SLOT_SERVICE) private registerClient: TcpClient) { }
 
+
+    // đăng ký lịch tư vấn của chuyên gia
     @Post()
     @Authorization({ secured: true })
     @ApiOkResponse({ type: ResponseDto<RegisterResponseDto> })
     @ApiOperation({ summary: 'Tạo đơn đăng ký !!!' })
-    // @Authorization({ secured: true })
+    @Authorization({ secured: true })
     @Roles([ROLE.ADMIN, ROLE.EXPERT])
     async createRegister(@ProcessId() processId: string, @Body() body: RegisterRequestDto, @UserInfo() userInfo: User) {
         body.id_expert = userInfo.id;
@@ -36,6 +38,8 @@ export class RegisterController {
         return rs;
     }
 
+
+    // chấp thuận lịch đăng ký của chuyên gia
     @Put('/accept-register/:id')
     @Authorization({ secured: true })
     @ApiOkResponse({ type: ResponseDto<string> })
@@ -48,6 +52,8 @@ export class RegisterController {
         return rs;
     }
 
+
+    // Hủy lịch đăng ký của chuyên gia
     @Put('/cancle-register/:id')
     @Authorization({ secured: true })
     @ApiOkResponse({ type: ResponseDto<string> })
@@ -60,6 +66,8 @@ export class RegisterController {
         return rs;
     }
 
+
+    // lấy tất cả các đơn đăng ký trong DB 
     @Get()
     @ApiOkResponse({ type: ResponseDto<(Register & Partial<User>)[]> })
     @ApiQuery({ name: 'page', required: false, type: Number })
@@ -77,6 +85,7 @@ export class RegisterController {
     }
 
 
+    // lấy đơn đăng ký theo mã chuyên gia đó
     @Get('/expert/:id_expert')
     @ApiOkResponse({ type: ResponseDto<RegisterResponseDto> })
     @ApiOperation({ summary: 'Lấy đơn đăng ký theo mã chuyên gia !!!' })
@@ -89,6 +98,7 @@ export class RegisterController {
     }
 
 
+    // lấy đơn đăng ký theo ID 
     @Get(':id')
     @ApiOkResponse({ type: ResponseDto<RegisterResponseDto> })
     @ApiOperation({ summary: 'Lấy đơn đăng ký theo mã id!!!' })
