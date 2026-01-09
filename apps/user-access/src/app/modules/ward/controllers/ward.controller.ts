@@ -15,7 +15,6 @@ export class WardController {
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_ALL_WARD)
     async getAllWard() {
-        // console.log('sdsdsdsdsdsdsd')
         const rs = await this.wardService.getAll();
         return ResponseTcp.success<WardResponseTcp[]>(rs)
     }
@@ -24,6 +23,12 @@ export class WardController {
     async getWardById(@RequestParams() param: string) {
         const rs = await this.wardService.getById(param);
         return ResponseTcp.success<WardResponseTcp>(rs);
+    }
+
+    @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_WARD_BY_ID_PROVINCE)
+    async getWardByIdProvince(@RequestParams() param: string) {
+        const rs = await this.wardService.getByIdProvince(param);
+        return ResponseTcp.success<WardResponseTcp[]>(rs)
     }
 
 

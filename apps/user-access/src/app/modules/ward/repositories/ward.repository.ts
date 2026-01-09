@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { WardModel, WardModelName } from '@common/schemas/user-access/ward.schema';
 import { InjectModel } from "@nestjs/mongoose";
 
+import { ObjectId } from "mongodb";
+
 @Injectable()
 export class WardRepository {
     constructor(@InjectModel(WardModelName) private readonly wardModel: WardModel) { }
@@ -12,5 +14,10 @@ export class WardRepository {
 
     getById(id: string) {
         return this.wardModel.findById(id).populate('province_id')
+    }
+
+
+    getByIdProvince(id_province: ObjectId) {
+        return this.wardModel.find({ province_id: id_province })
     }
 }

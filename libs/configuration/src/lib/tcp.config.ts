@@ -6,7 +6,8 @@ export enum TCP_SERVICE {
     SLOT_SERVICE = 'TCP_SLOT_SERVICE',
     USER_ACCESS_SERVICE = 'TCP_USER_ACCESS_SERVICE',
     MEDIA_SERVICE = 'TCP_MEDIA_SERVICE',
-    AUTHORIZER_SERVICE = 'TCP_AUTHORIZER_SERVICE'
+    AUTHORIZER_SERVICE = 'TCP_AUTHORIZER_SERVICE',
+    BOOKING_SERVICE = 'TCP_BOOKING_SERVICE'
 }
 
 export class TcpConfiguration {
@@ -25,6 +26,11 @@ export class TcpConfiguration {
     @IsNotEmpty()
     @IsObject()
     TCP_AUTHORIZER_SERVICE: TcpClientOptions;
+
+
+    @IsNotEmpty()
+    @IsObject()
+    TCP_BOOKING_SERVICE: TcpClientOptions;
 
 
     constructor() {

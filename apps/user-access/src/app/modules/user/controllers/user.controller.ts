@@ -11,6 +11,7 @@ import { TcpLoggingInterceptor } from "@common/interceptors/tcpLogging.intercept
 import { GRPC_MESSAGE_USER_ACCESS } from '@common/constant/enum/grpc-message-pattern.constant';
 import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from '@common/interfaces/gateway/common/pagegination-gateway.interface';
+import { StatusAccount } from "@common/constant/enum/status-account.constant";
 
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
@@ -71,8 +72,8 @@ export class UserController {
 
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_ALL_USER)
-    async getAllUser(@RequestParams() param: { limit: number | undefined, page: number | undefined, role: ROLE | undefined, sort: string | undefined }) {
-        const rs = await this.userService.getAllUserPagination(param.limit, param.page, param.role, param.sort)
+    async getAllUser(@RequestParams() param: { limit: number | undefined, page: number | undefined, role: ROLE | undefined, sort: string | undefined, status: StatusAccount | undefined, name: string | undefined }) {
+        const rs = await this.userService.getAllUserPagination(param.limit, param.page, param.role, param.sort, param.status, param.name)
         // console.log(rs);
         return ResponseTcp.success<PaginationResponse<Partial<User>>>(rs);
     }

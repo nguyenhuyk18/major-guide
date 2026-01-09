@@ -15,6 +15,10 @@ export class ShiftInWeekService {
         private readonly registerRepository: RegisterRepository
     ) { }
 
+    async getAllShiftInDay() {
+        const rs = await this.shiftInWeekRepoitory.getAll();
+        return rs;
+    }
 
     async getAll(startTime: Date, endTime: Date) {
         const rs = await this.shiftInWeekRepoitory.getAll();

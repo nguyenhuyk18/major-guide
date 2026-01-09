@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { WardRepository } from "../repositories/ward.repository";
+import { ObjectId } from "mongodb";
 
 @Injectable()
 export class WardService {
@@ -11,5 +12,10 @@ export class WardService {
 
     getById(id: string) {
         return this.wardRepository.getById(id)
+    }
+
+    getByIdProvince(id_province: string) {
+        const newIdProvince = new ObjectId(id_province);
+        return this.wardRepository.getByIdProvince(newIdProvince);
     }
 }

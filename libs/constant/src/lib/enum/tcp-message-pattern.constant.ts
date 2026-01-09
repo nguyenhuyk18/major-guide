@@ -5,6 +5,7 @@ export enum TCP_SLOT_SERVICE_MESSAGE {
     CREATE_REGISTER_EXPERT = 'slot.create_register_expert',
     GET_REGISTER_BY_ID_EXPERT = 'slot.get_register_by_id_expert',
     GET_SHIFT_IN_DAY = 'slot.get_shift_in_day',
+    GET_SHIFT_IN_DAY_WITHOUT_COUNT = 'slot.get_shift_in_day_without_count',
     GET_SHIFT_IN_DAY_BY_ID = 'slot.get_shift_in_day_by_id',
     APPROVE_THE_REGISTER = 'slot.approve_the_register',
     CANCLE_THE_REGISTER = 'slot.cancle_the_register',
@@ -20,7 +21,8 @@ export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
     GET_USER_BY_ID = 'useraccess.get_user_by_id',
     UPDATE_AVATAR_USER = 'useraccess.update_avatar_user',
     GET_USER_BY_IDS = 'useraccess.get_user_by_ids',
-    GET_ALL_USER = 'useraccess.get_all_user'
+    GET_ALL_USER = 'useraccess.get_all_user',
+    GET_WARD_BY_ID_PROVINCE = 'useraccess.get_ward_by_id_province'
 }
 
 export enum TCP_MEDIA_SERVICE_MESSAGE {

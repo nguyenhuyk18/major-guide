@@ -17,6 +17,8 @@ export class ExpertInfoRequestTcp {
 
 
     level?: LEVEL_USER
+
+    price?: number
 }
 
 export class MemberInfoTcp {

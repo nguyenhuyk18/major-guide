@@ -18,7 +18,8 @@ export const mapperCreateUser = (data: UserRequestTcp): Partial<User> => {
                 information: data.expertProfile.information,
                 level: data.expertProfile.level as LEVEL_USER,
                 major: data.expertProfile.major,
-                teachAt: data.expertProfile.teachAt
+                teachAt: data.expertProfile.teachAt,
+                price: data.expertProfile.price
             },
 
         }

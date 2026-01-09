@@ -9,7 +9,6 @@ import { firstValueFrom, map } from "rxjs";
 import { LoginTcpRequest } from "@common/interfaces/tcp/authorizer";
 import jwt, { Jwt, JwtPayload } from 'jsonwebtoken';
 import jwksRsa, { JwksClient } from 'jwks-rsa';
-
 import { ConfigService } from "@nestjs/config";
 import { AuthorizerResponse } from '@common/interfaces/gateway/authorizer';
 import { UserAccessService } from '@common/interfaces/grpc/user-access';
@@ -18,7 +17,7 @@ import { ObjectId } from "mongodb";
 import { GRPC_SERVICES } from "@common/configuration/grpc.config";
 import { ExchangeUserTokenResponse } from "@common/interfaces/common/exchange-token-user-password.interface";
 import { User } from "@common/schemas/user-access/user.schema";
-import { ROLE } from "@common/constant/enum/action.constant";
+// import { ROLE } from "@common/constant/enum/action.constant";
 
 @Injectable()
 export class AuthorizerService implements OnModuleInit {
@@ -47,17 +46,14 @@ export class AuthorizerService implements OnModuleInit {
     }
 
     async loginUser(data: LoginTcpRequest) {
-        // console.log('1234')
         const rs = await this.keycloakService.exchangeUserToken(data);
-        // console.log('1234')
+
         const accessToken = rs.access_token;
         const decoded = jwt.decode(accessToken, { complete: true }) as Jwt;
-        // console.log('1234')
-        // console.log(decoded.payload.sub);
+
 
         // call grpc để lấy role tại đây
         const userInfo = await firstValueFrom(this.userAccessService.findUserById({ idUser: String(decoded.payload.sub), isKeycloak: true }))
-        // console.log(userInfo);
 
         if (data.isAdminSite == true && userInfo.roleName === 'member') {
             throw new ForbiddenException('Bạn không có quyền đăng nhập vào hệ thống admin , vui lòng thoát ra ngay trước khi lãnh hậu quả !!!')
@@ -65,7 +61,7 @@ export class AuthorizerService implements OnModuleInit {
         else if (data.isAdminSite == false && userInfo.roleName !== 'member') {
             throw new ForbiddenException('Đây không phải là nơi bạn thuộc về , Badbye =(((( ')
         }
-        // console.log('1234')
+
         return {
             ...rs,
             fileAvartarUrl: userInfo.fileAvartarUrl,
@@ -73,6 +69,7 @@ export class AuthorizerService implements OnModuleInit {
             roleName: userInfo.roleName,
             email: userInfo.email
         } as ExchangeUserTokenResponse & Partial<User>;
+
     }
 
 
@@ -105,7 +102,7 @@ export class AuthorizerService implements OnModuleInit {
 
             const user = await this.validateGetUser(payload.sub, processid);
 
-            // console.log(user)
+
             return {
                 valid: true,
                 metadata: {
@@ -141,7 +138,6 @@ export class AuthorizerService implements OnModuleInit {
     async getUser(userId: string, processId: string) {
         console.log(processId);
         const rs = await firstValueFrom(this.userAccessService.findUserById({ idUser: userId, isKeycloak: true }))
-        // console.log(rs);
         return rs;
     }
 

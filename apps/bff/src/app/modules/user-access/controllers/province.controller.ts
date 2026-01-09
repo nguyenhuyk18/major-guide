@@ -16,7 +16,7 @@ export class ProvinceController {
 
     @Get()
     @ApiOperation({ summary: 'Lấy toàn bộ các tỉnh thành !!!' })
-    @Authorization({ secured: true })
+    // @Authorization({ secured: true })
     @ApiOkResponse({ type: ResponseDto<ProvinceResponseDto> })
     async getAll(@ProcessId() processId: string) {
         // console.log('sdadasd')

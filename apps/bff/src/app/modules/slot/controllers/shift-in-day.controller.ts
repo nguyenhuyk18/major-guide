@@ -12,11 +12,24 @@ import { getCurrentWeek } from '@common/utils/common/convert-time.util';
 import { Authorization } from "@common/decorators/authorizer.decorator";
 import { Roles } from "@common/decorators/role.decorator";
 import { ROLE } from "@common/constant/enum/action.constant";
+import { ShiftInWeek } from "@common/schemas/slot/shift-of-day.schema";
 
 @Controller('shift-in-day')
 @ApiTags('Shift In Day')
 export class ShiftInDayController {
     constructor(@Inject(TCP_SERVICE.SLOT_SERVICE) private shiftInDayClient: TcpClient) { }
+
+    @Get('only-shift')
+    @ApiOkResponse({ type: ResponseDto<ShiftInWeek[]> })
+    @ApiOperation({ summary: 'Api nay chi de lay toan bo shift in day' })
+    @Authorization({ secured: true })
+    @Roles([ROLE.EXPERT])
+    async getOnlyShift(@ProcessId() processId: string) {
+        const rs = await firstValueFrom(this.shiftInDayClient.send<ShiftInWeek[], string>(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY_WITHOUT_COUNT, { processId }).pipe(map(row => row.data)));
+
+        return new ResponseDto<ShiftInWeek[]>({ data: rs });
+    }
+
 
     // lấy ra các ca trong ngày đồng thời đếm luôn ca đó có bao nhiêu chuyên gia thường trực 
     @Get()

@@ -15,6 +15,7 @@ import { User } from "@common/schemas/user-access/user.schema";
 import { Authorization } from "@common/decorators/authorizer.decorator";
 import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from "@common/interfaces/tcp/common/pagegination-tcp.interface";
+import { StatusAccount } from "@common/constant/enum/status-account.constant";
 
 
 @Controller('user')
@@ -84,13 +85,15 @@ export class UserController {
     @ApiQuery({ name: 'limit', required: false, type: Number })
     @ApiQuery({ name: 'role', required: false, type: String })
     @ApiQuery({ name: 'sort', required: false, type: String })
-    async getAllUser(@ProcessId() processId: string, @Query('limit') limit?: number, @Query('page') page?: number, @Query('role') role?: ROLE, @Query('sort') sort?: string) {
-        const rs = await firstValueFrom(this.userAccessServie.send<PaginationResponse<Partial<User>>, { limit: number | undefined, page: number | undefined, role: ROLE | undefined, sort: string | undefined }>(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_ALL_USER, {
+    @ApiQuery({ name: 'status', required: false, type: String })
+    @ApiQuery({ name: 'name', required: false, type: String })
+    async getAllUser(@ProcessId() processId: string, @Query('name') name: string, @Query('status') status: StatusAccount, @Query('limit') limit?: number, @Query('page') page?: number, @Query('role') role?: ROLE, @Query('sort') sort?: string) {
+        const rs = await firstValueFrom(this.userAccessServie.send<PaginationResponse<Partial<User>>, { limit: number | undefined, page: number | undefined, role: ROLE | undefined, sort: string | undefined, status: StatusAccount | undefined, name: string | undefined }>(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_ALL_USER, {
             processId: processId, data: {
-                limit, page, role, sort
+                limit, page, role, sort, status, name
             }
         }).pipe(map(row => row.data)));
-        console.log(rs);
+        // console.log(rs);
         return new ResponseDto<PaginationResponse<Partial<User>>>({ data: rs });
     }
 

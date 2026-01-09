@@ -2,10 +2,11 @@ import { Prop, Schema } from '@nestjs/mongoose'
 import { Model } from 'mongoose';
 import { Base, createSchema } from '../common/base.schema';
 import { ObjectId } from 'mongodb'
-import { Schema as MongooseSchema } from 'mongoose';
+// import { Schema as MongooseSchema } from 'mongoose';
 import { ROLE } from '@common/constant/enum/action.constant';
 import { StatusAccount } from '@common/constant/enum/status-account.constant';
 import { LEVEL_USER } from '@common/constant/enum/level-user.constant';
+import { SEX_USER } from '@common/constant/enum/sex-user.constant';
 
 
 @Schema({ _id: false })
@@ -21,6 +22,9 @@ export class ExpertInfo {
 
     @Prop({ type: String, enum: LEVEL_USER })
     level?: LEVEL_USER;
+
+    @Prop({ type: Number })
+    price: number;
 }
 
 @Schema({ _id: false })
@@ -60,6 +64,11 @@ export class User extends Base {
 
     @Prop({ type: String, enum: ROLE })
     roleName?: ROLE;
+
+    @Prop({ type: String, enum: SEX_USER })
+    sex: SEX_USER;
+
+
 }
 
 

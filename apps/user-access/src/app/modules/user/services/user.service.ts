@@ -9,7 +9,8 @@ import { firstValueFrom, map } from "rxjs";
 import { User } from "@common/schemas/user-access/user.schema";
 import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from "@common/interfaces/gateway/common/pagegination-gateway.interface";
-
+import { StatusAccount } from "@common/constant/enum/status-account.constant";
+import { Filter } from 'mongodb';
 
 
 @Injectable()
@@ -41,12 +42,28 @@ export class UserService {
 
     // name-asc // tăng dần 1 
     // name-desc // giảm dần -1
-    async getAllUserPagination(limit: number | undefined, page: number | undefined, role: ROLE | undefined, sort: string | undefined): Promise<PaginationResponse<Partial<User>>> {
-        const cond = {};
+    async getAllUserPagination(limit: number | undefined, page: number | undefined, role: ROLE | undefined, sort: string | undefined, status: StatusAccount | undefined, name: string | undefined): Promise<PaginationResponse<Partial<User>>> {
+        let cond: Filter<User> = {};
         const limiting = limit || 6;
         const index = page ? page - 1 : 0;
         let sortigation = null;
         let roleNeed: ROLE[] = [ROLE.EXPERT, ROLE.MEMBER];
+
+
+
+        if (status) {
+            cond = {
+                statusAccount: status
+            }
+        }
+
+        if (name) {
+            const nameRegex = new RegExp(name, 'i')
+            cond = {
+                ...cond,
+                name: nameRegex
+            }
+        }
 
         if (sort) {
             sortigation = {}
