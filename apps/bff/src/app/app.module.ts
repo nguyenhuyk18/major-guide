@@ -14,6 +14,7 @@ import { PermissionGuard } from '@common/guards/permission.guard';
 import { AuthorizerModule } from './modules/authorizer/authorizer.module';
 import { GRPC_SERVICES, GrpcProvider } from '@common/configuration/grpc.config';
 import { BookingModule } from './modules/booking/booking.module';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [ConfigModule.forRoot(
@@ -26,6 +27,7 @@ import { BookingModule } from './modules/booking/booking.module';
     UserAccessModule,
     AuthorizerModule,
     BookingModule,
+    ChatModule,
   ClientsModule.registerAsync([GrpcProvider(GRPC_SERVICES.AUTHORIZE_SERVICE)]),
     RedisProvider,
   ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.AUTHORIZER_SERVICE)])

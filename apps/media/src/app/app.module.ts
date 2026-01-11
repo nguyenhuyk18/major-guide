@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 import { ConfigModule } from '@nestjs/config';
 import { CONFIGURATION, TConfiguration } from '../configuration';
-import { AvartarModule } from './avartar/avartar.module';
+import { AvartarModule } from './modules/avartar/avartar.module';
 
 @Module({
   imports: [CloudinaryModule,
