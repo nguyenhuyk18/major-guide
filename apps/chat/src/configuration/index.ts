@@ -17,18 +17,9 @@ export class Configuration extends BaseConfiguration {
     @Type(() => TcpConfiguration)
     TCP_SERV = new TcpConfiguration()
 
-    // @ValidateNested()
-    // @Type(() => RedisConfiguration)
-    // REDIS_CONFIG = new RedisConfiguration()
-
-
-    // @ValidateNested()
-    // @Type(() => GrpcConfiguration)
-    // GRPC_CONFIG = new GrpcConfiguration();
-
     @ValidateNested()
     @Type(() => MongoConfiguration)
-    MONGO_CONFIG = new MongoConfiguration({ DB_NAME: process.env['SLOT_SERVICE_DB_NAME'] })
+    MONGO_CONFIG = new MongoConfiguration({ DB_NAME: process.env['CHAT_SERVICE_DB_NAME'] })
 }
 
 

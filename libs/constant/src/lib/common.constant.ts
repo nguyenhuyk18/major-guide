@@ -3,6 +3,7 @@ export enum MetaDataKeys {
     START_TIME = 'startTime',
     SECURED = 'secured',
     USER_INFO = 'user_info'
+    // COMMUNITY_CHAT = 'community_chat'
 }
 
 

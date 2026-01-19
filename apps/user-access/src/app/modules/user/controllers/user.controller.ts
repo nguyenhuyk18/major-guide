@@ -12,6 +12,7 @@ import { GRPC_MESSAGE_USER_ACCESS } from '@common/constant/enum/grpc-message-pat
 import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from '@common/interfaces/gateway/common/pagegination-gateway.interface';
 import { StatusAccount } from "@common/constant/enum/status-account.constant";
+import { FindUserByIds } from '@common/interfaces/gateway/user';
 
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
@@ -58,7 +59,7 @@ export class UserController {
 
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_IDS)
-    async getByIds(@RequestParams() param: { ids: string[] }) {
+    async getByIds(@RequestParams() param: FindUserByIds) {
         // console.log('sdsdsdsds')
         const rs = await this.userService.getByIds(param.ids);
         return ResponseTcp.success<{ [k: string]: User }>(rs);

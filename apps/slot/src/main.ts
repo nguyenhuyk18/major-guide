@@ -24,7 +24,7 @@ async function bootstrap() {
   )
   AppModule.CONFIGURATION.validate();
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.SLOT_PORT || 3000;
+  const port = AppModule.CONFIGURATION.APP_CONFIG.SLOT_PORT;
   await app.startAllMicroservices();
   await app.listen(port);
   Logger.log(

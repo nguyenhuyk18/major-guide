@@ -29,7 +29,7 @@ async function bootstrap() {
 
   AppModule.CONFIGURATION.validate()
 
-  const port = process.env['BOOKING_PORT'] || 3000;
+  const port = AppModule.CONFIGURATION.APP_CONFIG.BOOKING_PORT;
   await app.startAllMicroservices();
   await app.listen(port);
 

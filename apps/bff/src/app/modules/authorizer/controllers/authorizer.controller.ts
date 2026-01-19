@@ -10,10 +10,11 @@ import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
 import { UserResponseTcp } from "@common/interfaces/tcp/user";
 import { User } from "@common/schemas/user-access/user.schema";
 import { Body, Controller, Inject, Post } from "@nestjs/common";
-import { ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { firstValueFrom, map } from "rxjs";
 
 @Controller('authorizer')
+@ApiTags('Authorizer')
 export class AuthorizerController {
     constructor(@Inject(TCP_SERVICE.AUTHORIZER_SERVICE) private readonly authorizerService: TcpClient) {
 

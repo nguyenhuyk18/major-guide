@@ -35,7 +35,7 @@ async function bootstrap() {
     },
   )
 
-  const port = process.env.USER_ACCESS_PORT || 3000;
+  const port = AppModule.CONFIGURATION.APP_CONFIG.USER_ACCESS_PORT || 3000;
   AppModule.CONFIGURATION.validate();
   await app.startAllMicroservices();
   await app.listen(port);

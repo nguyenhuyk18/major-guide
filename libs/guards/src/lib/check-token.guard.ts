@@ -48,7 +48,6 @@ export class UserGuard implements CanActivate, OnModuleInit {
         }
 
         const token = getToken(request, false);
-        // console.log(token)
         return this.verifyToken(token, request)
     }
 

@@ -2,7 +2,8 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { AppConfiguration } from '@common/configuration/app.config';
 import { MailConfiguration } from '@common/configuration/mail.config';
-export class Configuration {
+import { BaseConfiguration } from '@common/configuration/base.config';
+export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => AppConfiguration)
     APP_CONFIG = new AppConfiguration();
@@ -13,4 +14,5 @@ export class Configuration {
 }
 
 export const CONFIGURATION = new Configuration();
-export type TConfiguration = Configuration
+export type TConfiguration = Configuration;
+CONFIGURATION.validate();

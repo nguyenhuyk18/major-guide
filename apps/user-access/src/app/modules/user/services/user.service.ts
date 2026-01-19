@@ -96,8 +96,7 @@ export class UserService {
     async getByIds(id: string[]) {
         // console.log(id)
         const rs = await this.userRepository.getByIds(id);
-        // console.log('chocho')
-        // console.log(rs);
+
         const mapRs = new Map<string, User>()
 
         rs.forEach(row => {

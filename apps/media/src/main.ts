@@ -25,7 +25,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix(globalPrefix);
   await app.startAllMicroservices();
-  const port = process.env['MEDIA_PORT'] || 3303;
+  const port = AppModule.CONFIGURATION.APP_CONFIG.MEDIA_PORT;
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`

@@ -7,11 +7,23 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
     const globalPrefix = AppModule.CONFIGURATION.GLOBAL_PREFIX;
+
+    app.use(
+      // Đường dẫn mặc định của socket.io
+      createProxyMiddleware({
+        pathFilter: '/socket.io',
+        target: `http://${process.env['CHAT_SERVICE_HOST']}:${AppModule.CONFIGURATION.APP_CONFIG.CHAT_PORT}`,
+        changeOrigin: true,
+        ws: true
+      }),
+    );
+
 
     // console.log(AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE)
 

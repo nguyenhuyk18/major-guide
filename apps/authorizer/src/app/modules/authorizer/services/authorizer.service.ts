@@ -58,16 +58,18 @@ export class AuthorizerService implements OnModuleInit {
         if (data.isAdminSite == true && userInfo.roleName === 'member') {
             throw new ForbiddenException('Bạn không có quyền đăng nhập vào hệ thống admin , vui lòng thoát ra ngay trước khi lãnh hậu quả !!!')
         }
-        else if (data.isAdminSite == false && userInfo.roleName !== 'member') {
-            throw new ForbiddenException('Đây không phải là nơi bạn thuộc về , Badbye =(((( ')
+        else if (data.isAdminSite == false && (userInfo.roleName !== 'member' && userInfo.roleName !== 'expert')) {
+            throw new ForbiddenException('Đây không phải là nơi bạn thuộc về !!!');
         }
+
 
         return {
             ...rs,
             fileAvartarUrl: userInfo.fileAvartarUrl,
             name: userInfo.name,
             roleName: userInfo.roleName,
-            email: userInfo.email
+            email: userInfo.email,
+            id: userInfo.id
         } as ExchangeUserTokenResponse & Partial<User>;
 
     }

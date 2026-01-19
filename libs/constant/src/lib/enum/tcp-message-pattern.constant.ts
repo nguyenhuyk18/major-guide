@@ -36,3 +36,9 @@ export enum TCP_AUTHORIZER_SERVICE_MESSAGE {
     VERIFY_USER = 'autrhorizer.verify_user'
 }
 
+
+export enum TCP_CHAT_SERVICE_MESSAGE {
+    SAVE_MESSAGE_COMMUNITY = 'chat.save_message_community',
+    GET_ALL_MESSAGE_COMMUNITY = 'chat.get_all_message_community',
+    GET_MESSAGE_COMMUNITY_BY_ID = 'chat.get_message_community_by_id'
+}

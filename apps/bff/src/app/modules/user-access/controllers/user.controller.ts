@@ -1,6 +1,6 @@
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
-import { BadRequestException, Controller, Get, Inject, Param, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { BadRequestException, Controller, Get, Inject, Param, Put, Query, UploadedFile, UseInterceptors, Post, Body } from '@nestjs/common';
 import { ApiBody, ApiConsumes, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { ResponseDto } from '@common/interfaces/gateway/response-gateway.dto';
 import { firstValueFrom, map } from "rxjs";
@@ -16,6 +16,7 @@ import { Authorization } from "@common/decorators/authorizer.decorator";
 import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from "@common/interfaces/tcp/common/pagegination-tcp.interface";
 import { StatusAccount } from "@common/constant/enum/status-account.constant";
+import { FindUserByIds } from '@common/interfaces/gateway/user';
 
 
 @Controller('user')
@@ -25,6 +26,14 @@ export class UserController {
         @Inject(TCP_SERVICE.USER_ACCESS_SERVICE) private readonly userAccessServie: TcpClient
     ) { }
 
+    @Post('/many-user')
+    @ApiOperation({ summary: 'Api tìm user theo id' })
+    @ApiOkResponse({ type: ResponseDto<{ [k: string]: User }> })
+    async getUserByIds(@Body() data: FindUserByIds, @ProcessId() processId: string) {
+        const rs = await firstValueFrom(this.userAccessServie.send<{ [k: string]: User }, FindUserByIds>(TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_IDS, { data: data, processId }).pipe(map(row => row.data)));
+
+        return new ResponseDto<{ [k: string]: User }>({ data: rs });
+    }
 
     @Put('/upload-image/:id')
     @ApiConsumes('multipart/form-data')
