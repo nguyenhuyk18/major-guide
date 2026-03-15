@@ -20,7 +20,9 @@ export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
     CREATE_NEW_USER = 'useraccess.create_new_user',
     GET_USER_BY_ID = 'useraccess.get_user_by_id',
     UPDATE_AVATAR_USER = 'useraccess.update_avatar_user',
+    UPDATE_USER_PROFILE = 'useraccess.update_user_profile',
     GET_USER_BY_IDS = 'useraccess.get_user_by_ids',
+    CONTACT_TO_SUPPORT = 'useraccess.contact_to_support',
     GET_ALL_USER = 'useraccess.get_all_user',
     GET_WARD_BY_ID_PROVINCE = 'useraccess.get_ward_by_id_province'
 }
@@ -41,4 +43,9 @@ export enum TCP_CHAT_SERVICE_MESSAGE {
     SAVE_MESSAGE_COMMUNITY = 'chat.save_message_community',
     GET_ALL_MESSAGE_COMMUNITY = 'chat.get_all_message_community',
     GET_MESSAGE_COMMUNITY_BY_ID = 'chat.get_message_community_by_id'
+}
+
+
+export enum TCP_BOOKING_SERVICE_MESSAGE {
+    SAVE_REVERSE = 'booking.save_reserve'
 }

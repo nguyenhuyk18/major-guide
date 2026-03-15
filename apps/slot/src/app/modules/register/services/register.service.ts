@@ -99,7 +99,7 @@ export class RegisterService {
         const registerLatest = await this.registerRepository.getById(id);
 
         // laays danh sách các đơn đăng ký cũ mà đc chấp thuận của một chuyên gia ra
-        const getRegisterExpert: Register[] = await this.registerRepository.getAll({ id_expert: registerLatest.id_expert, status: STATUS_REGISTER_ADVISE.APPROVE }, { available_date: -1 });
+        const getRegisterExpert: Register[] = await this.registerRepository.getAll({ id_expert: registerLatest.id_expert, status: STATUS_REGISTER_ADVISE.APPROVE }, { _id: -1 });
 
         // lấy ngày chủ nhật của 2 tuần sau ra làm mốc để sang ngày thứ 2 thành lịch hợp lệ
         const dateExpire = new Date();

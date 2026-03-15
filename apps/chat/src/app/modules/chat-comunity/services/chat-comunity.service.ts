@@ -42,7 +42,7 @@ export class ChatComunityService {
 
 
     getById(id: string) {
-        const rs = this.getById(id);
+        const rs = this.chatComunityService.getById(id);
         return rs;
     }
 

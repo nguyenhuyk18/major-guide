@@ -77,7 +77,7 @@ export class UserRepository {
 
 
     updateUserById(id: string, data: Partial<User>) {
-        const rs = this.userModel.findByIdAndUpdate(id, data);
+        const rs = this.userModel.findByIdAndUpdate(id, data, { new: true });
         return rs;
     }
 

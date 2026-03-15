@@ -16,7 +16,9 @@ import { Authorization } from "@common/decorators/authorizer.decorator";
 import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from "@common/interfaces/tcp/common/pagegination-tcp.interface";
 import { StatusAccount } from "@common/constant/enum/status-account.constant";
-import { FindUserByIds } from '@common/interfaces/gateway/user';
+import { FindUserByIds, UpdateUserRequestDto } from '@common/interfaces/gateway/user';
+import { UpdateUserRequestTcp } from '@common/interfaces/tcp/user';
+import { ContactMailRequest, ContactMailResponse } from '@common/interfaces/gateway/mail';
 
 
 @Controller('user')
@@ -107,5 +109,37 @@ export class UserController {
     }
 
 
+    @Put('/:id')
+    @ApiOperation({ summary: 'API chỉnh sửa thông tin user (dựa trên role)' })
+    @ApiOkResponse({ type: ResponseDto<User> })
+    @Authorization({ secured: true })
+    async updateUserProfile(
+        @Param('id') userId: string,
+        @Body() updateData: UpdateUserRequestDto,
+        @ProcessId() processId: string
+    ) {
+        const tcpPayload: UpdateUserRequestTcp = {
+            userId,
+            ...updateData
+        };
+
+        const rs = await firstValueFrom(
+            this.userAccessServie.send<User, UpdateUserRequestTcp>(
+                TCP_USER_ACCESS_SERVICE_MESSAGE.UPDATE_USER_PROFILE,
+                { data: tcpPayload, processId }
+            ).pipe(map(row => row.data))
+        );
+
+        return new ResponseDto<User>({ data: rs });
+    }
+
+
+    @Post('/contact')
+    @ApiOperation({ summary: 'API gửi email' })
+    async sendEmailContact(@Body() data: ContactMailRequest, @ProcessId() processId: string) {
+        const rs = await firstValueFrom(this.userAccessServie.send<ContactMailResponse, ContactMailRequest>(TCP_USER_ACCESS_SERVICE_MESSAGE.CONTACT_TO_SUPPORT, { data: data, processId }).pipe(map(row => row.data)));
+
+        return new ResponseDto<ContactMailResponse>({ data: rs });
+    }
 
 }

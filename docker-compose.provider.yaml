@@ -58,3 +58,17 @@ services:
     networks:
       - major_guide_nw
   
+  rabbitmq:
+    image : rabbitmq:3.12-management
+    container_name: rabbitmq_major_guide
+    ports:
+      - "5672:5672"      
+      - "15672:15672"    
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: unless-stopped
+    volumes:
+      - ./docker/docker_data/rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - major_guide_nw

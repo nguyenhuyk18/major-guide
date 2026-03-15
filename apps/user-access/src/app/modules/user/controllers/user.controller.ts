@@ -1,9 +1,9 @@
-import { Controller, UseInterceptors } from "@nestjs/common";
+import { Controller, Inject, UseInterceptors } from "@nestjs/common";
 import { UserService } from "../services/user.service";
 import { GrpcMethod, MessagePattern } from "@nestjs/microservices";
 import { TCP_USER_ACCESS_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 import { RequestParams } from "@common/decorators/request-params.decorator";
-import { UpdateAvatarRequestTcp, UserRequestTcp } from '@common/interfaces/tcp/user';
+import { UpdateAvatarRequestTcp, UpdateUserRequestTcp, UserRequestTcp } from '@common/interfaces/tcp/user';
 import { ResponseTcp } from '@common/interfaces/tcp/common/response-tcp.interface';
 import { User } from "@common/schemas/user-access/user.schema";
 import { ProcessId } from '@common/decorators/processid.decorator'
@@ -13,11 +13,26 @@ import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from '@common/interfaces/gateway/common/pagegination-gateway.interface';
 import { StatusAccount } from "@common/constant/enum/status-account.constant";
 import { FindUserByIds } from '@common/interfaces/gateway/user';
+import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
+import { RABBIT_SERVICE } from "@common/configuration/rabbit.config";
+import { ContactMailRequest } from '@common/interfaces/tcp/mail';
+import { MAIL_SERVICE_RABBIT_MESSAGE } from '@common/constant/enum/rabbitmq-message.constant';
 
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
 export class UserController {
-    constructor(private readonly userService: UserService) { }
+    constructor(private readonly userService: UserService,
+        @Inject(RABBIT_SERVICE.MAIL_SERVICE) private readonly mailService: TcpClient
+
+    ) { }
+
+
+
+    @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.CONTACT_TO_SUPPORT)
+    async contactEmail(@RequestParams() data: ContactMailRequest, @ProcessId() processId: string) {
+        this.mailService.emit<void, ContactMailRequest>(MAIL_SERVICE_RABBIT_MESSAGE.CONTACT_MAIL, { processId, data });
+        return ResponseTcp.success<{ message: string }>({ message: 'Vui lòng kiếm tra email , nếu không có vui lòng kiểm tra email rác !!!' });
+    }
 
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.CREATE_NEW_USER)
@@ -67,8 +82,8 @@ export class UserController {
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.UPDATE_AVATAR_USER)
     async updateAvatar(@RequestParams() param: UpdateAvatarRequestTcp, @ProcessId() processId: string) {
-        await this.userService.updateAvatar(param, processId)
-        return ResponseTcp.success<string>('Thêm ảnh thành công !!')
+        const rs = await this.userService.updateAvatar(param, processId)
+        return ResponseTcp.success<string>(rs.fileAvartarUrl);
     }
 
 
@@ -77,5 +92,14 @@ export class UserController {
         const rs = await this.userService.getAllUserPagination(param.limit, param.page, param.role, param.sort, param.status, param.name)
         // console.log(rs);
         return ResponseTcp.success<PaginationResponse<Partial<User>>>(rs);
+    }
+
+    @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.UPDATE_USER_PROFILE)
+    async updateUserProfile(
+        @RequestParams() param: UpdateUserRequestTcp,
+        @ProcessId() processId: string
+    ) {
+        const rs = await this.userService.updateUserProfile(param, processId);
+        return ResponseTcp.success<User>(rs);
     }
 }

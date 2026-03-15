@@ -50,6 +50,7 @@ export class RegisterController {
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.APPROVE_THE_REGISTER)
     async approveRegisterById(@RequestParams() param: { id: string }) {
+        // console.log(param.id);
         const rs = await this.registerService.approveTheRegister(param.id);
 
         if (!rs) {

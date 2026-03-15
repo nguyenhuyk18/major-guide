@@ -4,6 +4,7 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer'
 import { MongoConfiguration } from '@common/configuration/mongo.config';
 import { TcpConfiguration } from '@common/configuration/tcp.config';
+import { RabbitConfiguration } from '@common/configuration/rabbit.config';
 
 export class Configuration extends BaseConfiguration {
 
@@ -18,6 +19,11 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => TcpConfiguration)
     TCP_SERV = new TcpConfiguration()
+
+
+    @ValidateNested()
+    @Type(() => RabbitConfiguration)
+    RABBIT_CONFIG = new RabbitConfiguration();
 
 }
 

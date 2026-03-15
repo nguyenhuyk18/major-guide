@@ -10,9 +10,9 @@ export const Authorization = ({ secured = false }: { secured?: boolean }) => {
 
     if (secured) {
         const decorator = [ApiBearerAuth()];
-        return applyDecorators(...decorator, setMetadata)
+        return applyDecorators(...decorator, setMetadata);
     }
 
-    return setMetadata
+    return setMetadata;
 
 }

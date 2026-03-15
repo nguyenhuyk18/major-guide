@@ -4,6 +4,7 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer'
 import { TcpConfiguration } from '@common/configuration/tcp.config';
 import { MongoConfiguration } from '@common/configuration/mongo.config';
+import { RabbitConfiguration } from '@common/configuration/rabbit.config';
 
 export class Configuration extends BaseConfiguration {
     @ValidateNested()
@@ -17,6 +18,12 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => MongoConfiguration)
     MONGO_CONFIG = new MongoConfiguration({ DB_NAME: process.env['BOOKING_SERVICE_DB_NAME'] })
+
+
+
+    @ValidateNested()
+    @Type(() => RabbitConfiguration)
+    RABBIT_CONFIG = new RabbitConfiguration();
 }
 
 export const CONFIGURATION = new Configuration();

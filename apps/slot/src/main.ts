@@ -22,6 +22,41 @@ async function bootstrap() {
       },
     },
   )
+
+  // set up lắng nghe đường ống BOOKING HOLD DEMAND
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_DEMAND.transport,
+      options: {
+        urls: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_DEMAND.options.urls,
+        queue: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_DEMAND.options.queue,
+        queueOptions: {
+          durable: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_DEMAND.options.queueOptions.durable,
+        },
+        prefetchCount: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_DEMAND.options.prefetchCount,
+        noAck: false,
+        persistent: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_DEMAND.options.persistent
+      }
+    },
+  )
+
+  // set up lắng nghe đường ống BOOKING HOLD CANCLE
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL_SLOT.transport,
+      options: {
+        urls: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL_SLOT.options.urls,
+        queue: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL_SLOT.options.queue,
+        queueOptions: {
+          durable: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL_SLOT.options.queueOptions.durable,
+        },
+        prefetchCount: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL_SLOT.options.prefetchCount,
+        noAck: false,
+        persistent: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL_SLOT.options.persistent
+      }
+    },
+  )
+
   AppModule.CONFIGURATION.validate();
   app.setGlobalPrefix(globalPrefix);
   const port = AppModule.CONFIGURATION.APP_CONFIG.SLOT_PORT;

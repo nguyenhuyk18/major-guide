@@ -5,6 +5,8 @@ import { Type } from 'class-transformer'
 import { MongoConfiguration } from '@common/configuration/mongo.config';
 import { TcpConfiguration } from '@common/configuration/tcp.config';
 import { GrpcConfiguration } from '@common/configuration/grpc.config';
+import { RabbitConfiguration } from '@common/configuration/rabbit.config';
+import { QUEUE_NAME } from '@common/constant/enum/queuename.constant';
 
 export class Configuration extends BaseConfiguration {
 
@@ -24,6 +26,10 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => GrpcConfiguration)
     GRPC_CONFIG = new GrpcConfiguration()
+
+    @ValidateNested()
+    @Type(() => RabbitConfiguration)
+    RABBIT_CONFIG = new RabbitConfiguration();
 }
 
 

@@ -1,6 +1,6 @@
 import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { UserRepository } from '../repositories/user.repository';
-import { UpdateAvatarRequestTcp, UserRequestTcp } from "@common/interfaces/tcp/user";
+import { UpdateAvatarRequestTcp, UpdateUserRequestTcp, UserRequestTcp } from "@common/interfaces/tcp/user";
 import { mapperCreateUser } from "../mapper";
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
@@ -10,7 +10,7 @@ import { User } from "@common/schemas/user-access/user.schema";
 import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from "@common/interfaces/gateway/common/pagegination-gateway.interface";
 import { StatusAccount } from "@common/constant/enum/status-account.constant";
-import { Filter } from 'mongodb';
+import { Filter, ObjectId } from 'mongodb';
 
 
 @Injectable()
@@ -119,6 +119,58 @@ export class UserService {
 
         return this.userRepository.updateUserById(data.id_user, { fileAvartarUrl: fileurl })
 
+    }
+
+
+    async updateUserProfile(data: UpdateUserRequestTcp, processId: string): Promise<User> {
+        // Lấy thông tin user hiện tại
+        const currentUser = await this.userRepository.getById(data.userId);
+
+        if (!currentUser) {
+            throw new BadRequestException('User không tồn tại');
+        }
+
+        // Chuẩn bị object update
+        const updateData: Partial<User> = {};
+
+        // Các trường chung cho tất cả role
+        if (data.name !== undefined) {
+            updateData.name = data.name;
+        }
+        if (data.wardId !== undefined) {
+            updateData.wardId = new ObjectId(data.wardId);
+        }
+
+        // Xử lý theo role
+        switch (currentUser.roleName) {
+            case ROLE.EXPERT:
+                if (data.expertProfile) {
+                    updateData.expertProfile = {
+                        ...currentUser.expertProfile,
+                        ...data.expertProfile
+                    };
+                }
+                break;
+
+            case ROLE.MEMBER:
+                if (data.memberProfile) {
+                    updateData.memberProfile = {
+                        ...currentUser.memberProfile,
+                        ...data.memberProfile
+                    };
+                }
+                break;
+
+            case ROLE.ADMIN:
+                // Admin chỉ được update name và wardId (đã xử lý ở trên)
+                break;
+
+            default:
+                throw new BadRequestException('Role không hợp lệ');
+        }
+
+        // Thực hiện update
+        return this.userRepository.updateUserById(data.userId, updateData);
     }
 
 

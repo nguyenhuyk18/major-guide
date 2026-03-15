@@ -23,15 +23,12 @@ export class ChatComunityController {
     @MessagePattern(TCP_CHAT_SERVICE_MESSAGE.GET_ALL_MESSAGE_COMMUNITY)
     async getAllMessage(@RequestParams() param: { page: number }) {
         const rs = await this.chatComunityService.getAll(param.page);
-
-        // const numberOfMessage = await this
-
-
         return ResponseTcp.success<ChatCommunityTcpResponeList>(rs)
     }
 
     @MessagePattern(TCP_CHAT_SERVICE_MESSAGE.GET_MESSAGE_COMMUNITY_BY_ID)
     async getMessageById(@RequestParams() param: { id: string }) {
+        console.log(param.id)
         const rs = await this.chatComunityService.getById(param.id);
         return ResponseTcp.success<ChatComunityResponseTcp>(rs);
     }

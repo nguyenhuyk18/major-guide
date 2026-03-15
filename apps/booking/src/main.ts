@@ -26,8 +26,23 @@ async function bootstrap() {
     },
   )
 
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL.transport,
+      options: {
+        urls: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL.options.urls,
+        queue: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL.options.queue,
+        queueOptions: {
+          durable: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL.options.queueOptions.durable,
+        },
+        prefetchCount: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL.options.prefetchCount,
+        noAck: false,
+        persistent: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_HOLD_CANCEL.options.persistent
+      }
+    },
+  )
 
-  AppModule.CONFIGURATION.validate()
+  AppModule.CONFIGURATION.validate();
 
   const port = AppModule.CONFIGURATION.APP_CONFIG.BOOKING_PORT;
   await app.startAllMicroservices();
