@@ -16,4 +16,12 @@ export class AvartarController {
         return ResponseTcp.success<string>(url_name)
     }
 
+    @MessagePattern(TCP_MEDIA_SERVICE_MESSAGE.UPLOAD_PDF)
+    async uploadPdf(@RequestParams() params: { buff: string, filename: string }) {
+        const url = await this.cloudinaryService.uploadFile(
+            Buffer.from(params.buff, 'base64'),
+            params.filename
+        );
+        return ResponseTcp.success<string>(url);
+    }
 }

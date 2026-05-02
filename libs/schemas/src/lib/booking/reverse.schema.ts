@@ -16,8 +16,9 @@ export class Reverse extends Base {
 
     @Prop({ type: String })
     id_shift_in_day: string;
+
     // ======================= //
-    @Prop({ type: String })
+    @Prop({ type: Date })
     day_support: Date;
 
     @Prop({ type: Date })
@@ -37,6 +38,33 @@ export class Reverse extends Base {
 
     @Prop({ type: String })
     id_reverse: string;
+
+    @Prop({ type: String })
+    payment_link: string;
+
+    @Prop({ type: Date })
+    payment_date: Date;
+
+    @Prop({ type: String })
+    transaction_id: string;
+
+    @Prop({ type: Date })
+    payment_expires_at: Date;
+
+    @Prop({ type: String })
+    email_customer: string;
+
+    @Prop({ type: String })
+    name_customer: string;
+
+    @Prop({ type: String })
+    name_expert: string;
+
+    @Prop({ type: String })
+    avatar_expert: string;
+
+    @Prop({ type: String })
+    note: string;
 
     // @Prop({  })
 

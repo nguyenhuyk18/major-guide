@@ -14,3 +14,14 @@ export class ShiftDailyStatusTcp {
 
 
 }
+
+export interface ShiftDailyStatusCheckRequest {
+    date_reverse: Date;
+    id_shift_in_day: string;
+    id_expert: string;
+}
+
+export interface ShiftDailyStatusCheckResponse {
+    status: STATUS_SLOT | null;
+    is_available: boolean;
+}

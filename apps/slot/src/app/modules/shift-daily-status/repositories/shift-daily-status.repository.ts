@@ -80,6 +80,20 @@ export class ShiftDailyStatusRepository {
     }
 
     /**
+     * Find all shift daily statuses by date, shift in day ID, and expert ID combined
+     */
+    findByDateAndShiftAndExpert(date: Date, id_shift_in_day: string, id_expert: string) {
+        return this.shiftDailyStatusModel.find({
+            id_expert,
+            id_shift_in_day: new ObjectId(id_shift_in_day),
+            date_reverse: {
+                $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+                $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+            }
+        }).populate('id_shift_in_day').exec();
+    }
+
+    /**
      * Update shift daily status by ID
      */
     updateByUuid(id: string, updateData: Partial<ShiftDailyStatus>) {

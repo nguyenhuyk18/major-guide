@@ -5,6 +5,7 @@ import { Type } from 'class-transformer'
 import { TcpConfiguration } from '@common/configuration/tcp.config';
 import { MongoConfiguration } from '@common/configuration/mongo.config';
 import { RabbitConfiguration } from '@common/configuration/rabbit.config';
+import { VNPayConfiguration } from '@common/configuration/vnpay.config';
 
 export class Configuration extends BaseConfiguration {
     @ValidateNested()
@@ -24,6 +25,10 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => RabbitConfiguration)
     RABBIT_CONFIG = new RabbitConfiguration();
+
+    @ValidateNested()
+    @Type(() => VNPayConfiguration)
+    VNPAY_CONFIG = new VNPayConfiguration();
 }
 
 export const CONFIGURATION = new Configuration();

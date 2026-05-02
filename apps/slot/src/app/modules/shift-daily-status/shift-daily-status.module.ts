@@ -8,7 +8,8 @@ import { ShiftDailyStatusDestination } from "@common/schemas/slot/shift-daily-st
 @Module({
     imports: [MongooseModule.forFeature([ShiftDailyStatusDestination])],
     providers: [ShiftDailyStatusRepository, ShiftDailyStatusService],
-    controllers: [ShiftDailyStatusController]
+    controllers: [ShiftDailyStatusController],
+    exports: [ShiftDailyStatusService]
 })
 export class ShiftDailyStatusModule {
 

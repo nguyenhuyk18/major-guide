@@ -11,6 +11,7 @@ import { ROLE } from "@common/constant/enum/action.constant";
 import { PaginationResponse } from "@common/interfaces/gateway/common/pagegination-gateway.interface";
 import { StatusAccount } from "@common/constant/enum/status-account.constant";
 import { Filter, ObjectId } from 'mongodb';
+import { LEVEL_USER } from "@common/constant/enum/level-user.constant";
 
 
 @Injectable()
@@ -144,21 +145,22 @@ export class UserService {
         // Xử lý theo role
         switch (currentUser.roleName) {
             case ROLE.EXPERT:
+                // console.log('tôi đã vào đây')
                 if (data.expertProfile) {
                     updateData.expertProfile = {
-                        ...currentUser.expertProfile,
-                        ...data.expertProfile
+                        teachAt: data?.expertProfile?.teachAt,
+                        price: data?.expertProfile?.price || 60000,
+                        information: data?.expertProfile?.information || 'Không có thông tin',
+                        level: data?.expertProfile?.level || LEVEL_USER.BACHELOR,
+                        major: data?.expertProfile?.major
                     };
                 }
                 break;
 
             case ROLE.MEMBER:
-                if (data.memberProfile) {
-                    updateData.memberProfile = {
-                        ...currentUser.memberProfile,
-                        ...data.memberProfile
-                    };
-                }
+                // if (data.expertProfile) {
+
+                // }
                 break;
 
             case ROLE.ADMIN:
@@ -168,6 +170,8 @@ export class UserService {
             default:
                 throw new BadRequestException('Role không hợp lệ');
         }
+
+        console.log(updateData);
 
         // Thực hiện update
         return this.userRepository.updateUserById(data.userId, updateData);

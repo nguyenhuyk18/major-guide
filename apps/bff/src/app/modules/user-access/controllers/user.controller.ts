@@ -123,6 +123,8 @@ export class UserController {
             ...updateData
         };
 
+        // console.log(tcpPayload);
+
         const rs = await firstValueFrom(
             this.userAccessServie.send<User, UpdateUserRequestTcp>(
                 TCP_USER_ACCESS_SERVICE_MESSAGE.UPDATE_USER_PROFILE,

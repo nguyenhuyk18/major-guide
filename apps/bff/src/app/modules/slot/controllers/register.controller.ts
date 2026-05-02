@@ -16,6 +16,7 @@ import { Register } from "@common/schemas/slot/register.schema";
 import { PaginationResponse } from '@common/interfaces/tcp/common/pagegination-tcp.interface';
 import { Roles } from "@common/decorators/role.decorator";
 import { ROLE } from "@common/constant/enum/action.constant";
+import { getCurrentWeek } from "@common/utils/common/convert-time.util";
 
 @Controller('register')
 @ApiTags('Register')
@@ -88,11 +89,24 @@ export class RegisterController {
     // lấy đơn đăng ký theo mã chuyên gia đó
     @Get('/expert/:id_expert')
     @ApiOkResponse({ type: ResponseDto<RegisterResponseDto> })
+    @ApiQuery({ name: 'start_time', required: false, type: String })
+    @ApiQuery({ name: 'end_time', required: false, type: String })
     @ApiOperation({ summary: 'Lấy đơn đăng ký theo mã chuyên gia !!!' })
     // @Roles([ ROLE.ADMIN , ROLE.EXPERT ])
-    async findRegisterByIdExpert(@ProcessId() processId: string, @Param('id_expert') id: string) {
+    async findRegisterByIdExpert(@ProcessId() processId: string, @Param('id_expert') id: string, @Query('start_time') startTime?: string,
+        @Query('end_time') endTime?: string) {
+        const tmp = getCurrentWeek();
+
+        let start = tmp[0];
+        let end = tmp[tmp.length - 1];
+
+        if (startTime && endTime) {
+            start = new Date(startTime);
+            end = new Date(endTime);
+        }
+
         const rs = await firstValueFrom(
-            this.registerClient.send<RegisterResponseDto, string>(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID_EXPERT, { processId, data: id }).pipe(map(row => new ResponseDto({ data: row.data })))
+            this.registerClient.send<RegisterResponseDto, { data: string, startTime: Date, endTime: Date }>(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID_EXPERT, { processId, data: { data: id, endTime: end, startTime: start } }).pipe(map(row => new ResponseDto({ data: row.data })))
         )
         return rs;
     }

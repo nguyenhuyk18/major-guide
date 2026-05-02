@@ -1,16 +1,27 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Inject } from "@nestjs/common";
 import { MailService } from "../services/mail.service";
 import { MAIL_SERVICE_RABBIT_MESSAGE } from '@common/constant/enum/rabbitmq-message.constant';
 import { Ctx, EventPattern, RmqContext } from '@nestjs/microservices'
 import { ContactMailRequest } from '@common/interfaces/tcp/mail';
 import { Logger } from '@nestjs/common';
 import { RequestParams } from '@common/decorators/request-params.decorator';
+import { EinvoiceMailRequest } from '@common/interfaces/tcp/mail/einvoice-mail.interface'
+import { PDFGeneratorService } from '../../pdf-generator/services/pdf-generator.service';
+import { buildInvoiceEmailHtml } from '../templates/einvoice-email.helper';
+import path from 'path';
+import { TCP_SERVICE } from "@common/configuration/tcp.config";
+import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
+import { TCP_MEDIA_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 
 @Controller()
 export class MailController {
     private readonly logger = new Logger(MailController.name);
 
-    constructor(private readonly mailService: MailService) { }
+    constructor(
+        private readonly mailService: MailService,
+        private readonly pdfService: PDFGeneratorService,
+        @Inject(TCP_SERVICE.MEDIA_SERVICE) private readonly mediaService: TcpClient
+    ) { }
 
 
     @EventPattern(MAIL_SERVICE_RABBIT_MESSAGE.CONTACT_MAIL)
@@ -159,6 +170,49 @@ export class MailController {
 
         } catch (error) {
             this.logger.error(`❌ Failed to process contact mail:`, error);
+            throw error;
+        }
+    }
+
+
+    @EventPattern(MAIL_SERVICE_RABBIT_MESSAGE.SEND_EINVOICE)
+    async sendEmailEinvoice(@RequestParams() data: EinvoiceMailRequest, @Ctx() context: RmqContext) {
+        try {
+            this.logger.log(`📄 Generating e-invoice for: ${data.email}`);
+
+            // 1. Xác định đường dẫn template EJS
+            // const templatePath = path.join(__dirname, 'templates', 'invoice.template.ejs');
+
+            // 2. Generate PDF từ EJS template
+            // const pdfBuffer = await this.pdfService.generatePdfFromEjs(templatePath, data);
+
+            // 3. Build HTML email body
+            const emailHtml = buildInvoiceEmailHtml(data);
+
+            // 4. Upload file lên cloudinary
+            // await this.mediaService.send<string, { buff: string, filename: string }>(TCP_MEDIA_SERVICE_MESSAGE.UPLOAD_PDF, { data: { buff: Buffer.from(pdfBuffer).toString('base64'), filename: `hoa-don-major-guide-${Date.now()}.pdf` }, processId: 'ai biết' })
+
+            // 4. Gửi email kèm file PDF đính kèm
+            await this.mailService.sendEmail({
+                to: data.email,
+                subject: data.subject,
+                html: emailHtml,
+                // attachments: [
+                //     {
+                //         filename: `hoa-don-major-guide-${Date.now()}.pdf`,
+                //         content: Buffer.from(pdfBuffer),
+                //         contentType: 'application/pdf',
+                //     },
+                // ],
+            });
+
+
+
+            this.logger.log(`✅ Invoice mail sent to ${data.email}`);
+            context.getChannelRef().ack(context.getMessage());
+
+        } catch (error) {
+            this.logger.error(`❌ Failed to send invoice mail to ${data.email}:`, error);
             throw error;
         }
     }

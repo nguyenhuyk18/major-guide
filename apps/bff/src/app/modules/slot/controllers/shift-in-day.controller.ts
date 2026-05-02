@@ -13,7 +13,7 @@ import { Authorization } from "@common/decorators/authorizer.decorator";
 import { Roles } from "@common/decorators/role.decorator";
 import { ROLE } from "@common/constant/enum/action.constant";
 import { ShiftInWeek } from "@common/schemas/slot/shift-of-day.schema";
-
+import { ShiftInWeekInterface } from "@common/interfaces/tcp/shift-in-day/shiftinday-tcp.interface";
 @Controller('shift-in-day')
 @ApiTags('Shift In Day')
 export class ShiftInDayController {
@@ -22,8 +22,8 @@ export class ShiftInDayController {
     @Get('only-shift')
     @ApiOkResponse({ type: ResponseDto<ShiftInWeek[]> })
     @ApiOperation({ summary: 'Api nay chi de lay toan bo shift in day' })
-    @Authorization({ secured: true })
-    @Roles([ROLE.EXPERT])
+    // @Authorization({ secured: true })
+    // @Roles([ROLE.EXPERT])
     async getOnlyShift(@ProcessId() processId: string) {
         const rs = await firstValueFrom(this.shiftInDayClient.send<ShiftInWeek[], string>(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY_WITHOUT_COUNT, { processId }).pipe(map(row => row.data)));
 
@@ -68,6 +68,13 @@ export class ShiftInDayController {
     }
 
 
-    // @Get('')
+    @Get('shift/:id')
+    @ApiOperation({ summary: 'Api này chỉ để lấy thông tin ca' })
+    async getByIdShft(@ProcessId() processId: string, @Param('id') id: string) {
+        const rs = await firstValueFrom(this.shiftInDayClient.send<ShiftInWeekInterface, { id: string }>(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY_BY_ID_REAL, { data: { id }, processId }).pipe(map(row => row.data)));
+        console.log(rs);
+
+        return new ResponseDto({ data: rs })
+    }
 
 }

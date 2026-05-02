@@ -9,7 +9,9 @@ export enum TCP_SLOT_SERVICE_MESSAGE {
     GET_SHIFT_IN_DAY_BY_ID = 'slot.get_shift_in_day_by_id',
     APPROVE_THE_REGISTER = 'slot.approve_the_register',
     CANCLE_THE_REGISTER = 'slot.cancle_the_register',
-    GET_REGISTER_BY_ID = 'slot.get_register_by_id'
+    GET_REGISTER_BY_ID = 'slot.get_register_by_id',
+    GET_SHIFT_DAILY_SLOT = 'slot.get_shift_daily_slot',
+    GET_SHIFT_IN_DAY_BY_ID_REAL = 'slot.get_shift_in_day_by_id_real'
 }
 
 export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
@@ -28,7 +30,8 @@ export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
 }
 
 export enum TCP_MEDIA_SERVICE_MESSAGE {
-    UPLOAD_AVARTAR_USER = 'media.upload_avartar_user'
+    UPLOAD_AVARTAR_USER = 'media.upload_avartar_user',
+    UPLOAD_PDF = 'media.upload_pdf'
 }
 
 
@@ -47,5 +50,10 @@ export enum TCP_CHAT_SERVICE_MESSAGE {
 
 
 export enum TCP_BOOKING_SERVICE_MESSAGE {
-    SAVE_REVERSE = 'booking.save_reserve'
+    SAVE_REVERSE = 'booking.save_reserve',
+    CREATE_LINK_PAYMENT = 'booking.create_link_payment',
+    CONFIRM_PAYMENT_BOOKING = 'booking.confirm_payment_booking',
+    GET_BOOKING_BY_MEMBER = 'booking.get_booking_by_member',
+    CREATE_BOOKING = 'booking.create_booking',
+    GET_BOOKING_BY_EXPERT = 'booking.get_booking_by_expert'
 }

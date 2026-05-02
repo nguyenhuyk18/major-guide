@@ -8,6 +8,7 @@ import { Register } from "@common/schemas/slot/register.schema";
 import { RegisterTcpWithUserResponse } from "@common/interfaces/tcp/register";
 import { ShiftInWeek } from "@common/schemas/slot/shift-of-day.schema";
 import { ShiftInDayTcpByIdResponse } from "@common/interfaces/tcp/shift-in-day";
+import { ShiftInWeekInterface } from "@common/interfaces/tcp/shift-in-day/shiftinday-tcp.interface";
 
 @Injectable()
 export class ShiftInWeekService {
@@ -49,5 +50,14 @@ export class ShiftInWeekService {
             register: allRegister,
             shiftInfo: shiftInDayInfo
         };
+    }
+
+    async getByIdShift(id: string): Promise<ShiftInWeekInterface> {
+        const shiftInDayInfo = await this.shiftInWeekRepoitory.getById(id);
+        return {
+
+            day: shiftInDayInfo.day,
+            shift_id: shiftInDayInfo.shift_id,
+        }
     }
 }

@@ -4,6 +4,7 @@ import { AppConfiguration } from '@common/configuration/app.config';
 import { MailConfiguration } from '@common/configuration/mail.config';
 import { BaseConfiguration } from '@common/configuration/base.config';
 import { RabbitConfiguration } from '@common/configuration/rabbit.config';
+import { TcpConfiguration } from '@common/configuration/tcp.config';
 // import { QUEUE_NAME } from '@common/constant/enum/queuename.constant';
 export class Configuration extends BaseConfiguration {
     @ValidateNested()
@@ -18,6 +19,11 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => RabbitConfiguration)
     RABBIT_CONFIG = new RabbitConfiguration();
+
+    @ValidateNested()
+    @Type(() => TcpConfiguration)
+    TCP_SERV = new TcpConfiguration();
+
 }
 
 export const CONFIGURATION = new Configuration();

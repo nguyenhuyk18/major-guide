@@ -43,8 +43,31 @@ export class ReverseGatewayRequest {
     price_support: number;
 
 
+
+    @ApiProperty()
+    @IsString()
+    note: string
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    name_customer: string;
+
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    name_expert: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    avatar_expert: string;
+
+
+
     // @ApiProperty()
     // @IsNotEmpty()
     // @IsString()
-    // id_reverse: string;
+    // email_customer: string;
 }

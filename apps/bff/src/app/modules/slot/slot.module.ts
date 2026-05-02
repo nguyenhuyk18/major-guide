@@ -4,6 +4,7 @@ import { TCP_SERVICE, TcpProvider } from '@common/configuration/tcp.config';
 import { ShiftController } from "./controllers/shift.controller";
 import { RegisterController } from "./controllers/register.controller";
 import { ShiftInDayController } from "./controllers/shift-in-day.controller";
+import { ShiftDailyStatusController } from "./controllers/shift-daily-status.controller";
 
 @Module({
     imports: [
@@ -11,7 +12,7 @@ import { ShiftInDayController } from "./controllers/shift-in-day.controller";
     ],
     // providers: [],
     // exports: [],
-    controllers: [ShiftController, RegisterController, ShiftInDayController]
+    controllers: [ShiftController, RegisterController, ShiftInDayController, ShiftDailyStatusController]
 })
 export class SlotModule {
 

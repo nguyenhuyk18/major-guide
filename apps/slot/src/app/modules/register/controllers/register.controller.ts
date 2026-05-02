@@ -68,8 +68,10 @@ export class RegisterController {
     }
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_REGISTER_BY_ID_EXPERT)
-    async findRegisterByIdExpert(@RequestParams() param: string) {
-        const rs = await this.registerService.getByIdExpert(param);
+    async findRegisterByIdExpert(@RequestParams() param: { data: string, startTime: Date, endTime: Date }) {
+
+        console.log(param);
+        const rs = await this.registerService.getByIdExpert(param.data, param.endTime, param.startTime);
 
         if (!rs) {
             throw new BadRequestException(`Không tìm thấy đơn đăng ký của chuyên gia mang mã ${param}`)

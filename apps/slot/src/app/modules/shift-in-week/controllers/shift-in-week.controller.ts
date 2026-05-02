@@ -7,6 +7,7 @@ import { RequestParams } from "@common/decorators/request-params.decorator";
 import { ShiftInDayTcpByIdResponse } from '@common/interfaces/tcp/shift-in-day/shift-in-day-response-tcp.interface';
 import { ShiftInDayAmount } from '@common/interfaces/tcp/shift-in-day/shift-in-day-amount-employ-tcp.interface';
 import { ShiftInWeek } from "@common/schemas/slot/shift-of-day.schema";
+import { ShiftInWeekInterface } from '@common/interfaces/tcp/shift-in-day/shiftinday-tcp.interface';
 
 @Controller()
 export class ShiftInWeekController {
@@ -34,5 +35,12 @@ export class ShiftInWeekController {
 
         const rs = await this.shiftInWeekService.getById(data.id, new Date(data.specify_time));
         return ResponseTcp.success<ShiftInDayTcpByIdResponse>(rs);
+    }
+
+    @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_IN_DAY_BY_ID_REAL)
+    async getByIdReal(@RequestParams() data: { id: string }) {
+        const rs = await this.shiftInWeekService.getByIdShift(data.id);
+
+        return ResponseTcp.success<ShiftInWeekInterface>(rs);
     }
 }

@@ -57,6 +57,24 @@ async function bootstrap() {
     },
   )
 
+  // set up lắng nghe đường ống BOOKING SUCCESS STATUS
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_STATUS_SUCCESS.transport,
+      options: {
+        urls: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_STATUS_SUCCESS.options.urls,
+        queue: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_STATUS_SUCCESS.options.queue,
+        queueOptions: {
+          durable: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_STATUS_SUCCESS.options.queueOptions.durable,
+        },
+        prefetchCount: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_STATUS_SUCCESS.options.prefetchCount,
+        noAck: false,
+        persistent: AppModule.CONFIGURATION.RABBIT_CONFIG.BOOKING_STATUS_SUCCESS.options.persistent
+      }
+    },
+  )
+
+
   AppModule.CONFIGURATION.validate();
   app.setGlobalPrefix(globalPrefix);
   const port = AppModule.CONFIGURATION.APP_CONFIG.SLOT_PORT;

@@ -89,8 +89,8 @@ export class RegisterService {
 
     }
 
-    getByIdExpert(id_expert: string) {
-        return this.registerRepository.getByIdExpert(id_expert);
+    getByIdExpert(id_expert: string, endTime: Date, startTime: Date) {
+        return this.registerRepository.getByIdExpert(id_expert, endTime, startTime);
     }
 
 

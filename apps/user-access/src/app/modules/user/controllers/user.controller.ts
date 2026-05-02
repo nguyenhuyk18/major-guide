@@ -30,6 +30,7 @@ export class UserController {
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.CONTACT_TO_SUPPORT)
     async contactEmail(@RequestParams() data: ContactMailRequest, @ProcessId() processId: string) {
+        console.log('sdsdsdsdsdsdsd')
         this.mailService.emit<void, ContactMailRequest>(MAIL_SERVICE_RABBIT_MESSAGE.CONTACT_MAIL, { processId, data });
         return ResponseTcp.success<{ message: string }>({ message: 'Vui lòng kiếm tra email , nếu không có vui lòng kiểm tra email rác !!!' });
     }
@@ -99,6 +100,7 @@ export class UserController {
         @RequestParams() param: UpdateUserRequestTcp,
         @ProcessId() processId: string
     ) {
+        // console.log(param);
         const rs = await this.userService.updateUserProfile(param, processId);
         return ResponseTcp.success<User>(rs);
     }

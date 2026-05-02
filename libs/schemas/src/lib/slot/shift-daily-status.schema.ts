@@ -20,6 +20,10 @@ export class ShiftDailyStatus extends Base {
     @Prop({ type: Date })
     date_reverse: Date;
 
+    @Prop({ type: String })
+    note: string
+
+
     @Prop({ type: String, enum: STATUS_SLOT })
     status: STATUS_SLOT;
 

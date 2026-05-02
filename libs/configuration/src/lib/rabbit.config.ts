@@ -6,13 +6,12 @@ import { EXCHANGE_NAME, QUEUE_NAME, ROUTING_KEY_NAME } from '@common/constant/en
 // url
 
 export enum RABBIT_SERVICE {
-
     MAIL_SERVICE = 'RABBIT_MAIL_SERVICE',
     BOOKING_HOLD_DELAY = 'BOOKING_HOLD_DELAY',
     BOOKING_HOLD_CANCEL = 'BOOKING_HOLD_CANCEL',
     BOOKING_HOLD_CANCEL_SLOT = 'BOOKING_HOLD_CANCEL_SLOT',
     BOOKING_HOLD_DEMAND = 'BOOKING_HOLD_DEMAND',
-    // BOOKING_
+    BOOKING_STATUS_SUCCESS = 'BOOKING_STATUS_SUCCESS',
 }
 
 
@@ -38,7 +37,16 @@ export class RabbitConfiguration {
     @IsObject()
     BOOKING_HOLD_CANCEL_SLOT: RmqOptions;
 
+    @IsNotEmpty()
+    @IsObject()
+    BOOKING_STATUS_SUCCESS: RmqOptions;
+
     constructor() {
+        this.BOOKING_STATUS_SUCCESS = RabbitConfiguration.setValue(
+            [process.env['RABBITMQ_SERVER_HOST'] || 'amqp://localhost:5672'],
+            QUEUE_NAME.BOOKING_SUCCESS_STATUS
+        )
+
         this.RABBIT_MAIL_SERVICE = RabbitConfiguration.setValue(
             [process.env['RABBITMQ_SERVER_HOST'] || 'amqp://localhost:5672'], QUEUE_NAME.SEND_MAIL_QUEUE
         );
@@ -69,7 +77,7 @@ export class RabbitConfiguration {
                 exchange: EXCHANGE_NAME.BOOKING_EXCHANGE,
                 routingKey: ROUTING_KEY_NAME.BOOKING_DELAY,
                 deadLetterRoutingKey: EXCHANGE_NAME.BOOKING_EXCHANGE_CANCLE,
-                ttl: 1 * 60 * 1000,
+                ttl: 5 * 60 * 1000, // 5 minutes for payment timeout
             }
         )
 

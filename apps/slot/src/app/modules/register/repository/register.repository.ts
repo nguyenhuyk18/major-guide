@@ -99,8 +99,18 @@ export class RegisterRepository {
         });
     }
 
-    getByIdExpert(id_expert: string) {
-        return this.registerModel.findOne({ id_expert: id_expert }).populate({
+    getByIdExpert(id_expert: string, endTime?: Date, startTime?: Date) {
+        console.log(id_expert);
+        return this.registerModel.findOne({
+            id_expert: id_expert,
+            status: STATUS_REGISTER_ADVISE.APPROVE,
+            available_date: { $lte: startTime },
+            $or: [
+                { unavailable_date: { $gte: endTime } },
+                { unavailable_date: null },
+                { unavailable_date: { $exists: false } }
+            ]
+        }).populate({
             path: 'day',
             select: 'day',
             populate: {

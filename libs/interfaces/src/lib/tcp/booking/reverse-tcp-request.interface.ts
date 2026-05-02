@@ -29,4 +29,15 @@ export class ReverseTcpRequest {
     price_support: number;
 
     // id_reverse: string
+
+    // thông tin để gửi mail hóa đơn
+    name_customer: string;
+
+    email_customer: string;
+
+    name_expert: string;
+
+    avatar_expert: string;
+
+    // payment_link: string;
 }
