@@ -14,19 +14,17 @@ export class ReverseRepository {
         return rs;
     }
 
-    checkDateSupport(date: Date, expertId: string, shiftId: string) {
-        const start = new Date(date);
-        start.setHours(0, 0, 0, 0);
-
-        const end = new Date(date);
-        end.setHours(23, 59, 59, 999);
+    checkDateSupport(dateStr: string, expertId: string, shiftId: string) {
+        // dateStr is already in YYYY-MM-DD format
+        const start = dateStr;
+        const end = dateStr;
 
         return this.reserveModel.findOne({
             id_expert: expertId,
             id_shift_in_day: shiftId,
             day_support: {
                 $gte: start,
-                $lt: end,
+                $lte: end,
             },
         });
     }

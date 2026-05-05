@@ -8,7 +8,7 @@ export class ReverseTcpRequest {
     // @Prop({ type: String })
     // @IsNotEmpty()
     // @IsDate()
-    day_support: Date;
+    day_support: string;
 
     // @Prop({ type: Date })
     // @IsNotEmpty()

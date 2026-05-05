@@ -6,6 +6,7 @@ import { TcpConfiguration } from '@common/configuration/tcp.config';
 import { MongoConfiguration } from '@common/configuration/mongo.config';
 import { RabbitConfiguration } from '@common/configuration/rabbit.config';
 import { VNPayConfiguration } from '@common/configuration/vnpay.config';
+import { GoogleCalendarConfiguration } from '@common/configuration/google-calendar.config';
 
 export class Configuration extends BaseConfiguration {
     @ValidateNested()
@@ -29,6 +30,11 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => VNPayConfiguration)
     VNPAY_CONFIG = new VNPayConfiguration();
+
+
+    @ValidateNested()
+    @Type(() => GoogleCalendarConfiguration)
+    GOOGLE_CALENDAR_CONFIG = new GoogleCalendarConfiguration();
 }
 
 export const CONFIGURATION = new Configuration();

@@ -8,7 +8,8 @@ export enum TCP_SERVICE {
     MEDIA_SERVICE = 'TCP_MEDIA_SERVICE',
     AUTHORIZER_SERVICE = 'TCP_AUTHORIZER_SERVICE',
     BOOKING_SERVICE = 'TCP_BOOKING_SERVICE',
-    CHAT_SERVICE = 'TCP_CHAT_SERVICE'
+    CHAT_SERVICE = 'TCP_CHAT_SERVICE',
+    AI_AGENT_SERVICE = 'TCP_AI_AGENT_SERVICE'
 }
 
 export class TcpConfiguration {
@@ -35,6 +36,10 @@ export class TcpConfiguration {
     @IsNotEmpty()
     @IsObject()
     TCP_CHAT_SERVICE: TcpClientOptions;
+
+    @IsNotEmpty()
+    @IsObject()
+    TCP_AI_AGENT_SERVICE: TcpClientOptions;
 
     constructor() {
         Object.entries(TCP_SERVICE).forEach(([key, serviceName]) => {

@@ -4,6 +4,7 @@ import { ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer'
 import { TcpConfiguration } from '@common/configuration/tcp.config';
 import { CloudinaryConfiguration } from '@common/configuration/cloudinary.config';
+import { MongoConfiguration } from '@common/configuration/mongo.config';
 
 export class Configuration extends BaseConfiguration {
 
@@ -20,6 +21,10 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => TcpConfiguration)
     TCP_SERV = new TcpConfiguration()
+
+    @ValidateNested()
+    @Type(() => MongoConfiguration)
+    MONGO_CONFIG = new MongoConfiguration({ DB_NAME: process.env['MEDIA_SERVICE_DB_NAME'] || 'media' })
 
 }
 

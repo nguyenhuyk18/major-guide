@@ -17,8 +17,8 @@ export class ShiftDailyStatus extends Base {
     @Prop({ type: String })
     booking_id: string;
 
-    @Prop({ type: Date })
-    date_reverse: Date;
+    @Prop({ type: String })
+    date_reverse: string;
 
     @Prop({ type: String })
     note: string

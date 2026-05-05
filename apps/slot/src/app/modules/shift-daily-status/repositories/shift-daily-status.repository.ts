@@ -56,12 +56,9 @@ export class ShiftDailyStatusRepository {
     /**
      * Find shift daily status by date
      */
-    findByDate(date: Date) {
+    findByDate(dateStr: string) {
         return this.shiftDailyStatusModel.find({
-            date_reverse: {
-                $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-                $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
-            }
+            date_reverse: dateStr
         }).populate('id_shift_in_day').exec();
     }
 
@@ -82,14 +79,11 @@ export class ShiftDailyStatusRepository {
     /**
      * Find all shift daily statuses by date, shift in day ID, and expert ID combined
      */
-    findByDateAndShiftAndExpert(date: Date, id_shift_in_day: string, id_expert: string) {
+    findByDateAndShiftAndExpert(dateStr: string, id_shift_in_day: string, id_expert: string) {
         return this.shiftDailyStatusModel.find({
             id_expert,
             id_shift_in_day: new ObjectId(id_shift_in_day),
-            date_reverse: {
-                $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-                $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
-            }
+            date_reverse: dateStr
         }).populate('id_shift_in_day').exec();
     }
 
@@ -139,13 +133,10 @@ export class ShiftDailyStatusRepository {
     /**
      * Check if a booking exists for a specific expert and date
      */
-    async checkBookingExists(expertId: string, date: Date, bookingId?: string): Promise<boolean> {
+    async checkBookingExists(expertId: string, dateStr: string, bookingId?: string): Promise<boolean> {
         const query: any = {
             id_expert: expertId,
-            date_reverse: {
-                $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-                $lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)
-            }
+            date_reverse: dateStr
         };
 
         // If bookingId is provided, exclude it from the check (for update operations)

@@ -13,11 +13,10 @@ export class CreateBookingRequest {
     @IsString()
     id_shift_in_day: string;
 
-    @ApiProperty()
+    @ApiProperty({ description: 'Ngày hỗ trợ theo định dạng YYYY-MM-DD' })
     @IsNotEmpty()
-    @IsDate()
-    @Type(() => Date)
-    day_support: Date;
+    @IsString()
+    day_support: string;
 
     @ApiProperty()
     @IsNotEmpty()

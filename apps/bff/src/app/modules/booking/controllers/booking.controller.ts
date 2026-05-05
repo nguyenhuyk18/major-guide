@@ -32,7 +32,12 @@ export class BookingController {
     async reserveSlot(@Body() data: ReverseGatewayRequest, @ProcessId() processId: string, @UserInfo() userInfo: User) {
         // return 1;
         // console.log('ghsgs')
-        const rs = await firstValueFrom(this.bookingService.send<void, ReverseTcpRequest>(TCP_BOOKING_SERVICE_MESSAGE.SAVE_REVERSE, { data: { day_support: data.day_support, id_expert: data.id_expert, id_member: userInfo.id, time_end: data.time_end, time_start: data.time_start, id_shift_in_day: data.id_shift_in_day, price_support: data.price_support, avatar_expert: data.avatar_expert, name_customer: data.name_customer, name_expert: data.name_expert, email_customer: userInfo.email }, processId }).pipe(map(row => new ResponseDto(row))));
+        // Format day_support to YYYY-MM-DD string to avoid timezone issues
+        const daySupportStr = typeof data.day_support === 'string' 
+            ? data.day_support.substring(0, 10) 
+            : new Date(data.day_support).toISOString().substring(0, 10);
+            
+        const rs = await firstValueFrom(this.bookingService.send<void, ReverseTcpRequest>(TCP_BOOKING_SERVICE_MESSAGE.SAVE_REVERSE, { data: { day_support: daySupportStr, id_expert: data.id_expert, id_member: userInfo.id, time_end: data.time_end, time_start: data.time_start, id_shift_in_day: data.id_shift_in_day, price_support: data.price_support, avatar_expert: data.avatar_expert, name_customer: data.name_customer, name_expert: data.name_expert, email_customer: userInfo.email }, processId }).pipe(map(row => new ResponseDto(row))));
         return new ResponseDto({ data: rs.data })
     }
 
@@ -43,10 +48,15 @@ export class BookingController {
     @Roles([ROLE.MEMBER, ROLE.ADMIN])
     @ApiOperation({ summary: 'API đặt chỗ chuyên gia (v2) - Tạo booking và trả về order_id để FE tạo link thanh toán' })
     async createBookingV2(@Body() data: CreateBookingRequest, @ProcessId() processId: string, @UserInfo() userInfo: User) {
+        // Format day_support to YYYY-MM-DD string to avoid timezone issues
+        const daySupportStr = typeof data.day_support === 'string'
+            ? data.day_support.substring(0, 10)
+            : new Date(data.day_support).toISOString().substring(0, 10);
+
         const payload: CreateBookingTcpRequest = {
             id_expert: data.id_expert,
             id_shift_in_day: data.id_shift_in_day,
-            day_support: data.day_support,
+            day_support: daySupportStr,
             time_start: data.time_start,
             time_end: data.time_end,
             price_support: data.price_support,

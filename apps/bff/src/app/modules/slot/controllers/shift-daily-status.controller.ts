@@ -16,7 +16,7 @@ export class ShiftDailyStatusController {
 
     @Get('check-status')
     @ApiOkResponse({ type: ResponseDto<ShiftDailyStatusCheckResponse> })
-    @ApiQuery({ name: 'date-reverse', required: false, type: Date, format: 'date-time' })
+    @ApiQuery({ name: 'date-reverse', required: false, type: String, description: 'Date in YYYY-MM-DD format' })
     @ApiQuery({ name: 'id-shift-in-day', required: false, type: String })
     @ApiQuery({ name: 'id-expert', required: false, type: String })
     async checkSlotAvailable(
@@ -31,7 +31,7 @@ export class ShiftDailyStatusController {
                     TCP_SLOT_SERVICE_MESSAGE.GET_SHIFT_DAILY_SLOT,
                     {
                         data: {
-                            date_reverse: new Date(dateReverse),
+                            date_reverse: dateReverse,
                             id_shift_in_day,
                             id_expert
                         },

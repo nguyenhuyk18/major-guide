@@ -56,7 +56,16 @@ async function bootstrap() {
     })
 
     const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup(`${globalPrefix}/docs`, app, documentFactory);
+    SwaggerModule.setup(`${globalPrefix}/docs`, app, documentFactory , {
+       jsonDocumentUrl: "swagger-json"
+    });
+
+    // Endpoint để xuất Swagger JSON file cho frontend
+    app.getHttpAdapter().get(`${globalPrefix}/docs-json`, (req, res) => {
+      res.setHeader('Content-Disposition', 'attachment; filename=swagger.json');
+      res.setHeader('Content-Type', 'application/json');
+      res.json(documentFactory());
+    });
 
     // set up port cho module này nó chạy
     const port = AppModule.CONFIGURATION.APP_CONFIG.PORT || 3000;

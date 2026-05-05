@@ -16,11 +16,10 @@ export class ReverseGatewayRequest {
 
 
     // @Prop({ type: String })
-    @ApiProperty()
+    @ApiProperty({ description: 'Ngày hỗ trợ theo định dạng YYYY-MM-DD' })
     @IsNotEmpty()
-    @IsDate()
-    @Type(() => Date)
-    day_support: Date;
+    @IsString()
+    day_support: string;
 
     // @Prop({ type: Date })
     @ApiProperty()

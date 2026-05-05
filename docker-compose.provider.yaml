@@ -72,3 +72,14 @@ services:
       - ./docker/docker_data/rabbitmq_data:/var/lib/rabbitmq
     networks:
       - major_guide_nw
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama_major_guide
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./docker/docker_data/ollama_data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - major_guide_nw

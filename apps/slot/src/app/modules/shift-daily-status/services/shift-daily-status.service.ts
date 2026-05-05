@@ -45,9 +45,9 @@ export class ShiftDailyStatusService {
     }
 
 
-    async getSlotStatus(date_reverse: Date, id_shift_in_day: string, id_expert: string): Promise<ShiftDailyStatusCheckResponse> {
+    async getSlotStatus(date_reverse: string, id_shift_in_day: string, id_expert: string): Promise<ShiftDailyStatusCheckResponse> {
         const record = await this.shiftDailyStatusRepository.findByDateAndShiftAndExpert(
-            new Date(date_reverse),
+            date_reverse,
             id_shift_in_day,
             id_expert
         );

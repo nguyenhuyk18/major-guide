@@ -18,8 +18,9 @@ export class Reverse extends Base {
     id_shift_in_day: string;
 
     // ======================= //
-    @Prop({ type: Date })
-    day_support: Date;
+    // Store as string YYYY-MM-DD to avoid timezone issues when only date matters
+    @Prop({ type: String })
+    day_support: string;
 
     @Prop({ type: Date })
     time_start: Date;
@@ -65,6 +66,9 @@ export class Reverse extends Base {
 
     @Prop({ type: String })
     note: string;
+
+    @Prop({ type: String })
+    meet_link: string;
 
     // @Prop({  })
 

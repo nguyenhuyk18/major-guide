@@ -31,7 +31,14 @@ export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
 
 export enum TCP_MEDIA_SERVICE_MESSAGE {
     UPLOAD_AVARTAR_USER = 'media.upload_avartar_user',
-    UPLOAD_PDF = 'media.upload_pdf'
+    UPLOAD_PDF = 'media.upload_pdf',
+    UPLOAD_IMAGE = 'media.upload_image',
+    CREATE_POST = 'media.create_post',
+    UPDATE_POST = 'media.update_post',
+    DELETE_POST = 'media.delete_post',
+    GET_POST_BY_ID = 'media.get_post_by_id',
+    GET_POSTS_BY_EXPERT = 'media.get_posts_by_expert',
+    GET_ALL_POSTS = 'media.get_all_posts'
 }
 
 

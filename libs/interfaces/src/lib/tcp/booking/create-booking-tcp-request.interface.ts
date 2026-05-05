@@ -2,7 +2,7 @@ export class CreateBookingTcpRequest {
     id_expert: string;
     id_member: string;
     id_shift_in_day: string;
-    day_support: Date;
+    day_support: string;
     time_start: Date;
     time_end: Date;
     price_support: number;

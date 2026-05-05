@@ -13,7 +13,7 @@ export class EinvoiceMailRequest {
 
     priceTotal: number;
 
-    daySupport: Date;
+    daySupport: string;
 
     endTime: Date;
 

@@ -6,7 +6,7 @@ export class ShiftDailyStatusTcp {
 
     booking_id: string;
 
-    date_reverse: Date;
+    date_reverse: string;
 
     status: STATUS_SLOT;
 
@@ -16,7 +16,7 @@ export class ShiftDailyStatusTcp {
 }
 
 export interface ShiftDailyStatusCheckRequest {
-    date_reverse: Date;
+    date_reverse: string;
     id_shift_in_day: string;
     id_expert: string;
 }

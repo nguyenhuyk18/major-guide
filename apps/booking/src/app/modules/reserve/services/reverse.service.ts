@@ -8,6 +8,7 @@ import { STATUS_BOOKING, STATUS_SLOT } from '@common/constant/enum/status_slot.c
 import { RABBIT_SERVICE } from '@common/configuration/rabbit.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { BOOKING_SERVICE_RABBIT_MESSAGE } from '@common/constant/enum/rabbitmq-message.constant';
+import { GoogleCalendarService } from './google-calendar.service';
 
 
 
@@ -15,11 +16,11 @@ import { BOOKING_SERVICE_RABBIT_MESSAGE } from '@common/constant/enum/rabbitmq-m
 export class ReverseService {
     constructor(private readonly reverseRepository: ReverseRepository,
         @Inject(RABBIT_SERVICE.BOOKING_STATUS_SUCCESS) private readonly successBooking: TcpClient,
-
+        private readonly googleCalendarService: GoogleCalendarService,
     ) { }
 
     // check reverse có trùng hay không
-    private async checkTheReverseExist(date_sup: Date, id_expert: string, id_shift: string) {
+    private async checkTheReverseExist(date_sup: string, id_expert: string, id_shift: string) {
         const rs = await this.reverseRepository.checkDateSupport(date_sup, id_expert, id_shift);
         if (!rs) {
             return false;
@@ -71,13 +72,33 @@ export class ReverseService {
     }
 
     async updatePaymentSuccess(uuid_reverse: string, paymentData: { payment_date?: Date; transaction_id?: string; payment_link?: string }) {
-        this.successBooking.emit<void, { uuid_reverse: string, status_hold: STATUS_SLOT }>(BOOKING_SERVICE_RABBIT_MESSAGE.BOOKING_SUCCESS_STATUS, { data: { uuid_reverse, status_hold: STATUS_SLOT.AVAILABLE }, processId: 'xxxxx' });
+        const booking = await this.reverseRepository.findByUUid(uuid_reverse);
+        if (!booking) {
+            return;
+        }
+
+        let meetLink = '';
+        try {
+            const { meetLink: link } = await this.googleCalendarService.createMeetEvent({
+                summary: `Tư vấn với ${booking.name_expert}`,
+                description: `Booking ID: ${booking.id_reverse}`,
+                startDateTime: booking.time_start.toISOString().replace('Z', '+07:00').split('.')[0],
+                endDateTime: booking.time_end.toISOString().replace('Z', '+07:00').split('.')[0],
+                attendeeEmail: booking.email_customer,
+            });
+            meetLink = link;
+        } catch (error) {
+            console.error('Failed to create Google Meet:', error);
+        }
+
+        this.successBooking.emit<void, { uuid_reverse: string, status_hold: STATUS_SLOT }>(BOOKING_SERVICE_RABBIT_MESSAGE.BOOKING_SUCCESS_STATUS, { data: { uuid_reverse, status_hold: STATUS_SLOT.ORDERED }, processId: 'xxxxx' });
 
         return this.reverseRepository.updateReverseByuuid(uuid_reverse, {
             status: STATUS_BOOKING.PAIED,
             payment_date: paymentData.payment_date || new Date(),
             transaction_id: paymentData.transaction_id,
             payment_link: paymentData.payment_link,
+            meet_link: meetLink,
         });
     }
 
@@ -138,7 +159,7 @@ export class ReverseService {
             id_member: data.id_member,
             id_expert: data.id_expert,
             id_shift_in_day: data.id_shift_in_day,
-            day_support: data.day_support,
+            day_support: data.day_support, // Already in YYYY-MM-DD format from BFF
             time_start: data.time_start,
             time_end: data.time_end,
             price_support: data.price_support,
