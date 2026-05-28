@@ -12,12 +12,17 @@ import { PaginationResponse } from "@common/interfaces/gateway/common/pageginati
 import { StatusAccount } from "@common/constant/enum/status-account.constant";
 import { Filter, ObjectId } from 'mongodb';
 import { LEVEL_USER } from "@common/constant/enum/level-user.constant";
-
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { createHash } from "crypto";
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
     constructor(private readonly userRepository: UserRepository,
-        @Inject(TCP_SERVICE.MEDIA_SERVICE) private readonly mediaClient: TcpClient
+        @Inject(TCP_SERVICE.MEDIA_SERVICE) private readonly mediaClient: TcpClient,
+
+
+        @Inject(CACHE_MANAGER) private cacheManager: Cache
     ) { }
 
     async createUser(data: UserRequestTcp, processId: string) {
@@ -122,6 +127,21 @@ export class UserService {
 
     }
 
+    generateTokenKey = (token: string): string => {
+        const hash = createHash('sha256').update(token).digest('hex');
+        return `black-list-user-id:${hash}`;
+    }
+
+    async updateStatusAccount(id_user: string, status: StatusAccount) {
+
+        // const newHashKey: string = this.generateTokenKey(id_user);
+
+        if (status === StatusAccount.DOWN) {
+            this.cacheManager.set(id_user, { is_block: true }, 30 * 60 * 1000)
+        }
+
+        return this.userRepository.updateUserById(id_user, { statusAccount: status });
+    }
 
     async updateUserProfile(data: UpdateUserRequestTcp, processId: string): Promise<User> {
         // Lấy thông tin user hiện tại
@@ -158,9 +178,11 @@ export class UserService {
                 break;
 
             case ROLE.MEMBER:
-                // if (data.expertProfile) {
-
-                // }
+                if (data.memberProfile) {
+                    updateData.memberProfile = {
+                        highSchool: data.memberProfile.highSchool
+                    };
+                }
                 break;
 
             case ROLE.ADMIN:
@@ -171,7 +193,7 @@ export class UserService {
                 throw new BadRequestException('Role không hợp lệ');
         }
 
-        console.log(updateData);
+        // console.log(updateData);
 
         // Thực hiện update
         return this.userRepository.updateUserById(data.userId, updateData);

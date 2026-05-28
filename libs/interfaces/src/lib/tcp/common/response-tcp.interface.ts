@@ -19,6 +19,10 @@ export class ResponseTcp<T> {
     static failer<T>(data: T) {
         return new ResponseTcp<T>({ data, code: HTTP_MESSAGE.FAILED, statusCode: HttpStatus.BAD_REQUEST })
     }
+
+    static error(message: string) {
+        return new ResponseTcp<null>({ data: null, code: HTTP_MESSAGE.FAILED, statusCode: HttpStatus.BAD_REQUEST, error: message })
+    }
 }
 
 export type ResponseType<T> = ResponseTcp<T>;

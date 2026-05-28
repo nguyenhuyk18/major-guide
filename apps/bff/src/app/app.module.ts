@@ -16,6 +16,7 @@ import { GRPC_SERVICES, GrpcProvider } from '@common/configuration/grpc.config';
 import { BookingModule } from './modules/booking/booking.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { PostModule } from './modules/post/post.module';
+import { ChatAiModule } from './modules/chat-ai/chat-ai.module';
 
 @Module({
   imports: [ConfigModule.forRoot(
@@ -30,6 +31,7 @@ import { PostModule } from './modules/post/post.module';
     BookingModule,
     ChatModule,
     PostModule,
+    ChatAiModule,
   ClientsModule.registerAsync([GrpcProvider(GRPC_SERVICES.AUTHORIZE_SERVICE)]),
     RedisProvider,
   ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.AUTHORIZER_SERVICE)]),

@@ -19,7 +19,8 @@ import { StatusAccount } from "@common/constant/enum/status-account.constant";
 import { FindUserByIds, UpdateUserRequestDto } from '@common/interfaces/gateway/user';
 import { UpdateUserRequestTcp } from '@common/interfaces/tcp/user';
 import { ContactMailRequest, ContactMailResponse } from '@common/interfaces/gateway/mail';
-
+import { Roles } from "@common/decorators/role.decorator";
+import { UpdateStatusUserDto } from "@common/interfaces/gateway/user/update-status-user.interface";
 
 @Controller('user')
 @ApiTags('User')
@@ -143,5 +144,16 @@ export class UserController {
 
         return new ResponseDto<ContactMailResponse>({ data: rs });
     }
+
+    @Put('/update-status-account')
+    @ApiOperation({ summary: 'API cập nhật trạng thái tài khoản' })
+    @ApiOkResponse({ type: ResponseDto<User> })
+    @Authorization({ secured: true })
+    @Roles([ROLE.ADMIN])
+    async updateStatusAccount(@Body() data: UpdateStatusUserDto , @ProcessId() processId: string) {
+        const rs = await firstValueFrom(this.userAccessServie.send<User, UpdateStatusUserDto>(TCP_USER_ACCESS_SERVICE_MESSAGE.UPDATE_STATUS_ACCOUNT, { data: data, processId }).pipe(map(row => row.data)));
+        return new ResponseDto<User>({ data: rs });
+    }
+
 
 }

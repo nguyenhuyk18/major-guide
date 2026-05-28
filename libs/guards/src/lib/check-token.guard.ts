@@ -10,8 +10,8 @@ import { getToken, grantUserToRequest } from '@common/utils/common/get-token.uti
 import { createHash } from 'crypto';
 import { Cache } from 'cache-manager';
 import { getProcessId } from '@common/utils/string.util';
-import { AuthorizerResponse, MetaDataOfAuThorizer } from '@common/interfaces/gateway/authorizer/authorizer-request.interface';
-import { TCP_AUTHORIZER_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-pattern.constant';
+import { MetaDataOfAuThorizer } from '@common/interfaces/gateway/authorizer/authorizer-request.interface';
+// import { TCP_AUTHORIZER_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-pattern.constant';
 
 import { AuthorizerService } from '@common/interfaces/grpc/authorizer';
 import { GRPC_SERVICES } from '../../../configuration/src/lib/grpc.config';
@@ -43,8 +43,14 @@ export class UserGuard implements CanActivate, OnModuleInit {
         const isSecured = this.reflector.get(MetaDataKeys.SECURED, context.getHandler());
         const request = context.switchToHttp().getRequest();
 
+        // console.log()
+
         if (!isSecured) {
             return true
+        }
+
+        if (!isSecured.secured) {
+            return true;
         }
 
         const token = getToken(request, false);

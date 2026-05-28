@@ -7,6 +7,7 @@ import { TcpConfiguration } from '@common/configuration/tcp.config';
 import { GrpcConfiguration } from '@common/configuration/grpc.config';
 import { RabbitConfiguration } from '@common/configuration/rabbit.config';
 import { QUEUE_NAME } from '@common/constant/enum/queuename.constant';
+import { RedisConfiguration } from '@common/configuration/redis.config';
 
 export class Configuration extends BaseConfiguration {
 
@@ -21,6 +22,11 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => TcpConfiguration)
     TCP_SERV = new TcpConfiguration()
+
+
+    @ValidateNested()
+    @Type(() => RedisConfiguration)
+    REDIS_CONFIG = new RedisConfiguration()
 
 
     @ValidateNested()

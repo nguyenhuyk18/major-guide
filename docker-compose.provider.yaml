@@ -73,13 +73,25 @@ services:
     networks:
       - major_guide_nw
 
-  ollama:
-    image: ollama/ollama
-    container_name: ollama_major_guide
+  # ollama:
+  #   image: ollama/ollama
+  #   container_name: ollama_major_guide
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ./docker/docker_data/ollama_data:/root/.ollama
+  #   restart: unless-stopped
+  #   networks:
+  #     - major_guide_nw
+    # gpus: all
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant_major_guide
     ports:
-      - "11434:11434"
+      - "6333:6333"
+      - "6334:6334"
     volumes:
-      - ./docker/docker_data/ollama_data:/root/.ollama
-    restart: unless-stopped
+      - ./docker/docker_data/qdrant_data:/qdrant/storage
     networks:
       - major_guide_nw
+    restart: unless-stopped

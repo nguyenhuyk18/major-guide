@@ -4,6 +4,7 @@ import { TCP_BOOKING_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-p
 import { RequestParams } from '@common/decorators/request-params.decorator';
 import { ReverseTcpRequest } from '@common/interfaces/tcp/booking/reverse-tcp-request.interface';
 import { CreateBookingTcpRequest } from '@common/interfaces/tcp/booking/create-booking-tcp-request.interface';
+import { ExpertJoinBookingTcpRequest } from '@common/interfaces/tcp/booking/expert-join-booking-tcp-request.interface';
 import { ReverseService } from "../services/reverse.service";
 import { v4 } from 'uuid'
 import { RABBIT_SERVICE } from "@common/configuration/rabbit.config";
@@ -119,5 +120,17 @@ export class ReverseController {
         const limit = data.limit || 10;
         const result = await this.reverseService.getBookingsByExpertId(data.expertId, page, limit);
         return ResponseTcp.success(result);
+    }
+
+    @MessagePattern(TCP_BOOKING_SERVICE_MESSAGE.EXPERT_JOIN_BOOKING)
+    async expertJoinBooking(@RequestParams() data: ExpertJoinBookingTcpRequest, @ProcessId() processId: string) {
+        try {
+            const result = await this.reverseService.expertJoinBooking(data.expertId, data.bookingId);
+            Logger.log(processId + ' Expert joined booking: ' + data.bookingId);
+            return ResponseTcp.success(result);
+        } catch (error: any) {
+            Logger.error(processId + ' Expert join booking failed: ' + error.message);
+            return ResponseTcp.error(error.message);
+        }
     }
 }

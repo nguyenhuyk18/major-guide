@@ -80,5 +80,13 @@ export class ReverseRepository {
         }).exec();
     }
 
+    updateJoinAt(id_reverse: string, joinAt: Date) {
+        return this.reserveModel.findOneAndUpdate(
+            { id_reverse },
+            { joinAt },
+            { new: true }
+        );
+    }
+
 
 }

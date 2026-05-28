@@ -22,15 +22,20 @@ import { MAIL_SERVICE_RABBIT_MESSAGE } from '@common/constant/enum/rabbitmq-mess
 @UseInterceptors(TcpLoggingInterceptor)
 export class UserController {
     constructor(private readonly userService: UserService,
-        @Inject(RABBIT_SERVICE.MAIL_SERVICE) private readonly mailService: TcpClient
+        @Inject(RABBIT_SERVICE.MAIL_SERVICE) private readonly mailService: TcpClient,
+        // private readonly  userService : UserService
 
     ) { }
 
-
+    @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.UPDATE_STATUS_ACCOUNT)
+    async updatestatusacc(@RequestParams() params: { id_user: string, status: StatusAccount }) {
+        const rs = await this.userService.updateStatusAccount(params.id_user, params.status);
+        return ResponseTcp.success<User>(rs);
+    }
 
     @MessagePattern(TCP_USER_ACCESS_SERVICE_MESSAGE.CONTACT_TO_SUPPORT)
     async contactEmail(@RequestParams() data: ContactMailRequest, @ProcessId() processId: string) {
-        console.log('sdsdsdsdsdsdsd')
+        // console.log('sdsdsdsdsdsdsd')
         this.mailService.emit<void, ContactMailRequest>(MAIL_SERVICE_RABBIT_MESSAGE.CONTACT_MAIL, { processId, data });
         return ResponseTcp.success<{ message: string }>({ message: 'Vui lòng kiếm tra email , nếu không có vui lòng kiểm tra email rác !!!' });
     }

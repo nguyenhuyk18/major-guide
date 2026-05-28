@@ -26,7 +26,26 @@ export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
     GET_USER_BY_IDS = 'useraccess.get_user_by_ids',
     CONTACT_TO_SUPPORT = 'useraccess.contact_to_support',
     GET_ALL_USER = 'useraccess.get_all_user',
-    GET_WARD_BY_ID_PROVINCE = 'useraccess.get_ward_by_id_province'
+    GET_WARD_BY_ID_PROVINCE = 'useraccess.get_ward_by_id_province',
+    UPDATE_STATUS_ACCOUNT = 'useraccess.update_status_account',
+    // Question
+    GET_ALL_QUESTION = 'useraccess.get_all_question',
+    GET_QUESTION_BY_ID = 'useraccess.get_question_by_id',
+    CREATE_QUESTION = 'useraccess.create_question',
+    CREATE_MANY_QUESTION = 'useraccess.create_many_question',
+    UPDATE_QUESTION = 'useraccess.update_question',
+    DELETE_QUESTION = 'useraccess.delete_question',
+    GET_PUBLISHED_QUESTIONS = 'useraccess.get_published_questions',
+    GET_GROUPED_QUESTIONS = 'useraccess.get_grouped_questions',
+    // TestResult
+    SAVE_TEST_ANSWER = 'useraccess.save_test_answer',
+    SUBMIT_TEST_RESULT = 'useraccess.submit_test_result',
+    GET_TEST_RESULTS_BY_USER = 'useraccess.get_test_results_by_user',
+    GET_LATEST_TEST_RESULT = 'useraccess.get_latest_test_result',
+    GET_INPROGRESS_TEST_RESULT = 'useraccess.get_inprogress_test_result',
+    GET_ALL_TEST_RESULTS = 'useraccess.get_all_test_results',
+    GET_TEST_RESULT_BY_ID = 'useraccess.get_test_result_by_id',
+    DELETE_TEST_RESULT = 'useraccess.delete_test_result'
 }
 
 export enum TCP_MEDIA_SERVICE_MESSAGE {
@@ -62,5 +81,6 @@ export enum TCP_BOOKING_SERVICE_MESSAGE {
     CONFIRM_PAYMENT_BOOKING = 'booking.confirm_payment_booking',
     GET_BOOKING_BY_MEMBER = 'booking.get_booking_by_member',
     CREATE_BOOKING = 'booking.create_booking',
-    GET_BOOKING_BY_EXPERT = 'booking.get_booking_by_expert'
+    GET_BOOKING_BY_EXPERT = 'booking.get_booking_by_expert',
+    EXPERT_JOIN_BOOKING = 'booking.expert_join_booking'
 }

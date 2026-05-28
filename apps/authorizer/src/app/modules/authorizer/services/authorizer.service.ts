@@ -17,6 +17,7 @@ import { ObjectId } from "mongodb";
 import { GRPC_SERVICES } from "@common/configuration/grpc.config";
 import { ExchangeUserTokenResponse } from "@common/interfaces/common/exchange-token-user-password.interface";
 import { User } from "@common/schemas/user-access/user.schema";
+import { StatusAccount } from "@common/constant/enum/status-account.constant";
 // import { ROLE } from "@common/constant/enum/action.constant";
 
 @Injectable()
@@ -54,6 +55,10 @@ export class AuthorizerService implements OnModuleInit {
 
         // call grpc để lấy role tại đây
         const userInfo = await firstValueFrom(this.userAccessService.findUserById({ idUser: String(decoded.payload.sub), isKeycloak: true }))
+
+        if(userInfo.statusAccount == StatusAccount.DOWN ) {
+            throw new ForbiddenException('Tài khoản của bạn đã bị khóa, vui lòng liên hệ admin để được hỗ trợ !!!')
+        }
 
         if (data.isAdminSite == true && userInfo.roleName === 'member') {
             throw new ForbiddenException('Bạn không có quyền đăng nhập vào hệ thống admin , vui lòng thoát ra ngay trước khi lãnh hậu quả !!!')

@@ -2,13 +2,15 @@ import { TCP_SERVICE } from "@common/configuration/tcp.config";
 import { TCP_BOOKING_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 import { ProcessId } from "@common/decorators/processid.decorator";
 import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
-import { Body, Controller, Get, Inject, Param, Post, Query, Version } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, Put, Query, Version } from "@nestjs/common";
 import { ReverseGatewayRequest } from '@common/interfaces/gateway/booking/reverse-gateway-request.interface';
 import { CreateBookingRequest } from '@common/interfaces/gateway/booking/create-booking-request.interface';
+import { ExpertJoinRequest } from '@common/interfaces/gateway/booking/expert-join-request.interface';
 import { ResponseDto } from "@common/interfaces/gateway/response-gateway.dto";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ReverseTcpRequest } from '@common/interfaces/tcp/booking/reverse-tcp-request.interface';
 import { CreateBookingTcpRequest } from '@common/interfaces/tcp/booking/create-booking-tcp-request.interface';
+import { ExpertJoinBookingTcpRequest } from '@common/interfaces/tcp/booking/expert-join-booking-tcp-request.interface';
 import { UserInfo } from "@common/decorators/get-user.decorator";
 import { User } from "@common/schemas/user-access/user.schema";
 import { Authorization } from "@common/decorators/authorizer.decorator";
@@ -111,5 +113,29 @@ export class BookingController {
             ).pipe(map(row => row.data))
         );
         return result;
+    }
+
+    @Put('expert/join-booking')
+    @ApiOkResponse({ type: ResponseDto })
+    @Authorization({ secured: true })
+    @Roles([ROLE.EXPERT])
+    @ApiOperation({ summary: 'API expert xác nhận tham gia cuộc hẹn - cập nhật trường joinAt' })
+    async expertJoinBooking(
+        @Body() body: ExpertJoinRequest,
+        @ProcessId() processId: string,
+        @UserInfo() userInfo: User
+    ) {
+        const payload: ExpertJoinBookingTcpRequest = {
+            bookingId: body.bookingId,
+            expertId: userInfo.id,
+        };
+
+        const result = await firstValueFrom(
+            this.bookingService.send<any, ExpertJoinBookingTcpRequest>(
+                TCP_BOOKING_SERVICE_MESSAGE.EXPERT_JOIN_BOOKING,
+                { data: payload, processId }
+            )
+        );
+        return new ResponseDto(result.data);
     }
 }

@@ -4,10 +4,12 @@ import { ClientsModule } from "@nestjs/microservices";
 import { ProvinceController } from "./controllers/province.controller";
 import { WardController } from "./controllers/ward.controller";
 import { UserController } from "./controllers/user.controller";
+import { QuestionController } from "./controllers/question.controller";
+import { TestResultController } from "./controllers/test-result.controller";
 
 @Module({
     imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.USER_ACCESS_SERVICE)])],
-    controllers: [ProvinceController, WardController, UserController]
+    controllers: [ProvinceController, WardController, UserController, QuestionController, TestResultController]
 })
 export class UserAccessModule {
 

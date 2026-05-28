@@ -5,6 +5,9 @@ import { CONFIGURATION, TConfiguration } from '../configuration';
 import { MongoProvider } from '@common/configuration/mongo.config';
 import { WardModule } from './modules/ward/ward.module';
 import { UserModule } from './modules/user/user.module';
+import { RedisProvider } from '@common/configuration/redis.config';
+import { QuestionModule } from './modules/question/question.module';
+import { TestResultModule } from './modules/test-result/test-result.module';
 
 
 @Module({
@@ -16,7 +19,10 @@ import { UserModule } from './modules/user/user.module';
     ProvinceModule,
     WardModule,
     UserModule,
-    MongoProvider
+    QuestionModule,
+    TestResultModule,
+    MongoProvider,
+    RedisProvider
   ],
   controllers: [],
   providers: [],

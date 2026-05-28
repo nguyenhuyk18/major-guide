@@ -70,6 +70,9 @@ export class Reverse extends Base {
     @Prop({ type: String })
     meet_link: string;
 
+    @Prop({ type: Date, default: null })
+    joinAt: Date;
+
     // @Prop({  })
 
 }

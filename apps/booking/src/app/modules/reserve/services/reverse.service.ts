@@ -189,4 +189,23 @@ export class ReverseService {
             totalPage
         };
     }
+
+    async expertJoinBooking(expertId: string, bookingId: string) {
+        const booking = await this.reverseRepository.findByUUid(bookingId);
+
+        if (!booking) {
+            throw new Error('Booking not found');
+        }
+
+        if (booking.id_expert !== expertId) {
+            throw new Error('Unauthorized: Expert does not own this booking');
+        }
+
+        if (booking.status !== STATUS_BOOKING.PAIED) {
+            throw new Error('Booking must be paid before expert can join');
+        }
+
+        const result = await this.reverseRepository.updateJoinAt(bookingId, new Date());
+        return result;
+    }
 }
