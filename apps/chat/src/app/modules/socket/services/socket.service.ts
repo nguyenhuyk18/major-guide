@@ -22,11 +22,12 @@ export class ChatSocketGateway {
     // hàm này là hàm có sẵn của socket  trong nestjs 
     handleConnection(client: Socket, ...args: any[]) {
         client.join(RADIO_CHAT.SEND_MESSAGE_COMMUNITY)
-        Logger.log(`${client.id} đã tham gia vào room ${RADIO_CHAT.SEND_MESSAGE_COMMUNITY}`)
+        Logger.log(`${client.id} đã tham gia vào room ${RADIO_CHAT.SEND_MESSAGE_COMMUNITY}`);
+        // console.log(client.handshake?.auth, 'hábgasfugsidufgsidfgsdhfisgdi');
     }
 
     sendMessageToRoom(room: string, content: { id: string, userId: string, replyTo: string, message: string }) {
-        console.log('sádasdasd');
+        // console.log('sádasdasd');
         this.server.to(room).emit(RADIO_CHAT.SEND_MESSAGE_COMMUNITY, content)
     }
 

@@ -8,6 +8,7 @@ import { UserModule } from './modules/user/user.module';
 import { RedisProvider } from '@common/configuration/redis.config';
 import { QuestionModule } from './modules/question/question.module';
 import { TestResultModule } from './modules/test-result/test-result.module';
+import { ReviewModule } from './modules/review/review.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { TestResultModule } from './modules/test-result/test-result.module';
     UserModule,
     QuestionModule,
     TestResultModule,
+    ReviewModule,
     MongoProvider,
     RedisProvider
   ],

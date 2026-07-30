@@ -15,14 +15,14 @@ import { LEVEL_USER } from "@common/constant/enum/level-user.constant";
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { createHash } from "crypto";
 import { Cache } from 'cache-manager';
+import { ReviewService } from '../../review/services/review.service';
 
 @Injectable()
 export class UserService {
     constructor(private readonly userRepository: UserRepository,
         @Inject(TCP_SERVICE.MEDIA_SERVICE) private readonly mediaClient: TcpClient,
-
-
-        @Inject(CACHE_MANAGER) private cacheManager: Cache
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
+        private readonly reviewService: ReviewService
     ) { }
 
     async createUser(data: UserRequestTcp, processId: string) {
@@ -94,8 +94,15 @@ export class UserService {
     }
 
 
-    getById(id: string) {
-        return this.userRepository.getById(id);
+    async getById(id: string) {
+        const user = await this.userRepository.getById(id);
+        if (!user || user.roleName !== ROLE.EXPERT) return user;
+
+        const reviewSummary = await this.reviewService.getSummary(id);
+        return {
+            ...user.toObject(),
+            reviewSummary
+        };
     }
 
 

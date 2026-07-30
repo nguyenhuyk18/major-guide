@@ -13,16 +13,18 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
     const globalPrefix = AppModule.CONFIGURATION.GLOBAL_PREFIX;
+    const chatServiceHost =
+      process.env['TCP_CHAT_SERVICE_HOST'] ||
+      'localhost';
 
-    app.use(
-      // Đường dẫn mặc định của socket.io
-      createProxyMiddleware({
-        pathFilter: '/socket.io',
-        target: `http://${process.env['CHAT_SERVICE_HOST']}:${AppModule.CONFIGURATION.APP_CONFIG.CHAT_PORT}`,
-        changeOrigin: true,
-        ws: true
-      }),
-    );
+    const socketProxy = createProxyMiddleware({
+      pathFilter: '/socket.io',
+      target: `http://${chatServiceHost}:${AppModule.CONFIGURATION.APP_CONFIG.CHAT_PORT}`,
+      changeOrigin: true,
+      ws: true
+    });
+
+    app.use(socketProxy);
 
 
     // console.log(AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE)
@@ -56,8 +58,8 @@ async function bootstrap() {
     })
 
     const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup(`${globalPrefix}/docs`, app, documentFactory , {
-       jsonDocumentUrl: "swagger-json"
+    SwaggerModule.setup(`${globalPrefix}/docs`, app, documentFactory, {
+      jsonDocumentUrl: "swagger-json"
     });
 
     // Endpoint để xuất Swagger JSON file cho frontend
@@ -70,7 +72,8 @@ async function bootstrap() {
     // set up port cho module này nó chạy
     const port = AppModule.CONFIGURATION.APP_CONFIG.PORT || 3000;
 
-    await app.listen(port);
+    const httpServer = await app.listen(port);
+    httpServer.on('upgrade', socketProxy.upgrade);
 
     Logger.log(
       `🚀 See all the api on: http://localhost:${port}/${globalPrefix}/docs`

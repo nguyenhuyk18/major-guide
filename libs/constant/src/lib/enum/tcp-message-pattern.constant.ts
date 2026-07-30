@@ -45,7 +45,13 @@ export enum TCP_USER_ACCESS_SERVICE_MESSAGE {
     GET_INPROGRESS_TEST_RESULT = 'useraccess.get_inprogress_test_result',
     GET_ALL_TEST_RESULTS = 'useraccess.get_all_test_results',
     GET_TEST_RESULT_BY_ID = 'useraccess.get_test_result_by_id',
-    DELETE_TEST_RESULT = 'useraccess.delete_test_result'
+    DELETE_TEST_RESULT = 'useraccess.delete_test_result',
+    // Expert review
+    CREATE_EXPERT_REVIEW = 'useraccess.create_expert_review',
+    UPDATE_EXPERT_REVIEW = 'useraccess.update_expert_review',
+    DELETE_EXPERT_REVIEW = 'useraccess.delete_expert_review',
+    GET_EXPERT_REVIEWS = 'useraccess.get_expert_reviews',
+    GET_EXPERT_REVIEW_SUMMARY = 'useraccess.get_expert_review_summary'
 }
 
 export enum TCP_MEDIA_SERVICE_MESSAGE {

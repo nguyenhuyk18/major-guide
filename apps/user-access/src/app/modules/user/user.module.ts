@@ -8,13 +8,15 @@ import { ClientsModule } from "@nestjs/microservices";
 import { TCP_SERVICE, TcpProvider } from "@common/configuration/tcp.config";
 import { RABBIT_SERVICE, RabbitProvider } from "@common/configuration/rabbit.config";
 import { CacheModule } from "@nestjs/cache-manager";
+import { ReviewModule } from "../review/review.module";
 
 @Module({
     controllers: [UserController],
     providers: [UserRepository, UserService],
     imports: [MongooseModule.forFeature([UserDestination]),
     ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.MEDIA_SERVICE), RabbitProvider(RABBIT_SERVICE.MAIL_SERVICE)]),
-    CacheModule.register()
+    CacheModule.register(),
+    ReviewModule
     ]
 })
 export class UserModule {
