@@ -9,15 +9,22 @@ import { RABBIT_SERVICE } from '@common/configuration/rabbit.config';
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
 import { BOOKING_SERVICE_RABBIT_MESSAGE } from '@common/constant/enum/rabbitmq-message.constant';
 import { GoogleCalendarService } from './google-calendar.service';
+import { ConfigService } from '@nestjs/config';
+import Stripe from 'stripe';
 
 
 
 @Injectable()
 export class ReverseService {
+    private readonly stripe: Stripe;
+
     constructor(private readonly reverseRepository: ReverseRepository,
         @Inject(RABBIT_SERVICE.BOOKING_STATUS_SUCCESS) private readonly successBooking: TcpClient,
         private readonly googleCalendarService: GoogleCalendarService,
-    ) { }
+        config: ConfigService,
+    ) {
+        this.stripe = new Stripe(config.getOrThrow<string>('STRIPE_CONFIG.SECRET_KEY'));
+    }
 
     // check reverse có trùng hay không
     private async checkTheReverseExist(date_sup: string, id_expert: string, id_shift: string) {
@@ -35,9 +42,9 @@ export class ReverseService {
     async addReverse(data: ReverseTcpRequest, id_reverse: string) {
         const newData: Partial<Reverse> = mappingToReverse(data, id_reverse);
 
-        // Set payment expiration to 5 minutes from now (matching delay queue TTL)
+        // Hold the booking for 30 minutes while the member completes payment.
         const expiresAt = new Date();
-        expiresAt.setMinutes(expiresAt.getMinutes() + 5);
+        expiresAt.setMinutes(expiresAt.getMinutes() + 30);
         newData.payment_expires_at = expiresAt;
 
         // check xem lịch này có bị ai đặt chưa 
@@ -102,6 +109,58 @@ export class ReverseService {
         });
     }
 
+    getBookingByOrderId(orderId: string) {
+        return this.reverseRepository.findByUUid(orderId);
+    }
+
+    getBookingByStripeSessionId(sessionId: string) {
+        return this.reverseRepository.findByStripeSessionId(sessionId);
+    }
+
+    async expireOpenStripeSession(orderId: string) {
+        const booking = await this.reverseRepository.findByUUid(orderId);
+        if (!booking?.stripe_session_id) return;
+        try {
+            const session = await this.stripe.checkout.sessions.retrieve(booking.stripe_session_id);
+            if (session.status === 'open') await this.stripe.checkout.sessions.expire(session.id);
+        } catch (error) {
+            console.error('Failed to expire Stripe Checkout Session:', error);
+        }
+    }
+
+    updateStripeSession(orderId: string, memberId: string, sessionId: string, checkoutUrl: string, expiresAt: Date) {
+        return this.reverseRepository.updateStripeSession(orderId, memberId, {
+            stripe_session_id: sessionId,
+            payment_link: checkoutUrl,
+            payment_expires_at: expiresAt,
+        });
+    }
+
+    async completeStripePayment(orderId: string, sessionId: string, paymentIntentId: string) {
+        const booking = await this.reverseRepository.markStripePaymentPaid(orderId, sessionId, {
+            payment_date: new Date(),
+            transaction_id: paymentIntentId,
+            stripe_payment_intent_id: paymentIntentId,
+        });
+        if (!booking) return null;
+
+        this.successBooking.emit<void, { uuid_reverse: string; status_hold: STATUS_SLOT }>(
+            BOOKING_SERVICE_RABBIT_MESSAGE.BOOKING_SUCCESS_STATUS,
+            { data: { uuid_reverse: booking.id_reverse, status_hold: STATUS_SLOT.ORDERED }, processId: 'stripe-webhook' }
+        );
+        return booking;
+    }
+
+    async failStripePayment(orderId: string, sessionId: string) {
+        const booking = await this.reverseRepository.markStripePaymentFailed(orderId, sessionId);
+        if (!booking) return null;
+        this.successBooking.emit<void, { uuid_reverse: string; status_hold: STATUS_SLOT }>(
+            BOOKING_SERVICE_RABBIT_MESSAGE.BOOKING_SUCCESS_STATUS,
+            { data: { uuid_reverse: booking.id_reverse, status_hold: STATUS_SLOT.CANCLE }, processId: 'stripe-webhook' }
+        );
+        return booking;
+    }
+
     async updateReverseFail(uuid_reverse: string) {
 
         this.successBooking.emit<void, { uuid_reverse: string, status_hold: STATUS_SLOT }>(BOOKING_SERVICE_RABBIT_MESSAGE.BOOKING_SUCCESS_STATUS, { data: { uuid_reverse, status_hold: STATUS_SLOT.CANCLE }, processId: 'xxxxx' });
@@ -151,9 +210,9 @@ export class ReverseService {
      * Create new booking (v2 flow - separate from payment)
      */
     async createBooking(data: CreateBookingTcpRequest, id_reverse: string) {
-        // Set payment expiration to 5 minutes from now (matching delay queue TTL)
+        // Hold the booking for 30 minutes while the member completes payment.
         const expiresAt = new Date();
-        expiresAt.setMinutes(expiresAt.getMinutes() + 5);
+        expiresAt.setMinutes(expiresAt.getMinutes() + 30);
 
         const newData: Partial<Reverse> = {
             id_member: data.id_member,
@@ -207,5 +266,100 @@ export class ReverseService {
 
         const result = await this.reverseRepository.updateJoinAt(bookingId, new Date());
         return result;
+    }
+
+    async getDashboardData(expertId?: string) {
+        const bookings: any[] = await this.reverseRepository.findForDashboard(expertId);
+        const paid = bookings.filter(item => item.status === STATUS_BOOKING.PAIED);
+        const now = new Date();
+        const monthKeys = Array.from({ length: 7 }, (_, offset) => {
+            const date = new Date(now.getFullYear(), now.getMonth() - (6 - offset), 1);
+            return {
+                key: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`,
+                month: `T${date.getMonth() + 1}`,
+                revenue: 0,
+                bookings: 0,
+            };
+        });
+        const revenueByMonth = new Map(monthKeys.map(item => [item.key, item]));
+
+        for (const booking of paid) {
+            const paymentDate = booking.payment_date || booking.createdAt;
+            if (!paymentDate) continue;
+            const date = new Date(paymentDate);
+            const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+            const bucket = revenueByMonth.get(key);
+            if (bucket) {
+                bucket.revenue += Number(booking.price_support || 0);
+                bucket.bookings += 1;
+            }
+        }
+
+        const expertStats = new Map<string, any>();
+        for (const booking of paid) {
+            const id = booking.id_expert || 'unknown';
+            const current = expertStats.get(id) || {
+                id, name: booking.name_expert || 'Chuyên gia', avatar: booking.avatar_expert || null,
+                bookings: 0, revenue: 0,
+            };
+            current.bookings += 1;
+            current.revenue += Number(booking.price_support || 0);
+            expertStats.set(id, current);
+        }
+
+        const currentMonthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const statusCounts = bookings.reduce((result, item) => {
+            result[item.status] = (result[item.status] || 0) + 1;
+            return result;
+        }, {} as Record<string, number>);
+
+        return {
+            totalBookings: bookings.length,
+            paidBookings: paid.length,
+            pendingBookings: statusCounts[STATUS_BOOKING.RESERVED] || 0,
+            cancelledBookings: (statusCounts[STATUS_BOOKING.CANCLE] || 0) + (statusCounts[STATUS_BOOKING.FAILED] || 0),
+            totalRevenue: paid.reduce((sum, item) => sum + Number(item.price_support || 0), 0),
+            monthlyRevenue: revenueByMonth.get(currentMonthKey)?.revenue || 0,
+            revenueData: monthKeys,
+            recentBookings: bookings.slice(0, 6),
+            topExperts: [...expertStats.values()].sort((a, b) => b.revenue - a.revenue).slice(0, 5),
+        };
+    }
+
+    async getVideoCallAccess(bookingId: string, userId: string, roleName?: string) {
+        const booking = await this.reverseRepository.findByUUid(bookingId);
+        if (!booking) return { canJoin: false, reason: 'Không tìm thấy lịch tư vấn' };
+        if (booking.status !== STATUS_BOOKING.PAIED) return { canJoin: false, reason: 'Lịch tư vấn chưa được thanh toán' };
+
+        const participantRole = booking.id_member === userId ? 'member' : booking.id_expert === userId ? 'expert' : null;
+        if (!participantRole || (roleName && roleName !== participantRole)) {
+            return { canJoin: false, reason: 'Bạn không thuộc lịch tư vấn này' };
+        }
+
+        const parts = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'Asia/Bangkok', year: 'numeric', month: '2-digit', day: '2-digit'
+        }).formatToParts(new Date());
+        const get = (type: string) => parts.find(part => part.type === type)?.value;
+        const today = `${get('year')}-${get('month')}-${get('day')}`;
+        if (booking.day_support !== today) {
+            return {
+                canJoin: false,
+                reason: booking.day_support > today ? 'Chưa đến ngày tư vấn' : 'Ngày tư vấn đã kết thúc',
+                daySupport: booking.day_support,
+            };
+        }
+
+        return {
+            canJoin: true,
+            bookingId: booking.id_reverse,
+            participantRole,
+            memberId: booking.id_member,
+            expertId: booking.id_expert,
+            daySupport: booking.day_support,
+            timeStart: booking.time_start,
+            timeEnd: booking.time_end,
+            nameCustomer: booking.name_customer,
+            nameExpert: booking.name_expert,
+        };
     }
 }

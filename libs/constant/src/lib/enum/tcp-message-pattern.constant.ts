@@ -77,16 +77,24 @@ export enum TCP_AUTHORIZER_SERVICE_MESSAGE {
 export enum TCP_CHAT_SERVICE_MESSAGE {
     SAVE_MESSAGE_COMMUNITY = 'chat.save_message_community',
     GET_ALL_MESSAGE_COMMUNITY = 'chat.get_all_message_community',
-    GET_MESSAGE_COMMUNITY_BY_ID = 'chat.get_message_community_by_id'
+    GET_MESSAGE_COMMUNITY_BY_ID = 'chat.get_message_community_by_id',
+    CREATE_ROOM = 'chat.create_room',
+    GET_ROOMS_BY_PARTICIPANT = 'chat.get_rooms_by_participant',
+    SEND_PRIVATE_MESSAGE = 'chat.send_private_message',
+    GET_PRIVATE_MESSAGES = 'chat.get_private_messages',
+    MARK_PRIVATE_ROOM_READ = 'chat.mark_private_room_read'
 }
 
 
 export enum TCP_BOOKING_SERVICE_MESSAGE {
     SAVE_REVERSE = 'booking.save_reserve',
-    CREATE_LINK_PAYMENT = 'booking.create_link_payment',
-    CONFIRM_PAYMENT_BOOKING = 'booking.confirm_payment_booking',
+    CREATE_STRIPE_CHECKOUT = 'booking.create_stripe_checkout',
+    GET_STRIPE_CHECKOUT_STATUS = 'booking.get_stripe_checkout_status',
+    PROCESS_STRIPE_WEBHOOK = 'booking.process_stripe_webhook',
     GET_BOOKING_BY_MEMBER = 'booking.get_booking_by_member',
     CREATE_BOOKING = 'booking.create_booking',
     GET_BOOKING_BY_EXPERT = 'booking.get_booking_by_expert',
-    EXPERT_JOIN_BOOKING = 'booking.expert_join_booking'
+    GET_BOOKING_DASHBOARD = 'booking.get_booking_dashboard',
+    EXPERT_JOIN_BOOKING = 'booking.expert_join_booking',
+    VIDEO_CALL_ACCESS = 'booking.video_call_access'
 }

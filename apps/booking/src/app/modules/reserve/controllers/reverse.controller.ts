@@ -72,9 +72,12 @@ export class ReverseController {
 
 
     @EventPattern(BOOKING_SERVICE_RABBIT_MESSAGE.BOOKING_CHECK_REVERSE)
-    cancleSlotHolding(@RequestParams() data: { uuid: string, status: STATUS_SLOT }, @Ctx() context: RmqContext) {
-        // Logger.log('Hello đang check sau 5p');
-        this.reverseService.updateReverseStatusReverse(data.uuid, STATUS_BOOKING.CANCLE);
+    async cancleSlotHolding(@RequestParams() data: { uuid: string, status: STATUS_SLOT }, @Ctx() context: RmqContext) {
+        const validity = await this.reverseService.checkBookingCanPay(data.uuid);
+        if (!validity.canPay && validity.reason === 'Payment link has expired') {
+            await this.reverseService.expireOpenStripeSession(data.uuid);
+            await this.reverseService.updateReverseStatusReverse(data.uuid, STATUS_BOOKING.CANCLE);
+        }
         context.getChannelRef().ack(context.getMessage());
     }
 
@@ -102,7 +105,7 @@ export class ReverseController {
             } 
         });
 
-        Logger.log(processId + 'đã publish vào queue delay chờ đợi 5 phút');
+        Logger.log(processId + ' đã publish vào queue delay chờ đợi 30 phút');
 
         // push tin nhắn để check sau 5p
         this.slotDelayHold.emit<void, { uuid: string, status: STATUS_SLOT }>(BOOKING_SERVICE_RABBIT_MESSAGE.BOOKING_CHECK_REVERSE, { data: { uuid: id_reverse, status: STATUS_SLOT.AVAILABLE }, processId: processId });
@@ -122,6 +125,11 @@ export class ReverseController {
         return ResponseTcp.success(result);
     }
 
+    @MessagePattern(TCP_BOOKING_SERVICE_MESSAGE.GET_BOOKING_DASHBOARD)
+    async getDashboardData(@RequestParams() data: { expertId?: string }) {
+        return ResponseTcp.success(await this.reverseService.getDashboardData(data.expertId));
+    }
+
     @MessagePattern(TCP_BOOKING_SERVICE_MESSAGE.EXPERT_JOIN_BOOKING)
     async expertJoinBooking(@RequestParams() data: ExpertJoinBookingTcpRequest, @ProcessId() processId: string) {
         try {
@@ -132,5 +140,10 @@ export class ReverseController {
             Logger.error(processId + ' Expert join booking failed: ' + error.message);
             return ResponseTcp.error(error.message);
         }
+    }
+
+    @MessagePattern(TCP_BOOKING_SERVICE_MESSAGE.VIDEO_CALL_ACCESS)
+    async videoCallAccess(@RequestParams() data: { bookingId: string; userId: string; roleName?: string }) {
+        return ResponseTcp.success(await this.reverseService.getVideoCallAccess(data.bookingId, data.userId, data.roleName));
     }
 }

@@ -11,7 +11,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 async function bootstrap() {
   try {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, { rawBody: true });
     const globalPrefix = AppModule.CONFIGURATION.GLOBAL_PREFIX;
     const chatServiceHost =
       process.env['TCP_CHAT_SERVICE_HOST'] ||

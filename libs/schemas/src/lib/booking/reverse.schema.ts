@@ -49,6 +49,12 @@ export class Reverse extends Base {
     @Prop({ type: String })
     transaction_id: string;
 
+    @Prop({ type: String, index: true })
+    stripe_session_id: string;
+
+    @Prop({ type: String })
+    stripe_payment_intent_id: string;
+
     @Prop({ type: Date })
     payment_expires_at: Date;
 

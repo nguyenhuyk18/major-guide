@@ -1,6 +1,6 @@
 export enum QUEUE_NAME {
     SEND_MAIL_QUEUE = 'mail.send_mail_queue',
-    HOLD_DELAY_QUEUE = 'booking.hold_delay_queue',
+    HOLD_DELAY_QUEUE = 'booking.hold_delay_queue_30m_v2',
     HOLD_DEMAND_QUEUE = 'booking.hold_demand_queue',
     HOLD_CANCLE_BOOKING_QUEUE = 'booking.hold_cancle_booking_queue',
     HOLD_CANCLE_QUEUE = 'booking.hold_cancle_queue',

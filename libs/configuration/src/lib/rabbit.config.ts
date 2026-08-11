@@ -77,7 +77,7 @@ export class RabbitConfiguration {
                 exchange: EXCHANGE_NAME.BOOKING_EXCHANGE,
                 routingKey: ROUTING_KEY_NAME.BOOKING_DELAY,
                 deadLetterRoutingKey: EXCHANGE_NAME.BOOKING_EXCHANGE_CANCLE,
-                ttl: 5 * 60 * 1000, // 5 minutes for payment timeout
+                ttl: 30 * 60 * 1000,
             }
         )
 

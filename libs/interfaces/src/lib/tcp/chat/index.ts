@@ -1,3 +1,5 @@
 export * from './chat-comunity-tcp.interface'
 export * from './chat-comunity-response-tcp.interface'
 export * from './chat-community-list.interface'
+export * from './room-tcp.interface'
+export * from './chat-private-tcp.interface'

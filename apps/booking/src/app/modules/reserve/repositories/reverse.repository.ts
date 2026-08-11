@@ -61,6 +61,34 @@ export class ReverseRepository {
         return rs;
     }
 
+    updateStripeSession(uuid: string, memberId: string, data: Partial<Reverse>) {
+        return this.reserveModel.findOneAndUpdate(
+            { id_reverse: uuid, id_member: memberId, status: STATUS_BOOKING.RESERVED },
+            data,
+            { new: true }
+        );
+    }
+
+    findByStripeSessionId(sessionId: string) {
+        return this.reserveModel.findOne({ stripe_session_id: sessionId });
+    }
+
+    markStripePaymentPaid(uuid: string, sessionId: string, data: Partial<Reverse>) {
+        return this.reserveModel.findOneAndUpdate(
+            { id_reverse: uuid, stripe_session_id: sessionId, status: STATUS_BOOKING.RESERVED },
+            { ...data, status: STATUS_BOOKING.PAIED },
+            { new: true }
+        );
+    }
+
+    markStripePaymentFailed(uuid: string, sessionId: string) {
+        return this.reserveModel.findOneAndUpdate(
+            { id_reverse: uuid, stripe_session_id: sessionId, status: STATUS_BOOKING.RESERVED },
+            { status: STATUS_BOOKING.FAILED },
+            { new: true }
+        );
+    }
+
     findByMemberId(memberId: string) {
         return this.reserveModel.find({ id_member: memberId }).sort({ createdAt: -1 }).exec();
     }
@@ -78,6 +106,11 @@ export class ReverseRepository {
             id_expert: expertId,
             status: STATUS_BOOKING.PAIED
         }).exec();
+    }
+
+    findForDashboard(expertId?: string) {
+        const filter = expertId ? { id_expert: expertId } : {};
+        return this.reserveModel.find(filter).sort({ createdAt: -1 }).lean().exec();
     }
 
     updateJoinAt(id_reverse: string, joinAt: Date) {

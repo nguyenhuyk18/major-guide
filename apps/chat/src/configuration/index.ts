@@ -6,6 +6,7 @@ import { TcpConfiguration } from '@common/configuration/tcp.config';
 // import { RedisConfiguration } from '@common/configuration/redis.config';
 // import { GrpcConfiguration } from '@common/configuration/grpc.config';
 import { MongoConfiguration } from '@common/configuration/mongo.config';
+import { GrpcConfiguration } from '@common/configuration/grpc.config';
 
 
 export class Configuration extends BaseConfiguration {
@@ -20,6 +21,10 @@ export class Configuration extends BaseConfiguration {
     @ValidateNested()
     @Type(() => MongoConfiguration)
     MONGO_CONFIG = new MongoConfiguration({ DB_NAME: process.env['CHAT_SERVICE_DB_NAME'] })
+
+    @ValidateNested()
+    @Type(() => GrpcConfiguration)
+    GRPC_CONFIG = new GrpcConfiguration();
 }
 
 

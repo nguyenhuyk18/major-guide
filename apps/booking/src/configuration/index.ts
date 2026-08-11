@@ -5,7 +5,7 @@ import { Type } from 'class-transformer'
 import { TcpConfiguration } from '@common/configuration/tcp.config';
 import { MongoConfiguration } from '@common/configuration/mongo.config';
 import { RabbitConfiguration } from '@common/configuration/rabbit.config';
-import { VNPayConfiguration } from '@common/configuration/vnpay.config';
+import { StripeConfiguration } from '@common/configuration/stripe.config';
 import { GoogleCalendarConfiguration } from '@common/configuration/google-calendar.config';
 
 export class Configuration extends BaseConfiguration {
@@ -28,8 +28,8 @@ export class Configuration extends BaseConfiguration {
     RABBIT_CONFIG = new RabbitConfiguration();
 
     @ValidateNested()
-    @Type(() => VNPayConfiguration)
-    VNPAY_CONFIG = new VNPayConfiguration();
+    @Type(() => StripeConfiguration)
+    STRIPE_CONFIG = new StripeConfiguration();
 
 
     @ValidateNested()

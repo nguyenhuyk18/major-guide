@@ -138,4 +138,40 @@ export class BookingController {
         );
         return new ResponseDto(result.data);
     }
+
+    @Get('dashboard')
+    @Authorization({ secured: true })
+    @Roles([ROLE.ADMIN, ROLE.EXPERT])
+    @ApiOperation({ summary: 'Dữ liệu thống kê thật cho dashboard admin/expert' })
+    async getDashboard(@ProcessId() processId: string, @UserInfo() userInfo: User) {
+        const isExpert = userInfo.roleName === ROLE.EXPERT;
+        const result = await firstValueFrom(this.bookingService.send<any, { expertId?: string }>(
+            TCP_BOOKING_SERVICE_MESSAGE.GET_BOOKING_DASHBOARD,
+            { data: { expertId: isExpert ? userInfo.id : undefined }, processId }
+        ));
+        return new ResponseDto({ data: result.data });
+    }
+
+    @Get(':bookingId/video-access')
+    @Authorization({ secured: true })
+    @Roles([ROLE.MEMBER, ROLE.EXPERT])
+    @ApiOperation({ summary: 'Kiểm tra quyền tham gia phòng gọi WebRTC' })
+    async videoCallAccess(
+        @Param('bookingId') bookingId: string,
+        @ProcessId() processId: string,
+        @UserInfo() userInfo: User,
+    ) {
+        const result = await firstValueFrom(this.bookingService.send<any, { bookingId: string; userId: string; roleName?: string }>(
+            TCP_BOOKING_SERVICE_MESSAGE.VIDEO_CALL_ACCESS,
+            { data: { bookingId, userId: userInfo.id, roleName: userInfo.roleName }, processId }
+        ));
+        const turnUrl = process.env['WEBRTC_TURN_URL'];
+        const iceServers: any[] = [{ urls: process.env['WEBRTC_STUN_URL'] || 'stun:stun.l.google.com:19302' }];
+        if (turnUrl) iceServers.push({
+            urls: turnUrl,
+            username: process.env['WEBRTC_TURN_USERNAME'] || '',
+            credential: process.env['WEBRTC_TURN_CREDENTIAL'] || '',
+        });
+        return new ResponseDto({ data: { ...result.data, iceServers } });
+    }
 }
