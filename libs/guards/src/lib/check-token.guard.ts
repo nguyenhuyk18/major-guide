@@ -40,7 +40,13 @@ export class UserGuard implements CanActivate, OnModuleInit {
     canActivate(
         context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
-        const isSecured = this.reflector.get(MetaDataKeys.SECURED, context.getHandler());
+        // Authorization can be declared on either a route handler or the whole
+        // controller. Reading only the handler made class-level secured routes
+        // execute without a user being attached to the request.
+        const isSecured = this.reflector.getAllAndOverride<{ secured?: boolean }>(
+            MetaDataKeys.SECURED,
+            [context.getHandler(), context.getClass()],
+        );
         const request = context.switchToHttp().getRequest();
 
         // console.log()

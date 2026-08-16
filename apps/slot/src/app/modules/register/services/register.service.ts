@@ -32,6 +32,15 @@ export class RegisterService {
         return this.registerRepository.create(newData);
     }
 
+    async getExpertNotificationInfo(expertId: string) {
+        try {
+            return await firstValueFrom(this.userAccessClient.send<User, { id_user: string; isKeycloak: boolean }>(
+                TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_ID,
+                { data: { id_user: expertId, isKeycloak: false }, processId: 'schedule-notification' }
+            ).pipe(map(row => row.data)));
+        } catch { return null; }
+    }
+
     update(id: string, data: Partial<Register>) {
         return this.registerRepository.update(id, data)
     }

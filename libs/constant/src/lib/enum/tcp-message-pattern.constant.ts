@@ -82,7 +82,12 @@ export enum TCP_CHAT_SERVICE_MESSAGE {
     GET_ROOMS_BY_PARTICIPANT = 'chat.get_rooms_by_participant',
     SEND_PRIVATE_MESSAGE = 'chat.send_private_message',
     GET_PRIVATE_MESSAGES = 'chat.get_private_messages',
-    MARK_PRIVATE_ROOM_READ = 'chat.mark_private_room_read'
+    MARK_PRIVATE_ROOM_READ = 'chat.mark_private_room_read',
+    CREATE_NOTIFICATION = 'notification.create',
+    GET_NOTIFICATIONS = 'notification.get_many',
+    GET_NOTIFICATION_UNREAD_COUNT = 'notification.unread_count',
+    MARK_NOTIFICATION_READ = 'notification.mark_read',
+    MARK_ALL_NOTIFICATIONS_READ = 'notification.mark_all_read'
 }
 
 

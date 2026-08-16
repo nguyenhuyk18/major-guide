@@ -18,7 +18,7 @@ describe('ReverseService video call access', () => {
     const makeService = (overrides = {}) => {
         const repository = { findByUUid: jest.fn().mockResolvedValue({ ...booking, ...overrides }) };
         const config = { getOrThrow: jest.fn().mockReturnValue('sk_test_unit') } as unknown as ConfigService;
-        return new ReverseService(repository as any, { emit: jest.fn() } as any, {} as any, config);
+        return new ReverseService(repository as any, { emit: jest.fn() } as any, { emit: jest.fn() } as any, {} as any, config);
     };
 
     it('allows the paid member on the booked day', async () => {

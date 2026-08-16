@@ -17,7 +17,11 @@ export class PermissionGuard implements CanActivate {
     ): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
 
-        const roles = this.reflector.get(Roles, context.getHandler());
+        // Support @Roles on both methods and controller classes.
+        const roles = this.reflector.getAllAndOverride(Roles, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
 
         if (!roles) {
             return true;

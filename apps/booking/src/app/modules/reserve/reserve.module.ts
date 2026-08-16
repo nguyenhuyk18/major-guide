@@ -7,10 +7,11 @@ import { ClientsModule } from "@nestjs/microservices";
 import { RABBIT_SERVICE, RabbitProvider } from "@common/configuration/rabbit.config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ReverseDestination } from "@common/schemas/booking/reverse.schema";
+import { TCP_SERVICE, TcpProvider } from '@common/configuration/tcp.config';
 
 
 @Module({
-    imports: [ClientsModule.registerAsync([RabbitProvider(RABBIT_SERVICE.BOOKING_STATUS_SUCCESS), RabbitProvider(RABBIT_SERVICE.BOOKING_HOLD_DELAY), RabbitProvider(RABBIT_SERVICE.BOOKING_HOLD_DEMAND), RabbitProvider(RABBIT_SERVICE.BOOKING_HOLD_CANCEL), RabbitProvider(RABBIT_SERVICE.MAIL_SERVICE)]), MongooseModule.forFeature([ReverseDestination])],
+    imports: [ClientsModule.registerAsync([RabbitProvider(RABBIT_SERVICE.BOOKING_STATUS_SUCCESS), RabbitProvider(RABBIT_SERVICE.BOOKING_HOLD_DELAY), RabbitProvider(RABBIT_SERVICE.BOOKING_HOLD_DEMAND), RabbitProvider(RABBIT_SERVICE.BOOKING_HOLD_CANCEL), RabbitProvider(RABBIT_SERVICE.MAIL_SERVICE), TcpProvider(TCP_SERVICE.CHAT_SERVICE)]), MongooseModule.forFeature([ReverseDestination])],
     controllers: [ReverseController],
     providers: [ReverseRepository, ReverseService, GoogleCalendarService],
     exports: [ReverseService, GoogleCalendarService]

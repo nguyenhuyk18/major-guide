@@ -22,11 +22,13 @@ export class ChatAiController {
                 { message: data.message },
                 {
                     headers: { 'Content-Type': 'application/json' },
+                    timeout: 90000,
                 }
             );
             return new ResponseDto<ChatAiResponseDto>({ data: response.data });
         } catch (error) {
-            const message = error.response?.data?.message
+            const message = error.response?.data?.detail
+                || error.response?.data?.message
                 || error.message
                 || 'Lỗi khi gọi AI Agent service';
             throw new HttpException(message, HttpStatus.BAD_GATEWAY);
@@ -44,11 +46,13 @@ export class ChatAiController {
                 { message: data.message },
                 {
                     headers: { 'Content-Type': 'application/json' },
+                    timeout: 90000,
                 }
             );
             return new ResponseDto<ChatAiRagResponseDto>({ data: response.data });
         } catch (error) {
-            const message = error.response?.data?.message
+            const message = error.response?.data?.detail
+                || error.response?.data?.message
                 || error.message
                 || 'Lỗi khi gọi AI Agent RAG service';
             throw new HttpException(message, HttpStatus.BAD_GATEWAY);

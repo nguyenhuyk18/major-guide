@@ -94,8 +94,43 @@ export class PaymentService {
 
         let status: 'processing' | 'paid' | 'failed' | 'expired' = 'processing';
         if (booking.status === STATUS_BOOKING.PAIED) status = 'paid';
-        else if (booking.payment_expires_at && new Date() > new Date(booking.payment_expires_at)) status = 'expired';
         else if (booking.status === STATUS_BOOKING.FAILED || booking.status === STATUS_BOOKING.CANCLE) status = 'failed';
+        else {
+            // Webhooks remain the primary source of truth. This authenticated status
+            // request provides a safe recovery path when a local Stripe CLI listener
+            // was stopped or delivery was delayed: Stripe itself is queried and every
+            // immutable payment field is validated before the atomic update.
+            try {
+                const session = await this.stripe.checkout.sessions.retrieve(sessionId);
+                const expectedAmount = Math.round(Number(booking.price_support || 0) + this.platformFee);
+                const metadataMatches = session.metadata?.bookingId === booking.id_reverse
+                    && session.metadata?.memberId === booking.id_member
+                    && booking.stripe_session_id === session.id;
+                const paymentMatches = session.currency === this.currency
+                    && session.amount_total === expectedAmount;
+
+                if (session.payment_status === 'paid' && metadataMatches && paymentMatches) {
+                    const paymentIntentId = typeof session.payment_intent === 'string'
+                        ? session.payment_intent
+                        : session.payment_intent?.id;
+                    await this.reverseService.completeStripePayment(
+                        booking.id_reverse,
+                        session.id,
+                        paymentIntentId || session.id,
+                    );
+                    const updated = await this.reverseService.getBookingByOrderId(booking.id_reverse);
+                    status = updated?.status === STATUS_BOOKING.PAIED ? 'paid' : 'processing';
+                } else if (session.status === 'expired') {
+                    await this.reverseService.failStripePayment(booking.id_reverse, session.id);
+                    status = 'expired';
+                } else if (booking.payment_expires_at && new Date() > new Date(booking.payment_expires_at)) {
+                    status = 'expired';
+                }
+            } catch (error) {
+                console.error(`Failed to reconcile Stripe Checkout Session ${sessionId}:`, error);
+                if (booking.payment_expires_at && new Date() > new Date(booking.payment_expires_at)) status = 'expired';
+            }
+        }
         return { status, orderId: booking.id_reverse };
     }
 
@@ -115,8 +150,9 @@ export class PaymentService {
             && event.paymentStatus === 'paid';
         if (successful) {
             if (booking.status === STATUS_BOOKING.PAIED) return { processed: true, idempotent: true };
-            const validity = await this.reverseService.checkBookingCanPay(event.bookingId);
-            if (!validity.canPay) {
+            // A paid Stripe session must be honoured when the booking is still
+            // reserved, even if webhook delivery arrives just after the local TTL.
+            if (booking.status !== STATUS_BOOKING.RESERVED) {
                 if (event.paymentIntentId) {
                     await this.stripe.refunds.create({ payment_intent: event.paymentIntentId }, { idempotencyKey: `expired-booking-refund-${event.sessionId}` });
                 }

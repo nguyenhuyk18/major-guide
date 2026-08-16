@@ -4,9 +4,10 @@ import { ClientsModule } from "@nestjs/microservices";
 import { TCP_SERVICE, TcpProvider } from "@common/configuration/tcp.config";
 import { RoomController } from "./controllers/room.controller";
 import { ChatPrivateController } from './controllers/chat-private.controller';
+import { NotificationController } from './controllers/notification.controller';
 
 @Module({
     imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.CHAT_SERVICE)])],
-    controllers: [ChatComunityController, RoomController, ChatPrivateController]
+    controllers: [ChatComunityController, RoomController, ChatPrivateController, NotificationController]
 })
 export class ChatModule { }

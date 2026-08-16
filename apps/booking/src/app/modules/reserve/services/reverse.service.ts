@@ -11,6 +11,8 @@ import { BOOKING_SERVICE_RABBIT_MESSAGE } from '@common/constant/enum/rabbitmq-m
 import { GoogleCalendarService } from './google-calendar.service';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
+import { TCP_SERVICE } from '@common/configuration/tcp.config';
+import { TCP_CHAT_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-pattern.constant';
 
 
 
@@ -20,6 +22,7 @@ export class ReverseService {
 
     constructor(private readonly reverseRepository: ReverseRepository,
         @Inject(RABBIT_SERVICE.BOOKING_STATUS_SUCCESS) private readonly successBooking: TcpClient,
+        @Inject(TCP_SERVICE.CHAT_SERVICE) private readonly notificationClient: TcpClient,
         private readonly googleCalendarService: GoogleCalendarService,
         config: ConfigService,
     ) {
@@ -148,6 +151,18 @@ export class ReverseService {
             BOOKING_SERVICE_RABBIT_MESSAGE.BOOKING_SUCCESS_STATUS,
             { data: { uuid_reverse: booking.id_reverse, status_hold: STATUS_SLOT.ORDERED }, processId: 'stripe-webhook' }
         );
+        this.notificationClient.emit(TCP_CHAT_SERVICE_MESSAGE.CREATE_NOTIFICATION, {
+            processId: 'stripe-webhook', data: {
+                eventId: `booking-paid:${booking.id_reverse}`,
+                recipientId: booking.id_expert,
+                type: 'booking_paid', title: 'Lịch tư vấn mới',
+                message: `${booking.name_customer || 'Một học viên'} đã đặt và thanh toán lịch tư vấn ngày ${booking.day_support}.`,
+                entityType: 'booking', entityId: booking.id_reverse,
+                actionUrl: `/admin/expert-bookings?bookingId=${booking.id_reverse}`,
+                actorId: booking.id_member, actorName: booking.name_customer,
+                metadata: { bookingId: booking.id_reverse, memberId: booking.id_member, expertId: booking.id_expert, daySupport: booking.day_support, timeStart: booking.time_start, price: booking.price_support }
+            }
+        }).subscribe({ error: error => console.error('Failed to publish booking notification:', error) });
         return booking;
     }
 

@@ -6,6 +6,7 @@ import { MongoProvider } from '@common/configuration/mongo.config';
 import { ChatSocketModule } from './modules/socket/socket.module';
 import { RoomModule } from './modules/room/room.module';
 import { ChatPrivateModule } from './modules/chat-private/chat-private.module';
+import { NotificationModule } from './modules/notification/notification.module';
 
 
 @Module({
@@ -13,6 +14,7 @@ import { ChatPrivateModule } from './modules/chat-private/chat-private.module';
     ChatSocketModule,
     RoomModule,
     ChatPrivateModule,
+    NotificationModule,
     MongoProvider,
     ConfigModule.forRoot(
       {

@@ -10,7 +10,7 @@ import { TCP_SERVICE, TcpProvider } from "@common/configuration/tcp.config";
 
 @Module({
     imports: [MongooseModule.forFeature([RegisterDestination]),
-    ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.USER_ACCESS_SERVICE)])
+    ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.USER_ACCESS_SERVICE), TcpProvider(TCP_SERVICE.CHAT_SERVICE)])
     ],
     controllers: [RegisterController],
     providers: [RegisterRepository, RegisterService],

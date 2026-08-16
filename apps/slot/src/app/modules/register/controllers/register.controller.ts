@@ -1,6 +1,6 @@
 import { TCP_SLOT_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
 import { BadRequestException, Controller, UseInterceptors } from "@nestjs/common";
-import { MessagePattern } from "@nestjs/microservices";
+import { ClientProxy, MessagePattern } from "@nestjs/microservices";
 import { RegisterService } from "../services/register.service";
 import { RequestParams } from "@common/decorators/request-params.decorator";
 import { RegisterTcpRequest, RegisterTcpResponse } from '@common/interfaces/tcp/register';
@@ -11,12 +11,15 @@ import { STATUS_REGISTER_ADVISE } from "@common/constant/enum/status-register-ad
 import { ProcessId } from '@common/decorators/processid.decorator';
 import { User } from "@common/schemas/user-access/user.schema";
 import { PaginationResponse } from '@common/interfaces/tcp/common/pagegination-tcp.interface';
+import { Inject } from '@nestjs/common';
+import { TCP_SERVICE } from '@common/configuration/tcp.config';
+import { TCP_CHAT_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-pattern.constant';
 
 
 @Controller()
 @UseInterceptors(TcpLoggingInterceptor)
 export class RegisterController {
-    constructor(private readonly registerService: RegisterService) { }
+    constructor(private readonly registerService: RegisterService, @Inject(TCP_SERVICE.CHAT_SERVICE) private readonly notificationClient: ClientProxy) { }
 
     @MessagePattern(TCP_SLOT_SERVICE_MESSAGE.GET_ALL_REGISTER)
     async getAll(@RequestParams() params: { pageSend: number, statusSend: string }, @ProcessId() processId: string): Promise<ResponseTcp<PaginationResponse<Register & Partial<User>>>> {
@@ -45,6 +48,18 @@ export class RegisterController {
     async create(@RequestParams() param: RegisterTcpRequest) {
 
         const rs = await this.registerService.create(param)
+        const expert = await this.registerService.getExpertNotificationInfo(rs.id_expert);
+        this.notificationClient.emit(TCP_CHAT_SERVICE_MESSAGE.CREATE_NOTIFICATION, {
+            processId: 'schedule-register', data: {
+                eventId: `expert-schedule-registered:${rs._id}`,
+                recipientRole: 'admin', type: 'expert_schedule_registered',
+                title: 'Đăng ký lịch mới', message: `${expert?.name || 'Một chuyên gia'} vừa gửi đăng ký lịch tư vấn cần xác nhận.`,
+                entityType: 'schedule_register', entityId: String(rs._id),
+                actionUrl: `/admin/review-detail/${rs._id}`,
+                actorId: rs.id_expert, actorName: expert?.name, actorAvatar: expert?.fileAvartarUrl,
+                metadata: { registerId: String(rs._id), expertId: rs.id_expert }
+            }
+        }).subscribe({ error: error => console.error('Failed to publish schedule notification:', error) });
         return ResponseTcp.success<RegisterTcpResponse>(rs)
     }
 
