@@ -1,0 +1,25 @@
+# Caddy trên EC2 data: HTTPS cho https://{DOMAIN} (sslip.io), phục vụ React build và chuyển API sang ALB.
+# Chạy trong ~/majorguide trên EC2 data (thư mục web/ chứa bản build React):
+#   ALB_DNS=<dns của majorguide-alb> docker compose --env-file .env.production -f docker-compose.edge.yml up -d
+name: majorguide-edge
+
+services:
+  caddy:
+    image: caddy:2.8-alpine
+    environment:
+      DOMAIN: ${DOMAIN}
+      ALB_DNS: ${ALB_DNS}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - ./Caddyfile.edge:/etc/caddy/Caddyfile:ro
+      - ./web:/srv:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options: { max-size: 10m, max-file: "3" }
+
+volumes:
+  caddy_data:
+  caddy_config:

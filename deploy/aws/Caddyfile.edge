@@ -1,0 +1,17 @@
+# Cửa vào HTTPS khi chưa dùng được CloudFront: chạy trên EC2 data (Elastic IP), Let's Encrypt cho {$DOMAIN}.
+#   /api/*, /socket.io/*, /ai/*  -> ALB -> ECS (bff, agentic-ai)
+#   còn lại                      -> React build trong /srv
+{$DOMAIN} {
+	encode zstd gzip
+
+	@backend path /api/* /socket.io/* /ai /ai/*
+	handle @backend {
+		reverse_proxy {$ALB_DNS}:80
+	}
+
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
