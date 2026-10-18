@@ -13,12 +13,14 @@ import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import { TCP_SERVICE } from '@common/configuration/tcp.config';
 import { TCP_CHAT_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-pattern.constant';
+import { bookingAmounts } from '../../accounting/booking-ledger';
 
 
 
 @Injectable()
 export class ReverseService {
     private readonly stripe: Stripe;
+    private readonly platformFee: number;
 
     constructor(private readonly reverseRepository: ReverseRepository,
         @Inject(RABBIT_SERVICE.BOOKING_STATUS_SUCCESS) private readonly successBooking: TcpClient,
@@ -27,6 +29,7 @@ export class ReverseService {
         config: ConfigService,
     ) {
         this.stripe = new Stripe(config.getOrThrow<string>('STRIPE_CONFIG.SECRET_KEY'));
+        this.platformFee = Number(config.get<number>('STRIPE_CONFIG.PLATFORM_FEE') || 45000);
     }
 
     // check reverse có trùng hay không
@@ -139,11 +142,12 @@ export class ReverseService {
         });
     }
 
-    async completeStripePayment(orderId: string, sessionId: string, paymentIntentId: string) {
+    async completeStripePayment(orderId: string, sessionId: string, paymentIntentId: string, charge?: { amountPaid: number; platformFee: number }) {
         const booking = await this.reverseRepository.markStripePaymentPaid(orderId, sessionId, {
             payment_date: new Date(),
             transaction_id: paymentIntentId,
             stripe_payment_intent_id: paymentIntentId,
+            ...(charge ? { amount_paid: charge.amountPaid, platform_fee: charge.platformFee } : {}),
         });
         if (!booking) return null;
 
@@ -284,7 +288,8 @@ export class ReverseService {
     }
 
     async getDashboardData(expertId?: string) {
-        const bookings: any[] = await this.reverseRepository.findForDashboard(expertId);
+        // Demo bookings (video-call testing) are not real sales.
+        const bookings: any[] = (await this.reverseRepository.findForDashboard(expertId)).filter((item: any) => !item.is_demo);
         const paid = bookings.filter(item => item.status === STATUS_BOOKING.PAIED);
         const now = new Date();
         const monthKeys = Array.from({ length: 7 }, (_, offset) => {
@@ -293,11 +298,16 @@ export class ReverseService {
                 key: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`,
                 month: `T${date.getMonth() + 1}`,
                 revenue: 0,
+                platformRevenue: 0,
                 bookings: 0,
             };
         });
         const revenueByMonth = new Map(monthKeys.map(item => [item.key, item]));
 
+        // Admin view: revenue = cash collected (expert fee + platform fee).
+        // Expert view: revenue = the expert's own earnings.
+        const amountsOf = (booking: any) => bookingAmounts(booking, this.platformFee);
+        const revenueOf = (booking: any) => expertId ? amountsOf(booking).expertAmount : amountsOf(booking).amountPaid;
         for (const booking of paid) {
             const paymentDate = booking.payment_date || booking.createdAt;
             if (!paymentDate) continue;
@@ -305,7 +315,8 @@ export class ReverseService {
             const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
             const bucket = revenueByMonth.get(key);
             if (bucket) {
-                bucket.revenue += Number(booking.price_support || 0);
+                bucket.revenue += revenueOf(booking);
+                bucket.platformRevenue += amountsOf(booking).platformFee;
                 bucket.bookings += 1;
             }
         }
@@ -318,7 +329,7 @@ export class ReverseService {
                 bookings: 0, revenue: 0,
             };
             current.bookings += 1;
-            current.revenue += Number(booking.price_support || 0);
+            current.revenue += amountsOf(booking).expertAmount;
             expertStats.set(id, current);
         }
 
@@ -333,7 +344,11 @@ export class ReverseService {
             paidBookings: paid.length,
             pendingBookings: statusCounts[STATUS_BOOKING.RESERVED] || 0,
             cancelledBookings: (statusCounts[STATUS_BOOKING.CANCLE] || 0) + (statusCounts[STATUS_BOOKING.FAILED] || 0),
-            totalRevenue: paid.reduce((sum, item) => sum + Number(item.price_support || 0), 0),
+            totalRevenue: paid.reduce((sum, item) => sum + revenueOf(item), 0),
+            ...(expertId ? {} : {
+                platformRevenue: paid.reduce((sum, item) => sum + amountsOf(item).platformFee, 0),
+                expertEarnings: paid.reduce((sum, item) => sum + amountsOf(item).expertAmount, 0),
+            }),
             monthlyRevenue: revenueByMonth.get(currentMonthKey)?.revenue || 0,
             revenueData: monthKeys,
             recentBookings: bookings.slice(0, 6),
@@ -356,7 +371,7 @@ export class ReverseService {
         }).formatToParts(new Date());
         const get = (type: string) => parts.find(part => part.type === type)?.value;
         const today = `${get('year')}-${get('month')}-${get('day')}`;
-        if (booking.day_support !== today) {
+        if (!booking.is_demo && booking.day_support !== today) {
             return {
                 canJoin: false,
                 reason: booking.day_support > today ? 'Chưa đến ngày tư vấn' : 'Ngày tư vấn đã kết thúc',
@@ -375,6 +390,7 @@ export class ReverseService {
             timeEnd: booking.time_end,
             nameCustomer: booking.name_customer,
             nameExpert: booking.name_expert,
+            isDemo: Boolean(booking.is_demo),
         };
     }
 }

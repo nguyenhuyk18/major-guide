@@ -19,7 +19,7 @@ async function bootstrap() {
     {
       transport: AppModule.CONFIGURATION.TCP_SERV.TCP_AUTHORIZER_SERVICE.transport,
       options: {
-        host: AppModule.CONFIGURATION.TCP_SERV.TCP_AUTHORIZER_SERVICE.options.host,
+        host: '0.0.0.0', // listen on every interface; *_HOST is only for callers
         port: AppModule.CONFIGURATION.TCP_SERV.TCP_AUTHORIZER_SERVICE.options.port
       },
     },
@@ -32,7 +32,7 @@ async function bootstrap() {
       options: {
         package: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE.name,
         protoPath: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE.options.protoPath,
-        url: AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE.options.url
+        url: `0.0.0.0:${AppModule.CONFIGURATION.GRPC_CONFIG.GRPC_AUTHORIZE_SERVICE.options.url.split(":").pop()}` // listen on every interface
       },
     },
   )

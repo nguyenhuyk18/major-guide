@@ -37,23 +37,63 @@ describe('PaymentService Stripe webhook', () => {
         failStripePayment: jest.fn().mockResolvedValue({}),
     });
 
+    const makeAccounting = () => ({
+        recordBookingPayment: jest.fn().mockResolvedValue({}),
+        recordBookingRefund: jest.fn().mockResolvedValue({}),
+    });
+
     it('completes a valid paid checkout', async () => {
         const reverse = makeReverseService();
-        const service = new PaymentService(config, reverse as any);
+        const service = new PaymentService(config, reverse as any, makeAccounting() as any);
         await expect(service.processWebhook(event)).resolves.toEqual({ processed: true });
         expect(reverse.completeStripePayment).toHaveBeenCalledTimes(1);
     });
 
+    it('snapshots the charge and writes the payment to the ledger', async () => {
+        const reverse = makeReverseService();
+        const paidBooking = { id_reverse: 'booking-1', price_support: 100000, status: STATUS_BOOKING.PAIED };
+        reverse.getBookingByOrderId
+            .mockResolvedValueOnce({ id_reverse: 'booking-1', id_member: 'member-1', stripe_session_id: 'cs_test_1', price_support: 100000, status: STATUS_BOOKING.RESERVED })
+            .mockResolvedValueOnce(paidBooking);
+        const accounting = makeAccounting();
+        const service = new PaymentService(config, reverse as any, accounting as any);
+        await service.processWebhook(event);
+        expect(reverse.completeStripePayment).toHaveBeenCalledWith('booking-1', 'cs_test_1', 'pi_test_1', { amountPaid: 145000, platformFee: 45000 });
+        expect(accounting.recordBookingPayment).toHaveBeenCalledWith(paidBooking, { reference: 'pi_test_1' });
+    });
+
+    it('does not fail the payment when the ledger write fails', async () => {
+        const reverse = makeReverseService(STATUS_BOOKING.PAIED);
+        const accounting = makeAccounting();
+        accounting.recordBookingPayment.mockRejectedValue(new Error('mongo down'));
+        const service = new PaymentService(config, reverse as any, accounting as any);
+        await expect(service.processWebhook(event)).resolves.toEqual({ processed: true, idempotent: true });
+        expect(accounting.recordBookingPayment).toHaveBeenCalledTimes(1);
+    });
+
+    it('records both the charge and the refund for a late payment', async () => {
+        const reverse = makeReverseService(STATUS_BOOKING.FAILED);
+        const accounting = makeAccounting();
+        const service = new PaymentService(config, reverse as any, accounting as any);
+        (service as any).stripe = { refunds: { create: jest.fn().mockResolvedValue({}) } };
+        await expect(service.processWebhook(event)).resolves.toEqual({ processed: true, refunded: true });
+        expect(accounting.recordBookingPayment).toHaveBeenCalledTimes(1);
+        expect(accounting.recordBookingRefund).toHaveBeenCalledWith(
+            expect.objectContaining({ id_reverse: 'booking-1' }),
+            expect.objectContaining({ amountPaid: 145000, platformFee: 45000, reference: 'pi_test_1' }),
+        );
+    });
+
     it('is idempotent when Stripe retries a completed event', async () => {
         const reverse = makeReverseService(STATUS_BOOKING.PAIED);
-        const service = new PaymentService(config, reverse as any);
+        const service = new PaymentService(config, reverse as any, makeAccounting() as any);
         await expect(service.processWebhook(event)).resolves.toEqual({ processed: true, idempotent: true });
         expect(reverse.completeStripePayment).not.toHaveBeenCalled();
     });
 
     it('rejects a mismatched amount', async () => {
         const reverse = makeReverseService();
-        const service = new PaymentService(config, reverse as any);
+        const service = new PaymentService(config, reverse as any, makeAccounting() as any);
         await expect(service.processWebhook({ ...event, amountTotal: 1 })).rejects.toBeInstanceOf(BadRequestException);
     });
 });

@@ -1,0 +1,88 @@
+# EC2 "majorguide-data": chỉ chạy database / broker / TURN. Các service NestJS + AI chạy trên ECS.
+# Chạy trong ~/majorguide trên EC2 data (data-restore.sh gọi file này):
+#   docker compose --env-file .env.production -f docker-compose.data.yml up -d
+# Các port được mở trên máy, nhưng security group majorguide-data chỉ cho máy ECS (majorguide-ecs) vào.
+name: majorguide-data
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: 10m, max-file: "3" }
+
+services:
+  mongodb:
+    image: mongo:8.2
+    command: ["--wiredTigerCacheSizeGB", "1"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    ports: ["27017:27017"]
+    volumes: ["mongo_data:/data/db", "./data/restore:/restore:ro"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    logging: *logging
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    ports: ["6379:6379"]
+    restart: unless-stopped
+    logging: *logging
+
+  rabbitmq:
+    image: rabbitmq:3.12-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports: ["5672:5672"]
+    volumes: ["rabbitmq_data:/var/lib/rabbitmq"]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+    restart: unless-stopped
+    logging: *logging
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.0
+    command: start-dev
+    environment:
+      JAVA_OPTS_APPEND: -Xms128m -Xmx512m
+    ports: ["8080:8080"]
+    volumes: ["./data/keycloak:/opt/keycloak/data"]
+    restart: unless-stopped
+    logging: *logging
+
+  qdrant:
+    image: qdrant/qdrant:v1.17.1
+    ports: ["6333:6333"]
+    volumes: ["./data/qdrant:/qdrant/storage"]
+    restart: unless-stopped
+    logging: *logging
+
+  coturn:
+    image: coturn/coturn:4.6
+    network_mode: host
+    command:
+      - -n
+      - --listening-port=3478
+      - --external-ip=${PUBLIC_IP}/${PRIVATE_IP}
+      - --realm=${DOMAIN}
+      - --lt-cred-mech
+      - --user=${WEBRTC_TURN_USERNAME}:${WEBRTC_TURN_CREDENTIAL}
+      - --min-port=49152
+      - --max-port=49200
+      - --fingerprint
+      - --no-cli
+      - --no-tls
+      - --no-dtls
+    restart: unless-stopped
+    logging: *logging
+
+volumes:
+  mongo_data:
+  rabbitmq_data:

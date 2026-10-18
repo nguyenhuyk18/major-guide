@@ -16,6 +16,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { createHash } from "crypto";
 import { Cache } from 'cache-manager';
 import { ReviewService } from '../../review/services/review.service';
+import { cleanCareerFamilies, inferCareerFamilies } from '../../career-assessment/expert-matching';
 
 @Injectable()
 export class UserService {
@@ -174,12 +175,20 @@ export class UserService {
             case ROLE.EXPERT:
                 // console.log('tôi đã vào đây')
                 if (data.expertProfile) {
+                    // Keep the stored families when the form does not send them; infer when there are none.
+                    const sent = cleanCareerFamilies(data.expertProfile.careerFamilies);
+                    const kept = cleanCareerFamilies(currentUser.expertProfile?.careerFamilies);
                     updateData.expertProfile = {
                         teachAt: data?.expertProfile?.teachAt,
                         price: data?.expertProfile?.price || 60000,
                         information: data?.expertProfile?.information || 'Không có thông tin',
                         level: data?.expertProfile?.level || LEVEL_USER.BACHELOR,
-                        major: data?.expertProfile?.major
+                        major: data?.expertProfile?.major,
+                        careerFamilies: sent.length
+                            ? sent
+                            : kept.length
+                                ? kept
+                                : inferCareerFamilies(data.expertProfile.major, data.expertProfile.teachAt, data.expertProfile.information)
                     };
                 }
                 break;

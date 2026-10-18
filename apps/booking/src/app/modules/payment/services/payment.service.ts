@@ -1,8 +1,9 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { STATUS_BOOKING } from '@common/constant/enum/status_slot.contant';
 import Stripe from 'stripe';
 import { ReverseService } from '../../reserve/services/reverse.service';
+import { AccountingService } from '../../accounting/accounting.module';
 
 export interface StripeWebhookPayload {
     type: string;
@@ -17,18 +18,51 @@ export interface StripeWebhookPayload {
 
 @Injectable()
 export class PaymentService {
+    private readonly logger = new Logger(PaymentService.name);
     private readonly stripe: Stripe;
     private readonly currency: string;
     private readonly platformFee: number;
     private readonly successUrl: string;
     private readonly cancelUrl: string;
 
-    constructor(private readonly config: ConfigService, private readonly reverseService: ReverseService) {
+    constructor(
+        private readonly config: ConfigService,
+        private readonly reverseService: ReverseService,
+        private readonly accounting: AccountingService,
+    ) {
         this.stripe = new Stripe(this.config.getOrThrow<string>('STRIPE_CONFIG.SECRET_KEY'));
         this.currency = this.config.get<string>('STRIPE_CONFIG.CURRENCY') || 'vnd';
         this.platformFee = Number(this.config.get<number>('STRIPE_CONFIG.PLATFORM_FEE') || 45000);
         this.successUrl = this.config.getOrThrow<string>('STRIPE_CONFIG.SUCCESS_URL');
         this.cancelUrl = this.config.getOrThrow<string>('STRIPE_CONFIG.CANCEL_URL');
+    }
+
+    private charge(booking: { price_support?: number }) {
+        const expertAmount = Math.round(Number(booking.price_support || 0));
+        return { amountPaid: expertAmount + Math.round(this.platformFee), platformFee: Math.round(this.platformFee) };
+    }
+
+    // Ledger writes are idempotent and must never block a payment; a failed write
+    // is healed by the next webhook retry or by POST /accounting/sync-bookings.
+    private async recordPayment(bookingId: string, reference?: string) {
+        try {
+            const booking = await this.reverseService.getBookingByOrderId(bookingId);
+            if (booking?.status === STATUS_BOOKING.PAIED) {
+                await this.accounting.recordBookingPayment(booking, { reference });
+            }
+        } catch (error) {
+            this.logger.error(`Ledger write failed for paid booking ${bookingId}: ${error?.message}`);
+        }
+    }
+
+    private async recordRefund(booking: any, reference?: string) {
+        try {
+            const charge = this.charge(booking);
+            await this.accounting.recordBookingPayment(booking, { ...charge, paidAt: new Date(), reference });
+            await this.accounting.recordBookingRefund(booking, { ...charge, refundedAt: new Date(), reference });
+        } catch (error) {
+            this.logger.error(`Ledger write failed for refunded booking ${booking?.id_reverse}: ${error?.message}`);
+        }
     }
 
     async createCheckoutSession(data: { orderId: string; memberId: string }) {
@@ -117,9 +151,11 @@ export class PaymentService {
                         booking.id_reverse,
                         session.id,
                         paymentIntentId || session.id,
+                        this.charge(booking),
                     );
                     const updated = await this.reverseService.getBookingByOrderId(booking.id_reverse);
                     status = updated?.status === STATUS_BOOKING.PAIED ? 'paid' : 'processing';
+                    if (status === 'paid') await this.recordPayment(booking.id_reverse, paymentIntentId || session.id);
                 } else if (session.status === 'expired') {
                     await this.reverseService.failStripePayment(booking.id_reverse, session.id);
                     status = 'expired';
@@ -149,7 +185,10 @@ export class PaymentService {
         const successful = ['checkout.session.completed', 'checkout.session.async_payment_succeeded'].includes(event.type)
             && event.paymentStatus === 'paid';
         if (successful) {
-            if (booking.status === STATUS_BOOKING.PAIED) return { processed: true, idempotent: true };
+            if (booking.status === STATUS_BOOKING.PAIED) {
+                await this.recordPayment(event.bookingId, event.paymentIntentId);
+                return { processed: true, idempotent: true };
+            }
             // A paid Stripe session must be honoured when the booking is still
             // reserved, even if webhook delivery arrives just after the local TTL.
             if (booking.status !== STATUS_BOOKING.RESERVED) {
@@ -157,9 +196,11 @@ export class PaymentService {
                     await this.stripe.refunds.create({ payment_intent: event.paymentIntentId }, { idempotencyKey: `expired-booking-refund-${event.sessionId}` });
                 }
                 await this.reverseService.failStripePayment(event.bookingId, event.sessionId);
+                if (event.paymentIntentId) await this.recordRefund(booking, event.paymentIntentId);
                 return { processed: true, refunded: true };
             }
-            await this.reverseService.completeStripePayment(event.bookingId, event.sessionId, event.paymentIntentId || event.sessionId);
+            await this.reverseService.completeStripePayment(event.bookingId, event.sessionId, event.paymentIntentId || event.sessionId, this.charge(booking));
+            await this.recordPayment(event.bookingId, event.paymentIntentId);
             return { processed: true };
         }
 

@@ -12,10 +12,12 @@ export class Base {
     })
     id: string;
 
-    @Prop({ type: Date, default: new Date() })
+    // Defaults must be functions: `new Date()` here would be evaluated once when the
+    // service starts, stamping every document with the start-up time.
+    @Prop({ type: Date, default: () => new Date() })
     createdAt: Date;
 
-    @Prop({ type: Date, default: new Date() })
+    @Prop({ type: Date, default: () => new Date() })
     updatedAt: Date;
 }
 

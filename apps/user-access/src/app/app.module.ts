@@ -9,6 +9,7 @@ import { RedisProvider } from '@common/configuration/redis.config';
 import { QuestionModule } from './modules/question/question.module';
 import { TestResultModule } from './modules/test-result/test-result.module';
 import { ReviewModule } from './modules/review/review.module';
+import { CareerAssessmentModule } from './modules/career-assessment/career-assessment.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { ReviewModule } from './modules/review/review.module';
     QuestionModule,
     TestResultModule,
     ReviewModule,
+    CareerAssessmentModule,
     MongoProvider,
     RedisProvider
   ],

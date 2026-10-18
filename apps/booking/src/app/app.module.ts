@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CONFIGURATION, TConfiguration } from '../configuration';
 import { ReverseModule } from './modules/reserve/reserve.module';
 import { MongoProvider } from '@common/configuration/mongo.config';
+import { AccountingModule } from './modules/accounting/accounting.module';
 import { PaymentModule } from './modules/payment/payment.module';
 
 
@@ -14,6 +15,7 @@ import { PaymentModule } from './modules/payment/payment.module';
     }),
     ReverseModule,
     PaymentModule,
+    AccountingModule,
     MongoProvider
   ],
   controllers: [],

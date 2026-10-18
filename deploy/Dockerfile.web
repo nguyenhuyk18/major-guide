@@ -1,0 +1,16 @@
+# React build served by Caddy (HTTPS + reverse proxy for /api, /socket.io, /ai).
+FROM node:22.14.0-bookworm-slim AS build
+WORKDIR /web
+ARG PUBLIC_URL_ORIGIN
+ENV REACT_APP_API_URL=${PUBLIC_URL_ORIGIN} \
+    REACT_APP_AGENTIC_AI_URL=${PUBLIC_URL_ORIGIN}/ai \
+    REACT_APP_WEBRTC_STUN_URL=stun:stun.l.google.com:19302 \
+    GENERATE_SOURCEMAP=false CI=false
+COPY package.json package-lock.json* ./
+RUN npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+COPY . .
+# Local .env files point at localhost; the values above must win.
+RUN rm -f .env .env.local .env.production .env.production.local && npm run build
+
+FROM caddy:2.8-alpine
+COPY --from=build /web/build /srv

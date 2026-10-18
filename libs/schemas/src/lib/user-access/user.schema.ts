@@ -25,6 +25,10 @@ export class ExpertInfo {
 
     @Prop({ type: Number })
     price: number;
+
+    /** Career family codes (career-family.constant.ts) this expert advises on. */
+    @Prop({ type: [String], default: undefined })
+    careerFamilies?: string[];
 }
 
 @Schema({ _id: false })

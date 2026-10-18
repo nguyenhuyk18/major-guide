@@ -1,3 +1,4 @@
+import { AccountingController } from "./controllers/accounting.controller";
 import { Module } from "@nestjs/common";
 import { BookingController } from "./controllers/booking.controller";
 import { ClientsModule } from "@nestjs/microservices";
@@ -6,7 +7,7 @@ import { PaymentController } from "./controllers/payment.controller";
 
 @Module({
     imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.BOOKING_SERVICE)])],
-    controllers: [BookingController, PaymentController]
+    controllers: [BookingController, PaymentController, AccountingController]
 })
 export class BookingModule {
 

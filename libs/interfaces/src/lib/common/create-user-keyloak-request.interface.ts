@@ -1,7 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString, ValidateNested } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString, ValidateNested, IsOptional, IsArray, ArrayMaxSize, IsIn } from "class-validator";
 import { Type } from 'class-transformer';
 import { LEVEL_USER } from "@common/constant/enum/level-user.constant";
+import { CAREER_FAMILY_CODES, MAX_EXPERT_CAREER_FAMILIES } from "@common/constant/enum/career-family.constant";
 import { ROLE } from "@common/constant/enum/action.constant";
 import { SEX_USER } from "@common/constant/enum/sex-user.constant";
 import { StatusAccount } from "@common/constant/enum/status-account.constant";
@@ -32,6 +33,13 @@ export class ExpertInfoRequest {
     @IsNumber()
     @IsNotEmpty()
     price: number;
+
+    @ApiProperty({ required: false, type: [String], enum: CAREER_FAMILY_CODES, description: 'Nhóm ngành tư vấn (tối đa 3)' })
+    @IsOptional()
+    @IsArray()
+    @ArrayMaxSize(MAX_EXPERT_CAREER_FAMILIES)
+    @IsIn(CAREER_FAMILY_CODES, { each: true })
+    careerFamilies?: string[];
 }
 
 export class MemberInfo {

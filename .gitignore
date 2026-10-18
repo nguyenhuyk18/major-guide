@@ -46,3 +46,9 @@ Thumbs.db
 
 docker
 agentic-ai
+# deploy secrets / bundles
+deploy/.env.production
+deploy/out/
+deploy/data/
+*.pem
+deploy/.env.ecs

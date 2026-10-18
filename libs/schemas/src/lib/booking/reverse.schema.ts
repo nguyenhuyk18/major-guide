@@ -58,6 +58,14 @@ export class Reverse extends Base {
     @Prop({ type: Date })
     payment_expires_at: Date;
 
+    // Snapshot of what was actually charged (VND). price_support is owed to the
+    // expert; platform_fee is MajorGuide revenue.
+    @Prop({ type: Number })
+    amount_paid: number;
+
+    @Prop({ type: Number })
+    platform_fee: number;
+
     @Prop({ type: String })
     email_customer: string;
 
@@ -78,6 +86,10 @@ export class Reverse extends Base {
 
     @Prop({ type: Date, default: null })
     joinAt: Date;
+
+    /** Demo booking for testing video calls: the room is open every day and it is left out of revenue. */
+    @Prop({ type: Boolean, default: false })
+    is_demo: boolean;
 
     // @Prop({  })
 

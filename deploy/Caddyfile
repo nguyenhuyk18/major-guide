@@ -1,0 +1,26 @@
+# HTTPS is issued automatically by Let's Encrypt for {$DOMAIN} (e.g. 13-250-1-2.sslip.io).
+{$DOMAIN} {
+	encode zstd gzip
+
+	# AI service: FE calls https://DOMAIN/ai/... -> agentic-ai:8000/...
+	handle_path /ai/* {
+		reverse_proxy agentic-ai:8000
+	}
+
+	# REST API + Stripe webhook (/api/v2/...)
+	handle /api/* {
+		reverse_proxy bff:3300
+	}
+
+	# Chat, notifications and video-call signalling (BFF forwards to the chat service)
+	handle /socket.io/* {
+		reverse_proxy bff:3300
+	}
+
+	# React app (client-side routing falls back to index.html)
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}

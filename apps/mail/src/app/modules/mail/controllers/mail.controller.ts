@@ -23,6 +23,32 @@ export class MailController {
         @Inject(TCP_SERVICE.MEDIA_SERVICE) private readonly mediaService: TcpClient
     ) { }
 
+    private escapeHtml(value: string) {
+        return String(value || '').replace(/[&<>'"]/g, character => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+        }[character] || character));
+    }
+
+    @EventPattern(MAIL_SERVICE_RABBIT_MESSAGE.SEND_ADMIN_EMAIL)
+    async sendAdminAiEmail(
+        @RequestParams() data: { to: string; subject: string; content: string; requestedBy: string; actionId: string },
+        @Ctx() context: RmqContext,
+    ) {
+        try {
+            await this.mailService.sendEmail({
+                to: data.to,
+                subject: this.escapeHtml(data.subject).slice(0, 150),
+                html: `<div style="font-family:Arial,sans-serif;line-height:1.7"><h2>Thông báo từ MajorGuide</h2><p>${this.escapeHtml(data.content).replace(/\n/g, '<br>')}</p></div>`,
+            });
+            this.logger.log(`Admin AI email sent. actionId=${data.actionId} requestedBy=${data.requestedBy}`);
+            context.getChannelRef().ack(context.getMessage());
+        } catch (error) {
+            this.logger.error(`Admin AI email failed. actionId=${data?.actionId || 'unknown'}`, error);
+            const channel = context.getChannelRef();
+            channel.nack(context.getMessage(), false, false);
+        }
+    }
+
 
     @EventPattern(MAIL_SERVICE_RABBIT_MESSAGE.CONTACT_MAIL)
     async sendEmailContact(@RequestParams() data: ContactMailRequest, @Ctx() context: RmqContext) {
@@ -170,7 +196,7 @@ export class MailController {
 
         } catch (error) {
             this.logger.error(`❌ Failed to process contact mail:`, error);
-            throw error;
+            context.getChannelRef().nack(context.getMessage(), false, false);
         }
     }
 
@@ -212,8 +238,8 @@ export class MailController {
             context.getChannelRef().ack(context.getMessage());
 
         } catch (error) {
-            this.logger.error(`❌ Failed to send invoice mail to ${data.email}:`, error);
-            throw error;
+            this.logger.error(`❌ Failed to send invoice mail to ${data?.email || 'unknown'}:`, error);
+            context.getChannelRef().nack(context.getMessage(), false, false);
         }
     }
 }

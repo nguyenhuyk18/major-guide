@@ -1,0 +1,462 @@
+[
+ {
+  "scores": {
+   "toan": 9,
+   "vat_li": 8.5,
+   "hoa_hoc": 8,
+   "ngu_van": 6.5,
+   "ngoai_ngu": 7
+  },
+  "source": "thi_thu",
+  "expected": {
+   "it_software": {
+    "fit": 0.8233,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "engineering": {
+    "fit": 0.8076,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "architecture_construction": {
+    "fit": 0.8233,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "business_management": {
+    "fit": 0.7608,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "marketing_communication": {
+    "fit": 0.6359,
+    "combo": "A01",
+    "total": 24.5,
+    "percentile": 0.8867
+   },
+   "finance_economics": {
+    "fit": 0.8233,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "arts_design": {
+    "fit": 0.6202,
+    "combo": "A01",
+    "total": 24.5,
+    "percentile": 0.8867
+   },
+   "humanities_language": {
+    "fit": 0.5356,
+    "combo": "D01",
+    "total": 22.5,
+    "percentile": 0.775
+   },
+   "psychology_counseling": {
+    "fit": 0.52,
+    "combo": "D01",
+    "total": 22.5,
+    "percentile": 0.775
+   },
+   "education": {
+    "fit": 0.831,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "social_work": {
+    "fit": 0.52,
+    "combo": "D01",
+    "total": 22.5,
+    "percentile": 0.775
+   },
+   "law_public": {
+    "fit": 0.667,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "health_medicine": {
+    "fit": 0.7608,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "life_sciences": {
+    "fit": 0.7608,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "physical_sciences_math": {
+    "fit": 0.8233,
+    "combo": "A00",
+    "total": 25.5,
+    "percentile": 0.935
+   },
+   "hospitality_tourism": {
+    "fit": 0.6515,
+    "combo": "A01",
+    "total": 24.5,
+    "percentile": 0.8867
+   },
+   "sports_fitness": {
+    "fit": 0.635,
+    "combo": "D01",
+    "total": 22.5,
+    "percentile": 0.775
+   }
+  }
+ },
+ {
+  "scores": {
+   "toan": 6,
+   "ngu_van": 8.5,
+   "lich_su": 8,
+   "dia_li": 8.75,
+   "ngoai_ngu": 6.5
+  },
+  "source": "thi_thu",
+  "expected": {
+   "it_software": {
+    "fit": 0.4249,
+    "combo": "D01",
+    "total": 21.0,
+    "percentile": 0.64
+   },
+   "engineering": {
+    "fit": 0.0,
+    "combo": null,
+    "total": null,
+    "percentile": null
+   },
+   "architecture_construction": {
+    "fit": 0.4249,
+    "combo": "D01",
+    "total": 21.0,
+    "percentile": 0.64
+   },
+   "business_management": {
+    "fit": 0.4405,
+    "combo": "D01",
+    "total": 21.0,
+    "percentile": 0.64
+   },
+   "marketing_communication": {
+    "fit": 0.7419,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   },
+   "finance_economics": {
+    "fit": 0.4249,
+    "combo": "D01",
+    "total": 21.0,
+    "percentile": 0.64
+   },
+   "arts_design": {
+    "fit": 0.8044,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   },
+   "humanities_language": {
+    "fit": 0.7419,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   },
+   "psychology_counseling": {
+    "fit": 0.8044,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   },
+   "education": {
+    "fit": 0.8267,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   },
+   "social_work": {
+    "fit": 0.8044,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   },
+   "law_public": {
+    "fit": 0.8044,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   },
+   "health_medicine": {
+    "fit": 0.0,
+    "combo": null,
+    "total": null,
+    "percentile": null
+   },
+   "life_sciences": {
+    "fit": 0.0,
+    "combo": null,
+    "total": null,
+    "percentile": null
+   },
+   "physical_sciences_math": {
+    "fit": 0.0,
+    "combo": null,
+    "total": null,
+    "percentile": null
+   },
+   "hospitality_tourism": {
+    "fit": 0.6794,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   },
+   "sports_fitness": {
+    "fit": 0.8267,
+    "combo": "C00",
+    "total": 25.25,
+    "percentile": 0.9
+   }
+  }
+ },
+ {
+  "scores": {
+   "toan": 9,
+   "hoa_hoc": 9,
+   "sinh_hoc": 9.25,
+   "ngu_van": 5.5,
+   "ngoai_ngu": 6
+  },
+  "source": "thi_thu",
+  "expected": {
+   "it_software": {
+    "fit": 0.7664,
+    "combo": "D07",
+    "total": 24.0,
+    "percentile": 0.8767
+   },
+   "engineering": {
+    "fit": 0.7664,
+    "combo": "D07",
+    "total": 24.0,
+    "percentile": 0.8767
+   },
+   "architecture_construction": {
+    "fit": 0.5499,
+    "combo": "D01",
+    "total": 20.5,
+    "percentile": 0.59
+   },
+   "business_management": {
+    "fit": 0.6726,
+    "combo": "D07",
+    "total": 24.0,
+    "percentile": 0.8767
+   },
+   "marketing_communication": {
+    "fit": 0.3467,
+    "combo": "D01",
+    "total": 20.5,
+    "percentile": 0.59
+   },
+   "finance_economics": {
+    "fit": 0.7664,
+    "combo": "D07",
+    "total": 24.0,
+    "percentile": 0.8767
+   },
+   "arts_design": {
+    "fit": 0.3467,
+    "combo": "D01",
+    "total": 20.5,
+    "percentile": 0.59
+   },
+   "humanities_language": {
+    "fit": 0.3467,
+    "combo": "D01",
+    "total": 20.5,
+    "percentile": 0.59
+   },
+   "psychology_counseling": {
+    "fit": 0.6966,
+    "combo": "B00",
+    "total": 27.25,
+    "percentile": 0.9923
+   },
+   "education": {
+    "fit": 0.9287,
+    "combo": "B00",
+    "total": 27.25,
+    "percentile": 0.9923
+   },
+   "social_work": {
+    "fit": 0.3467,
+    "combo": "D01",
+    "total": 20.5,
+    "percentile": 0.59
+   },
+   "law_public": {
+    "fit": 0.3467,
+    "combo": "D01",
+    "total": 20.5,
+    "percentile": 0.59
+   },
+   "health_medicine": {
+    "fit": 0.9075,
+    "combo": "B00",
+    "total": 27.25,
+    "percentile": 0.9923
+   },
+   "life_sciences": {
+    "fit": 0.9075,
+    "combo": "B00",
+    "total": 27.25,
+    "percentile": 0.9923
+   },
+   "physical_sciences_math": {
+    "fit": 0.8997,
+    "combo": "B00",
+    "total": 27.25,
+    "percentile": 0.9923
+   },
+   "hospitality_tourism": {
+    "fit": 0.3624,
+    "combo": "D01",
+    "total": 20.5,
+    "percentile": 0.59
+   },
+   "sports_fitness": {
+    "fit": 0.9287,
+    "combo": "B00",
+    "total": 27.25,
+    "percentile": 0.9923
+   }
+  }
+ },
+ {
+  "scores": {
+   "toan": 8.5,
+   "ngu_van": 8.8,
+   "ngoai_ngu": 9.2,
+   "vat_li": 8,
+   "hoa_hoc": 8.3,
+   "sinh_hoc": 8.1,
+   "lich_su": 8.6,
+   "dia_li": 8.9,
+   "gdcd": 9.4
+  },
+  "source": "hoc_ba",
+  "expected": {
+   "it_software": {
+    "fit": 0.5928,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   },
+   "engineering": {
+    "fit": 0.5503,
+    "combo": "D07",
+    "total": 26.0,
+    "percentile": 0.9771
+   },
+   "architecture_construction": {
+    "fit": 0.5928,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   },
+   "business_management": {
+    "fit": 0.6147,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   },
+   "marketing_communication": {
+    "fit": 0.6283,
+    "combo": "D14",
+    "total": 26.6,
+    "percentile": 0.985
+   },
+   "finance_economics": {
+    "fit": 0.5928,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   },
+   "arts_design": {
+    "fit": 0.6116,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   },
+   "humanities_language": {
+    "fit": 0.6437,
+    "combo": "D15",
+    "total": 26.9,
+    "percentile": 0.9875
+   },
+   "psychology_counseling": {
+    "fit": 0.6116,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   },
+   "education": {
+    "fit": 0.6358,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   },
+   "social_work": {
+    "fit": 0.6312,
+    "combo": "D15",
+    "total": 26.9,
+    "percentile": 0.9875
+   },
+   "law_public": {
+    "fit": 0.6116,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   },
+   "health_medicine": {
+    "fit": 0.5388,
+    "combo": "B08",
+    "total": 25.8,
+    "percentile": 0.988
+   },
+   "life_sciences": {
+    "fit": 0.5471,
+    "combo": "D07",
+    "total": 26.0,
+    "percentile": 0.9771
+   },
+   "physical_sciences_math": {
+    "fit": 0.5659,
+    "combo": "D07",
+    "total": 26.0,
+    "percentile": 0.9771
+   },
+   "hospitality_tourism": {
+    "fit": 0.6562,
+    "combo": "D15",
+    "total": 26.9,
+    "percentile": 0.9875
+   },
+   "sports_fitness": {
+    "fit": 0.6358,
+    "combo": "D01",
+    "total": 26.5,
+    "percentile": 0.99
+   }
+  }
+ }
+]

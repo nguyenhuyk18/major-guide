@@ -9,10 +9,15 @@ export class MailService {
     private readonly logger = new Logger(MailService.name);
 
     constructor(private configService: ConfigService) {
+        const port = configService.get<number>('MAIL_CONFIG.PORT') || 587;
         this.transporter = nodemailer.createTransport({
             host: configService.get<string>('MAIL_CONFIG.HOST'),
-            port: configService.get<number>('MAIL_CONFIG.PORT'),
-            secure: false,
+            port,
+            secure: port === 465,
+            requireTLS: port === 587,
+            connectionTimeout: 10_000,
+            greetingTimeout: 10_000,
+            socketTimeout: 20_000,
             auth: {
                 user: configService.get<string>('MAIL_CONFIG.USER'),
                 pass: configService.get<string>('MAIL_CONFIG.PASS'),

@@ -6,6 +6,7 @@ export class UpdateExpertInfoTcp {
     major?: string;
     level?: LEVEL_USER;
     price?: number;
+    careerFamilies?: string[];
 }
 
 export class UpdateMemberInfoTcp {

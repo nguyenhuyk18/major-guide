@@ -1,7 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString, IsNumber, IsEnum, ValidateNested } from "class-validator";
+import { IsOptional, IsString, IsNumber, IsEnum, ValidateNested, IsArray, ArrayMaxSize, IsIn } from "class-validator";
 import { Type } from "class-transformer";
 import { LEVEL_USER } from "@common/constant/enum/level-user.constant";
+import { CAREER_FAMILY_CODES, MAX_EXPERT_CAREER_FAMILIES } from "@common/constant/enum/career-family.constant";
 
 export class UpdateExpertInfoDto {
     @ApiProperty({ required: false, description: 'Nơi giảng dạy' })
@@ -28,6 +29,13 @@ export class UpdateExpertInfoDto {
     @IsOptional()
     @IsNumber()
     price?: number;
+
+    @ApiProperty({ required: false, type: [String], enum: CAREER_FAMILY_CODES, description: 'Nhóm ngành tư vấn (tối đa 3)' })
+    @IsOptional()
+    @IsArray()
+    @ArrayMaxSize(MAX_EXPERT_CAREER_FAMILIES)
+    @IsIn(CAREER_FAMILY_CODES, { each: true })
+    careerFamilies?: string[];
 }
 
 export class UpdateMemberInfoDto {

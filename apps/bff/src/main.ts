@@ -69,6 +69,11 @@ async function bootstrap() {
       res.json(documentFactory());
     });
 
+    // Health check cho ALB / ECS
+    app.getHttpAdapter().get(`/${globalPrefix.replace(/^\/+/, '')}/health`, (req, res) => {
+      res.json({ status: 'ok' });
+    });
+
     // set up port cho module này nó chạy
     const port = AppModule.CONFIGURATION.APP_CONFIG.PORT || 3000;
 

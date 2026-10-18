@@ -5,10 +5,13 @@
 
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ensureRabbitTopology } from '@common/configuration/rabbit-topology';
 import { AppModule } from './app/app.module';
 import { MicroserviceOptions } from '@nestjs/microservices';
 
 async function bootstrap() {
+  // Exchanges/queues must exist before the RMQ clients bind to them (fresh broker).
+  await ensureRabbitTopology();
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
 
@@ -17,7 +20,7 @@ async function bootstrap() {
     {
       transport: AppModule.CONFIGURATION.TCP_SERV.TCP_SLOT_SERVICE.transport,
       options: {
-        host: AppModule.CONFIGURATION.TCP_SERV.TCP_SLOT_SERVICE.options.host,
+        host: '0.0.0.0', // listen on every interface; *_HOST is only for callers
         port: AppModule.CONFIGURATION.TCP_SERV.TCP_SLOT_SERVICE.options.port
       },
     },

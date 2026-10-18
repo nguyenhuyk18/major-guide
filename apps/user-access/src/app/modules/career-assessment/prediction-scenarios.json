@@ -1,0 +1,3352 @@
+[
+ {
+  "id": "DD-01",
+  "name": "Nghiên cứu nổi bật (I)",
+  "answers": {
+   "R": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ],
+   "I": [
+    5,
+    5,
+    5,
+    5,
+    4
+   ],
+   "A": [
+    2,
+    2,
+    1,
+    2,
+    2
+   ],
+   "S": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "E": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "C": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.2369
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.1982
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.1111
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0957
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0746
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0447
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0396
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0378
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0326
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0324
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0291
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0188
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0149
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0118
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0097
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0072
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0049
+   }
+  ],
+  "expectTop1": [
+   "physical_sciences_math",
+   "life_sciences",
+   "it_software",
+   "engineering",
+   "health_medicine"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "life_sciences",
+   "physical_sciences_math",
+   "engineering"
+  ]
+ },
+ {
+  "id": "DD-02",
+  "name": "Thực hành - Kỹ thuật nổi bật (R)",
+  "answers": {
+   "R": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "I": [
+    4,
+    4,
+    3,
+    4,
+    4
+   ],
+   "A": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "S": [
+    1,
+    1,
+    1,
+    2,
+    1
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "C": [
+    3,
+    3,
+    3,
+    3,
+    2
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.4652
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.121
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.1165
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0871
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0404
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0299
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0298
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0212
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0206
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0169
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0161
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0115
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0056
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0055
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0048
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0047
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0031
+   }
+  ],
+  "expectTop1": [
+   "engineering",
+   "architecture_construction",
+   "it_software",
+   "physical_sciences_math"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "engineering",
+   "architecture_construction",
+   "it_software"
+  ]
+ },
+ {
+  "id": "DD-03",
+  "name": "Nghệ thuật - Sáng tạo nổi bật (A)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "I": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "A": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "S": [
+    3,
+    3,
+    2,
+    3,
+    3
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    2,
+    3
+   ],
+   "C": [
+    1,
+    1,
+    1,
+    2,
+    1
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.3373
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.1551
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.1481
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0702
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0501
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0375
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0337
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0322
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0244
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.022
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0194
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0171
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0152
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.015
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0111
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.007
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0049
+   }
+  ],
+  "expectTop1": [
+   "arts_design",
+   "humanities_language",
+   "marketing_communication"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "arts_design",
+   "humanities_language",
+   "marketing_communication"
+  ]
+ },
+ {
+  "id": "DD-04",
+  "name": "Xã hội - Hỗ trợ nổi bật (S)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    1,
+    1,
+    2
+   ],
+   "I": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "A": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ],
+   "S": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "C": [
+    2,
+    2,
+    2,
+    2,
+    1
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.322
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.1596
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.1289
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0616
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0614
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0607
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0414
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0391
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0259
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0225
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0179
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0172
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0105
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0093
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0089
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0084
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0046
+   }
+  ],
+  "expectTop1": [
+   "psychology_counseling",
+   "social_work",
+   "education",
+   "health_medicine"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "psychology_counseling",
+   "education",
+   "social_work"
+  ]
+ },
+ {
+  "id": "DD-05",
+  "name": "Quản lý - Thuyết phục nổi bật (E)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "I": [
+    2,
+    2,
+    2,
+    2,
+    1
+   ],
+   "A": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "S": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "E": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "C": [
+    4,
+    4,
+    4,
+    3,
+    4
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.3704
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.1161
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0989
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0966
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0507
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0413
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0397
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0303
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0265
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.026
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0227
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0185
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0165
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0164
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0117
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0091
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0088
+   }
+  ],
+  "expectTop1": [
+   "business_management",
+   "marketing_communication",
+   "finance_economics",
+   "law_public",
+   "hospitality_tourism"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "business_management",
+   "finance_economics",
+   "hospitality_tourism"
+  ]
+ },
+ {
+  "id": "DD-06",
+  "name": "Nghiệp vụ - Tổ chức nổi bật (C)",
+  "answers": {
+   "R": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "I": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "A": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "S": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "E": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "C": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.247
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.2013
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0976
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0873
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.059
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0453
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0415
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0406
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0352
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.034
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0315
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0201
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0187
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0168
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.011
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0096
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0035
+   }
+  ],
+  "expectTop1": [
+   "finance_economics",
+   "business_management",
+   "it_software"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "finance_economics",
+   "business_management",
+   "it_software"
+  ]
+ },
+ {
+  "id": "DD-07",
+  "name": "Mã IA: nghiên cứu + sáng tạo",
+  "answers": {
+   "R": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "I": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "A": [
+    5,
+    5,
+    5,
+    4,
+    5
+   ],
+   "S": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "E": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "C": [
+    1,
+    1,
+    1,
+    1,
+    2
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.1917
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.1391
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.1362
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.1143
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0781
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0554
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0497
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0402
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0397
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0383
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0382
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0229
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0192
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0163
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0152
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.003
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0026
+   }
+  ],
+  "expectTop1": [
+   "physical_sciences_math",
+   "life_sciences",
+   "arts_design",
+   "humanities_language",
+   "architecture_construction"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "humanities_language",
+   "arts_design",
+   "physical_sciences_math"
+  ]
+ },
+ {
+  "id": "DD-08",
+  "name": "Mã SE: xã hội + quản lý",
+  "answers": {
+   "R": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "I": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "A": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "S": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "E": [
+    5,
+    5,
+    5,
+    5,
+    4
+   ],
+   "C": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.2052
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.1656
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.1308
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0857
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.076
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0742
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0626
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0617
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0423
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0344
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0163
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.016
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0107
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0062
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0051
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0039
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0034
+   }
+  ],
+  "expectTop1": [
+   "business_management",
+   "psychology_counseling",
+   "law_public",
+   "education",
+   "hospitality_tourism",
+   "social_work"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "business_management",
+   "education",
+   "psychology_counseling"
+  ]
+ },
+ {
+  "id": "DD-09",
+  "name": "Mã RC: kỹ thuật + nghiệp vụ",
+  "answers": {
+   "R": [
+    5,
+    5,
+    5,
+    4,
+    5
+   ],
+   "I": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "A": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "S": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "C": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.3519
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.1962
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.1199
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0858
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0808
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0443
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0232
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.02
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0193
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0159
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0127
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0085
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0063
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0054
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0035
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0034
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0029
+   }
+  ],
+  "expectTop1": [
+   "engineering",
+   "it_software",
+   "finance_economics",
+   "architecture_construction"
+  ],
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "engineering",
+   "it_software",
+   "physical_sciences_math"
+  ]
+ },
+ {
+  "id": "DD-10",
+  "name": "Trả lời toàn bộ \"Bình thường\" (3)",
+  "answers": {
+   "R": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "I": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "A": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "S": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "E": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "C": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.1302
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.1209
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.1166
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0934
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0908
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0778
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0531
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0521
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0486
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0427
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0366
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0339
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0293
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0226
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0198
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0177
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0139
+   }
+  ],
+  "expectTop1": null,
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "engineering",
+   "business_management",
+   "architecture_construction"
+  ]
+ },
+ {
+  "id": "DD-11",
+  "name": "Trả lời toàn bộ \"Rất thích\" (5)",
+  "answers": {
+   "R": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "I": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "A": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "S": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "E": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "C": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.1839
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.1724
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.089
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0865
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0839
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0826
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0534
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0506
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0461
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0344
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0239
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0223
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0194
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.017
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0134
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0123
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0089
+   }
+  ],
+  "expectTop1": null,
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "engineering",
+   "business_management",
+   "architecture_construction"
+  ]
+ },
+ {
+  "id": "DD-12",
+  "name": "Trả lời toàn bộ \"Rất không thích\" (1)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "I": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "A": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "S": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "E": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "C": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  "academic": null,
+  "mlFamilies": [
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.101
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0991
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0967
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0887
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0761
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0725
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0653
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0536
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0494
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0467
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0454
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0446
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0446
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.042
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0354
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0254
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0135
+   }
+  ],
+  "expectTop1": null,
+  "expectAlignment": null,
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "humanities_language",
+   "arts_design",
+   "business_management"
+  ]
+ },
+ {
+  "id": "DD-13",
+  "name": "I nổi bật + khối B mạnh (thi thử)",
+  "answers": {
+   "R": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ],
+   "I": [
+    5,
+    5,
+    5,
+    5,
+    4
+   ],
+   "A": [
+    2,
+    2,
+    1,
+    2,
+    2
+   ],
+   "S": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "E": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "C": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ]
+  },
+  "academic": {
+   "source": "thi_thu",
+   "scores": {
+    "toan": 9,
+    "hoa_hoc": 9,
+    "sinh_hoc": 9.25,
+    "ngu_van": 5.5,
+    "ngoai_ngu": 6
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.2369
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.1982
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.1111
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0957
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0746
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0447
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0396
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0378
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0326
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0324
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0291
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0188
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0149
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0118
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0097
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0072
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0049
+   }
+  ],
+  "expectTop1": [
+   "health_medicine",
+   "life_sciences",
+   "physical_sciences_math"
+  ],
+  "expectAlignment": "aligned",
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "life_sciences",
+   "physical_sciences_math",
+   "engineering"
+  ]
+ },
+ {
+  "id": "DD-14",
+  "name": "I nổi bật + khối C mạnh, khối tự nhiên yếu (học bạ)",
+  "answers": {
+   "R": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ],
+   "I": [
+    5,
+    5,
+    5,
+    5,
+    4
+   ],
+   "A": [
+    2,
+    2,
+    1,
+    2,
+    2
+   ],
+   "S": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "E": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "C": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ]
+  },
+  "academic": {
+   "source": "hoc_ba",
+   "scores": {
+    "toan": 5,
+    "hoa_hoc": 4.5,
+    "sinh_hoc": 5,
+    "ngu_van": 8.5,
+    "lich_su": 8.75,
+    "dia_li": 9
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.2369
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.1982
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.1111
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0957
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0746
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0447
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0396
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0378
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0326
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0324
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0291
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0188
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0149
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0118
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0097
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0072
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0049
+   }
+  ],
+  "expectTop1": null,
+  "expectAlignment": "mismatch",
+  "expectRankingChanged": true,
+  "expectTop3": [
+   "life_sciences",
+   "physical_sciences_math",
+   "psychology_counseling"
+  ]
+ },
+ {
+  "id": "DD-15",
+  "name": "S nổi bật + khối C mạnh (học bạ)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    1,
+    1,
+    2
+   ],
+   "I": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "A": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ],
+   "S": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "C": [
+    2,
+    2,
+    2,
+    2,
+    1
+   ]
+  },
+  "academic": {
+   "source": "hoc_ba",
+   "scores": {
+    "toan": 6,
+    "ngu_van": 8.75,
+    "ngoai_ngu": 7,
+    "lich_su": 8.5,
+    "dia_li": 9,
+    "gdcd": 9
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.322
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.1596
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.1289
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0616
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0614
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0607
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0414
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0391
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0259
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0225
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0179
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0172
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0105
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0093
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0089
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0084
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0046
+   }
+  ],
+  "expectTop1": [
+   "psychology_counseling",
+   "social_work",
+   "education",
+   "law_public"
+  ],
+  "expectAlignment": "aligned",
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "psychology_counseling",
+   "education",
+   "social_work"
+  ]
+ },
+ {
+  "id": "DD-16",
+  "name": "E nổi bật + D01 mạnh (thi thử)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "I": [
+    2,
+    2,
+    2,
+    2,
+    1
+   ],
+   "A": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "S": [
+    3,
+    3,
+    3,
+    3,
+    3
+   ],
+   "E": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "C": [
+    4,
+    4,
+    4,
+    3,
+    4
+   ]
+  },
+  "academic": {
+   "source": "thi_thu",
+   "scores": {
+    "toan": 8.5,
+    "ngu_van": 8,
+    "ngoai_ngu": 9.5
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.3704
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.1161
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0989
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0966
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0507
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0413
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0397
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0303
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0265
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.026
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0227
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0185
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0165
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0164
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0117
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0091
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0088
+   }
+  ],
+  "expectTop1": [
+   "business_management",
+   "marketing_communication",
+   "finance_economics",
+   "law_public",
+   "hospitality_tourism"
+  ],
+  "expectAlignment": "aligned",
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "business_management",
+   "finance_economics",
+   "hospitality_tourism"
+  ]
+ },
+ {
+  "id": "DD-17",
+  "name": "R nổi bật + khối A00 mạnh (thi thử)",
+  "answers": {
+   "R": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "I": [
+    4,
+    4,
+    3,
+    4,
+    4
+   ],
+   "A": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "S": [
+    1,
+    1,
+    1,
+    2,
+    1
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "C": [
+    3,
+    3,
+    3,
+    3,
+    2
+   ]
+  },
+  "academic": {
+   "source": "thi_thu",
+   "scores": {
+    "toan": 9,
+    "vat_li": 9,
+    "hoa_hoc": 8.5,
+    "ngu_van": 6,
+    "ngoai_ngu": 6.5
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.4652
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.121
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.1165
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0871
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0404
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0299
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0298
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0212
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0206
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0169
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0161
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0115
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0056
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0055
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0048
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0047
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0031
+   }
+  ],
+  "expectTop1": [
+   "engineering",
+   "architecture_construction",
+   "it_software",
+   "physical_sciences_math"
+  ],
+  "expectAlignment": "aligned",
+  "expectRankingChanged": true,
+  "expectTop3": [
+   "engineering",
+   "it_software",
+   "architecture_construction"
+  ]
+ },
+ {
+  "id": "DD-18",
+  "name": "R nổi bật + khối A00 yếu, khối D mạnh (học bạ)",
+  "answers": {
+   "R": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "I": [
+    4,
+    4,
+    3,
+    4,
+    4
+   ],
+   "A": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "S": [
+    1,
+    1,
+    1,
+    2,
+    1
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "C": [
+    3,
+    3,
+    3,
+    3,
+    2
+   ]
+  },
+  "academic": {
+   "source": "hoc_ba",
+   "scores": {
+    "toan": 5,
+    "vat_li": 4.5,
+    "hoa_hoc": 5,
+    "ngu_van": 8,
+    "ngoai_ngu": 8.5
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.4652
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.121
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.1165
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0871
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0404
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0299
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0298
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0212
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0206
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0169
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0161
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0115
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0056
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0055
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0048
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0047
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0031
+   }
+  ],
+  "expectTop1": null,
+  "expectAlignment": "mismatch",
+  "expectRankingChanged": true,
+  "expectTop3": [
+   "engineering",
+   "it_software",
+   "architecture_construction"
+  ]
+ },
+ {
+  "id": "DD-19",
+  "name": "A nổi bật, chỉ nhập Toán–Văn–Anh (thi thử)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "I": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "A": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "S": [
+    3,
+    3,
+    2,
+    3,
+    3
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    2,
+    3
+   ],
+   "C": [
+    1,
+    1,
+    1,
+    2,
+    1
+   ]
+  },
+  "academic": {
+   "source": "thi_thu",
+   "scores": {
+    "toan": 6.5,
+    "ngu_van": 8.5,
+    "ngoai_ngu": 8
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.3373
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.1551
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.1481
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0702
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0501
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0375
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0337
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0322
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0244
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.022
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0194
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0171
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0152
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.015
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0111
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.007
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0049
+   }
+  ],
+  "expectTop1": [
+   "arts_design",
+   "humanities_language",
+   "marketing_communication"
+  ],
+  "expectAlignment": "aligned",
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "arts_design",
+   "humanities_language",
+   "marketing_communication"
+  ]
+ },
+ {
+  "id": "DD-20",
+  "name": "I nổi bật + học lực đều 8 điểm cả 9 môn (thi thử)",
+  "answers": {
+   "R": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ],
+   "I": [
+    5,
+    5,
+    5,
+    5,
+    4
+   ],
+   "A": [
+    2,
+    2,
+    1,
+    2,
+    2
+   ],
+   "S": [
+    2,
+    2,
+    2,
+    1,
+    2
+   ],
+   "E": [
+    1,
+    1,
+    2,
+    1,
+    1
+   ],
+   "C": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ]
+  },
+  "academic": {
+   "source": "thi_thu",
+   "scores": {
+    "toan": 8,
+    "ngu_van": 8,
+    "ngoai_ngu": 8,
+    "vat_li": 8,
+    "hoa_hoc": 8,
+    "sinh_hoc": 8,
+    "lich_su": 8,
+    "dia_li": 8,
+    "gdcd": 8
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.2369
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.1982
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.1111
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0957
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0746
+   },
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.0447
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0396
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0378
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0326
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0324
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0291
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0188
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.0149
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0118
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.0097
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0072
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0049
+   }
+  ],
+  "expectTop1": [
+   "physical_sciences_math",
+   "life_sciences",
+   "it_software",
+   "engineering",
+   "health_medicine"
+  ],
+  "expectAlignment": "neutral",
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "life_sciences",
+   "physical_sciences_math",
+   "engineering"
+  ]
+ },
+ {
+  "id": "DD-21",
+  "name": "Biên trên: S nổi bật + toàn bộ 10 điểm (thi thử)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    1,
+    1,
+    2
+   ],
+   "I": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "A": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ],
+   "S": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "C": [
+    2,
+    2,
+    2,
+    2,
+    1
+   ]
+  },
+  "academic": {
+   "source": "thi_thu",
+   "scores": {
+    "toan": 10,
+    "ngu_van": 10,
+    "ngoai_ngu": 10,
+    "vat_li": 10,
+    "hoa_hoc": 10,
+    "sinh_hoc": 10,
+    "lich_su": 10,
+    "dia_li": 10,
+    "gdcd": 10
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.322
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.1596
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.1289
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0616
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0614
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0607
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0414
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0391
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0259
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0225
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0179
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0172
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0105
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0093
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0089
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0084
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0046
+   }
+  ],
+  "expectTop1": [
+   "psychology_counseling",
+   "social_work",
+   "education",
+   "health_medicine"
+  ],
+  "expectAlignment": "neutral",
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "psychology_counseling",
+   "education",
+   "social_work"
+  ]
+ },
+ {
+  "id": "DD-22",
+  "name": "Biên dưới: S nổi bật + Toán–Văn–Anh đều 0 (thi thử)",
+  "answers": {
+   "R": [
+    1,
+    1,
+    1,
+    1,
+    2
+   ],
+   "I": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "A": [
+    3,
+    3,
+    3,
+    2,
+    3
+   ],
+   "S": [
+    5,
+    5,
+    5,
+    5,
+    5
+   ],
+   "E": [
+    2,
+    2,
+    2,
+    2,
+    2
+   ],
+   "C": [
+    2,
+    2,
+    2,
+    2,
+    1
+   ]
+  },
+  "academic": {
+   "source": "thi_thu",
+   "scores": {
+    "toan": 0,
+    "ngu_van": 0,
+    "ngoai_ngu": 0
+   }
+  },
+  "mlFamilies": [
+   {
+    "code": "psychology_counseling",
+    "name": "Tâm lý học",
+    "probability": 0.322
+   },
+   {
+    "code": "education",
+    "name": "Giáo dục",
+    "probability": 0.1596
+   },
+   {
+    "code": "social_work",
+    "name": "Xã hội học & Công tác xã hội",
+    "probability": 0.1289
+   },
+   {
+    "code": "law_public",
+    "name": "Luật & Khu vực công",
+    "probability": 0.0616
+   },
+   {
+    "code": "health_medicine",
+    "name": "Y tế & Điều dưỡng",
+    "probability": 0.0614
+   },
+   {
+    "code": "humanities_language",
+    "name": "Ngôn ngữ & Nhân văn",
+    "probability": 0.0607
+   },
+   {
+    "code": "business_management",
+    "name": "Kinh doanh & Quản trị",
+    "probability": 0.0414
+   },
+   {
+    "code": "marketing_communication",
+    "name": "Marketing & Truyền thông",
+    "probability": 0.0391
+   },
+   {
+    "code": "sports_fitness",
+    "name": "Thể thao & Vận động",
+    "probability": 0.0259
+   },
+   {
+    "code": "arts_design",
+    "name": "Nghệ thuật & Thiết kế",
+    "probability": 0.0225
+   },
+   {
+    "code": "physical_sciences_math",
+    "name": "Khoa học tự nhiên & Toán",
+    "probability": 0.0179
+   },
+   {
+    "code": "finance_economics",
+    "name": "Tài chính, Kế toán & Kinh tế",
+    "probability": 0.0172
+   },
+   {
+    "code": "life_sciences",
+    "name": "Khoa học sự sống",
+    "probability": 0.0105
+   },
+   {
+    "code": "engineering",
+    "name": "Kỹ thuật",
+    "probability": 0.0093
+   },
+   {
+    "code": "it_software",
+    "name": "Công nghệ thông tin",
+    "probability": 0.0089
+   },
+   {
+    "code": "hospitality_tourism",
+    "name": "Du lịch & Dịch vụ",
+    "probability": 0.0084
+   },
+   {
+    "code": "architecture_construction",
+    "name": "Kiến trúc & Xây dựng",
+    "probability": 0.0046
+   }
+  ],
+  "expectTop1": [
+   "psychology_counseling",
+   "social_work",
+   "education",
+   "health_medicine"
+  ],
+  "expectAlignment": "neutral",
+  "expectRankingChanged": false,
+  "expectTop3": [
+   "psychology_counseling",
+   "education",
+   "social_work"
+  ]
+ }
+]

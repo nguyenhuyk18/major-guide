@@ -1,0 +1,12 @@
+**/node_modules
+dist
+tmp
+.nx
+.git
+**/.env
+**/.env.*
+agentic-ai
+docker/docker_data
+deploy
+docs
+*.log

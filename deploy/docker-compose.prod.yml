@@ -1,0 +1,165 @@
+# MajorGuide on one server. Run from major-guide/deploy:
+#   docker compose --env-file .env.production -f docker-compose.prod.yml <command>
+# Only Caddy (80/443) and coturn (3478 + relay ports) are reachable from outside.
+name: majorguide
+
+x-nest: &nest
+  image: majorguide/nest:latest
+  pull_policy: never
+  env_file: .env.production
+  environment:
+    NODE_OPTIONS: --max-old-space-size=384
+    TZ: Asia/Ho_Chi_Minh
+  restart: unless-stopped
+  depends_on:
+    mongodb: { condition: service_healthy }
+    rabbitmq: { condition: service_healthy }
+    redis: { condition: service_started }
+  logging: &logging
+    driver: json-file
+    options: { max-size: 10m, max-file: "3" }
+
+services:
+  # ---------- edge ----------
+  caddy:
+    build:
+      context: ../../major-guide-fe-main
+      dockerfile: ../major-guide/deploy/Dockerfile.web
+      args:
+        PUBLIC_URL_ORIGIN: https://${DOMAIN}
+    image: majorguide/web:latest
+    environment:
+      DOMAIN: ${DOMAIN}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [bff, agentic-ai]
+    restart: unless-stopped
+    logging: *logging
+
+  coturn:
+    image: coturn/coturn:4.6
+    network_mode: host
+    command:
+      - -n
+      - --listening-port=3478
+      - --external-ip=${PUBLIC_IP}/${PRIVATE_IP}
+      - --realm=${DOMAIN}
+      - --lt-cred-mech
+      - --user=${WEBRTC_TURN_USERNAME}:${WEBRTC_TURN_CREDENTIAL}
+      - --min-port=49152
+      - --max-port=49200
+      - --fingerprint
+      - --no-cli
+      - --no-tls
+      - --no-dtls
+    restart: unless-stopped
+    logging: *logging
+
+  # ---------- infrastructure (internal only) ----------
+  mongodb:
+    image: mongo:8.2
+    command: ["--wiredTigerCacheSizeGB", "0.4"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    volumes: ["mongo_data:/data/db", "./data/restore:/restore:ro"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    logging: *logging
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--maxmemory", "128mb", "--maxmemory-policy", "allkeys-lru"]
+    restart: unless-stopped
+    logging: *logging
+
+  rabbitmq:
+    image: rabbitmq:3.12-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    volumes: ["rabbitmq_data:/var/lib/rabbitmq"]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+    restart: unless-stopped
+    logging: *logging
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.0
+    command: start-dev
+    environment:
+      JAVA_OPTS_APPEND: -Xms128m -Xmx512m
+    volumes: ["./data/keycloak:/opt/keycloak/data"]
+    restart: unless-stopped
+    logging: *logging
+
+  qdrant:
+    image: qdrant/qdrant:v1.17.1
+    volumes: ["./data/qdrant:/qdrant/storage"]
+    restart: unless-stopped
+    logging: *logging
+
+  # ---------- NestJS services (one image, see Dockerfile.nest) ----------
+  bff:
+    <<: *nest
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.nest
+    pull_policy: build
+    command: ["node", "dist/apps/bff/main.js"]
+  authorizer:
+    <<: *nest
+    command: ["node", "dist/apps/authorizer/main.js"]
+    depends_on:
+      mongodb: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      keycloak: { condition: service_started }
+  user-access:
+    <<: *nest
+    command: ["node", "dist/apps/user-access/main.js"]
+  booking:
+    <<: *nest
+    command: ["node", "dist/apps/booking/main.js"]
+  chat:
+    <<: *nest
+    command: ["node", "dist/apps/chat/main.js"]
+  mail:
+    <<: *nest
+    command: ["node", "dist/apps/mail/main.js"]
+  media:
+    <<: *nest
+    command: ["node", "dist/apps/media/main.js"]
+  slot:
+    <<: *nest
+    command: ["node", "dist/apps/slot/main.js"]
+
+  # ---------- AI service ----------
+  agentic-ai:
+    build:
+      context: ../agentic-ai
+      dockerfile: ../deploy/Dockerfile.ai
+    image: majorguide/agentic-ai:latest
+    env_file: .env.production
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+    volumes: ["hf_models:/models"]
+    depends_on: [qdrant, mongodb]
+    restart: unless-stopped
+    logging: *logging
+
+volumes:
+  mongo_data:
+  rabbitmq_data:
+  caddy_data:
+  caddy_config:
+  hf_models:

@@ -17,7 +17,10 @@ describe('ReverseService video call access', () => {
 
     const makeService = (overrides = {}) => {
         const repository = { findByUUid: jest.fn().mockResolvedValue({ ...booking, ...overrides }) };
-        const config = { getOrThrow: jest.fn().mockReturnValue('sk_test_unit') } as unknown as ConfigService;
+        const config = {
+            getOrThrow: jest.fn().mockReturnValue('sk_test_unit'),
+            get: jest.fn().mockReturnValue(45000),
+        } as unknown as ConfigService;
         return new ReverseService(repository as any, { emit: jest.fn() } as any, { emit: jest.fn() } as any, {} as any, config);
     };
 
@@ -40,5 +43,46 @@ describe('ReverseService video call access', () => {
     it('rejects a booking outside its support day', async () => {
         const result = await makeService({ day_support: '2099-01-01' }).getVideoCallAccess('booking-1', 'member-1', 'member');
         expect(result).toMatchObject({ canJoin: false, reason: 'Chưa đến ngày tư vấn' });
+    });
+
+    it('opens a demo booking on any day, still only for its own participants', async () => {
+        const service = makeService({ is_demo: true, day_support: '2020-01-01' });
+        expect(await service.getVideoCallAccess('booking-1', 'expert-1', 'expert')).toMatchObject({ canJoin: true, isDemo: true });
+        expect(await service.getVideoCallAccess('booking-1', 'stranger', 'member')).toMatchObject({ canJoin: false });
+    });
+
+    it('keeps an unpaid demo booking closed', async () => {
+        const result = await makeService({ is_demo: true, status: STATUS_BOOKING.RESERVED }).getVideoCallAccess('booking-1', 'member-1', 'member');
+        expect(result.canJoin).toBe(false);
+    });
+
+    describe('dashboard revenue', () => {
+        const paid = [
+            // Paid after the fee snapshot existed: 200k expert + 50k platform fee.
+            { ...booking, id_reverse: 'b1', price_support: 200000, amount_paid: 250000, platform_fee: 50000, payment_date: new Date() },
+            // Legacy booking without snapshot: falls back to the configured 45k fee.
+            { ...booking, id_reverse: 'b2', price_support: 100000, payment_date: new Date() },
+            // Demo booking for video-call testing: never counted.
+            { ...booking, id_reverse: 'demo', is_demo: true, price_support: 999000, amount_paid: 999000, payment_date: new Date() },
+        ];
+        const makeDashboardService = () => {
+            const repository = { findForDashboard: jest.fn().mockResolvedValue(paid) };
+            const config = { getOrThrow: jest.fn().mockReturnValue('sk_test_unit'), get: jest.fn().mockReturnValue(45000) } as unknown as ConfigService;
+            return new ReverseService(repository as any, { emit: jest.fn() } as any, { emit: jest.fn() } as any, {} as any, config);
+        };
+
+        it('reports cash collected and the platform fee separately for admins', async () => {
+            const result: any = await makeDashboardService().getDashboardData();
+            expect(result.totalRevenue).toBe(395000);
+            expect(result.platformRevenue).toBe(95000);
+            expect(result.expertEarnings).toBe(300000);
+            expect(result.monthlyRevenue).toBe(395000);
+        });
+
+        it('shows an expert only their own earnings', async () => {
+            const result: any = await makeDashboardService().getDashboardData('expert-1');
+            expect(result.totalRevenue).toBe(300000);
+            expect(result.platformRevenue).toBeUndefined();
+        });
     });
 });

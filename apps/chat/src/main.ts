@@ -22,7 +22,7 @@ async function bootstrap() {
     {
       transport: AppModule.CONFIGURATION.TCP_SERV.TCP_CHAT_SERVICE.transport,
       options: {
-        host: AppModule.CONFIGURATION.TCP_SERV.TCP_CHAT_SERVICE.options.host,
+        host: '0.0.0.0', // listen on every interface; *_HOST is only for callers
         port: AppModule.CONFIGURATION.TCP_SERV.TCP_CHAT_SERVICE.options.port
       },
     },

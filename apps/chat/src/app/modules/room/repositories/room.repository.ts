@@ -26,7 +26,7 @@ export class RoomRepository {
             : { id_expert: participantId };
 
         return this.roomModel.find(condition)
-            .sort({ updatedAt: -1 })
+            .sort({ 'last_message.createdAt': -1, updatedAt: -1 })
             .lean()
             .exec();
     }
@@ -35,7 +35,7 @@ export class RoomRepository {
         const unreadField = senderId === room.id_member ? 'unread_expert' : 'unread_member';
         return this.roomModel.findByIdAndUpdate(
             room._id,
-            { $set: { last_message: lastMessage }, $inc: { [unreadField]: 1 } },
+            { $set: { last_message: lastMessage, updatedAt: new Date() }, $inc: { [unreadField]: 1 } },
             { new: true }
         ).lean().exec();
     }

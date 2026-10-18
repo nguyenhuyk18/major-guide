@@ -2,7 +2,8 @@
 
 export enum MAIL_SERVICE_RABBIT_MESSAGE {
     CONTACT_MAIL = 'mail.contact_mail',
-    SEND_EINVOICE = 'mail.send_einvoice'
+    SEND_EINVOICE = 'mail.send_einvoice',
+    SEND_ADMIN_EMAIL = 'mail.send_admin_email'
 }
 
 export enum BOOKING_SERVICE_RABBIT_MESSAGE {
