@@ -10,7 +10,10 @@ set -euo pipefail
 export AWS_REGION=ap-southeast-1 AWS_PAGER="" MSYS_NO_PATHCONV=1
 
 GITHUB_OWNER=nguyenhuyk18
+GITHUB_OWNER_ID=115150581
 GITHUB_REPOS=(major-guide agentic-service major-guide-fe)
+# GitHub gửi sub dạng repo:<owner>@<owner-id>/<repo>@<repo-id>:ref:..., ID lấy từ https://api.github.com/repos/<owner>/<repo>
+declare -A GITHUB_REPO_IDS=([major-guide]=1112931207 [agentic-service]=1335574944 [major-guide-fe]=1120130773)
 ECR_REPOS=(majorguide/nest majorguide/agentic-ai)
 ROLE_NAME=majorguide-github-actions
 OIDC_HOST=token.actions.githubusercontent.com
@@ -44,7 +47,10 @@ else
 fi
 
 SUBS=""
-for r in "${GITHUB_REPOS[@]}"; do SUBS="$SUBS\"repo:$GITHUB_OWNER/$r:ref:refs/heads/main\","; done
+for r in "${GITHUB_REPOS[@]}"; do
+  SUBS="$SUBS\"repo:$GITHUB_OWNER/$r:ref:refs/heads/main\","
+  SUBS="$SUBS\"repo:$GITHUB_OWNER@$GITHUB_OWNER_ID/$r@${GITHUB_REPO_IDS[$r]}:ref:refs/heads/main\","
+done
 SUBS="${SUBS%,}"
 
 TRUST=$(cat <<EOF
