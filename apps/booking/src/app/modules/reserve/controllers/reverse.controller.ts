@@ -6,6 +6,7 @@ import { ReverseTcpRequest } from '@common/interfaces/tcp/booking/reverse-tcp-re
 import { CreateBookingTcpRequest } from '@common/interfaces/tcp/booking/create-booking-tcp-request.interface';
 import { ExpertJoinBookingTcpRequest } from '@common/interfaces/tcp/booking/expert-join-booking-tcp-request.interface';
 import { ReverseService } from "../services/reverse.service";
+import { BookingOverviewRequest } from '../services/booking-overview';
 import { v4 } from 'uuid'
 import { RABBIT_SERVICE } from "@common/configuration/rabbit.config";
 import { TcpClient } from '@common/interfaces/tcp/common/tcp-client.interface';
@@ -128,6 +129,11 @@ export class ReverseController {
     @MessagePattern(TCP_BOOKING_SERVICE_MESSAGE.GET_BOOKING_DASHBOARD)
     async getDashboardData(@RequestParams() data: { expertId?: string }) {
         return ResponseTcp.success(await this.reverseService.getDashboardData(data.expertId));
+    }
+
+    @MessagePattern(TCP_BOOKING_SERVICE_MESSAGE.GET_BOOKING_OVERVIEW)
+    async getBookingOverview(@RequestParams() data: BookingOverviewRequest) {
+        return ResponseTcp.success(await this.reverseService.getBookingOverview(data));
     }
 
     @MessagePattern(TCP_BOOKING_SERVICE_MESSAGE.EXPERT_JOIN_BOOKING)

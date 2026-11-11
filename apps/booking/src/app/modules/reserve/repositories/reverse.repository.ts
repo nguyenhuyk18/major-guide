@@ -108,6 +108,10 @@ export class ReverseRepository {
         }).exec();
     }
 
+    findForOverview(filter: Record<string, unknown>, sort: Record<string, 1 | -1>, limit: number) {
+        return this.reserveModel.find(filter).sort(sort).limit(limit).lean().exec();
+    }
+
     findForDashboard(expertId?: string) {
         const filter = expertId ? { id_expert: expertId } : {};
         return this.reserveModel.find(filter).sort({ createdAt: -1 }).lean().exec();

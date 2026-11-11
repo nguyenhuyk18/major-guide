@@ -110,6 +110,7 @@ export enum TCP_BOOKING_SERVICE_MESSAGE {
     CREATE_BOOKING = 'booking.create_booking',
     GET_BOOKING_BY_EXPERT = 'booking.get_booking_by_expert',
     GET_BOOKING_DASHBOARD = 'booking.get_booking_dashboard',
+    GET_BOOKING_OVERVIEW = 'booking.get_booking_overview',
     EXPERT_JOIN_BOOKING = 'booking.expert_join_booking',
     VIDEO_CALL_ACCESS = 'booking.video_call_access'
 }

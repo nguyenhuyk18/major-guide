@@ -14,6 +14,7 @@ import Stripe from 'stripe';
 import { TCP_SERVICE } from '@common/configuration/tcp.config';
 import { TCP_CHAT_SERVICE_MESSAGE } from '@common/constant/enum/tcp-message-pattern.constant';
 import { bookingAmounts } from '../../accounting/booking-ledger';
+import { BookingOverviewRequest, overviewQuery, toOverviewRow, vietnamToday } from './booking-overview';
 
 
 
@@ -285,6 +286,16 @@ export class ReverseService {
 
         const result = await this.reverseRepository.updateJoinAt(bookingId, new Date());
         return result;
+    }
+
+    async getBookingOverview(request: BookingOverviewRequest) {
+        const { filter, sort, limit } = overviewQuery(request);
+        const rows: any[] = await this.reverseRepository.findForOverview(filter, sort, limit);
+        return {
+            scope: request.scope === 'recent' ? 'recent' : 'upcoming',
+            today: vietnamToday(),
+            items: rows.map(row => toOverviewRow(row, request)),
+        };
     }
 
     async getDashboardData(expertId?: string) {

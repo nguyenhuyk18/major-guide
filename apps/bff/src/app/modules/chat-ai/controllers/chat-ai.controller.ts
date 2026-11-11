@@ -5,7 +5,9 @@ import {
   ChatAiResponseDto,
   ChatAiRagRequestDto,
   ChatAiRagResponseDto,
+  ChatAiMemberRequestDto,
 } from '../dto';
+import { sanitizeMemberActions } from '../ai-actions';
 import {
   Controller,
   Post,
@@ -38,6 +40,7 @@ const AGENTIC_AI_BASE_URL =
 export class ChatAiController {
   private readonly requestWindows = new Map<string, number[]>();
   private readonly ragRequestWindows = new Map<string, number[]>();
+  private readonly memberRequestWindows = new Map<string, number[]>();
   private readonly pendingActions = new Map<
     string,
     { adminId: string; action: any; expiresAt: number; used: boolean }
@@ -46,6 +49,17 @@ export class ChatAiController {
   constructor(
     @Inject(RABBIT_SERVICE.MAIL_SERVICE) private readonly mailClient: TcpClient
   ) {}
+
+  private enforceWindow(windows: Map<string, number[]>, userId: string, max: number, message: string) {
+    const now = Date.now();
+    const recent = (windows.get(userId) || []).filter((time) => now - time < 60_000);
+    if (recent.length >= max) throw new HttpException(message, HttpStatus.TOO_MANY_REQUESTS);
+    recent.push(now);
+    windows.set(userId, recent);
+    if (windows.size > 5000) {
+      for (const [key, times] of windows) if (!times.some((time) => now - time < 60_000)) windows.delete(key);
+    }
+  }
 
   private enforceRateLimit(adminId: string) {
     const now = Date.now();
@@ -104,9 +118,9 @@ export class ChatAiController {
   @Post()
   @ApiOkResponse({ type: ResponseDto<ChatAiResponseDto> })
   @Authorization({ secured: true })
-  @Roles([ROLE.ADMIN])
+  @Roles([ROLE.ADMIN, ROLE.EXPERT])
   @ApiOperation({
-    summary: 'Gửi tin nhắn tới AI Agent và nhận phản hồi (LLM + Tools)',
+    summary: 'Trợ lý AI cho admin/chuyên gia (LLM + Tools, dữ liệu giới hạn theo tài khoản)',
   })
   async sendMessage(
     @Body() data: ChatAiRequestDto,
@@ -114,10 +128,18 @@ export class ChatAiController {
     @Req() request: Request
   ): Promise<ResponseDto<ChatAiResponseDto>> {
     this.enforceRateLimit(user.id);
+    const isAdmin = user.roleName === ROLE.ADMIN;
     try {
       const response = await axios.post<ChatAiResponseDto>(
         `${AGENTIC_AI_BASE_URL}/chat-ai`,
-        { message: data.message, admin_id: user.id },
+        {
+          message: data.message,
+          admin_id: user.id,
+          user_id: user.id,
+          role: isAdmin ? 'admin' : 'expert',
+          name: user.name?.slice(0, 120),
+          history: (data.history || []).slice(-10),
+        },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -129,7 +151,8 @@ export class ChatAiController {
       );
       const safeResponse = {
         ...response.data,
-        actions: this.registerActions(user.id, response.data?.actions || []),
+        // Only admins may confirm actions (e.g. sending an email draft).
+        actions: isAdmin ? this.registerActions(user.id, response.data?.actions || []) : [],
       };
       return new ResponseDto<ChatAiResponseDto>({ data: safeResponse });
     } catch (error) {
@@ -185,6 +208,59 @@ export class ChatAiController {
         message: 'Email đã được đưa vào hàng đợi gửi.',
       },
     });
+  }
+
+  @Post('member')
+  @Authorization({ secured: true })
+  @Roles([ROLE.MEMBER])
+  @ApiOperation({
+    summary: 'Trợ lý AI cho học viên: tư vấn ngành, kết quả test gần nhất, gợi ý chuyên gia, hỗ trợ đặt lịch, hỏi đáp website',
+  })
+  async memberChat(
+    @Body() data: ChatAiMemberRequestDto,
+    @UserInfo() user: User,
+    @Req() request: Request
+  ) {
+    this.enforceWindow(this.memberRequestWindows, user.id, 12, 'Bạn gửi câu hỏi quá nhanh. Vui lòng chờ một phút.');
+    const internalToken = process.env['AGENTIC_INTERNAL_TOKEN']?.trim();
+    if (!internalToken)
+      throw new HttpException('AI internal authentication is not configured', HttpStatus.SERVICE_UNAVAILABLE);
+    try {
+      const response = await axios.post(
+        `${AGENTIC_AI_BASE_URL}/chat-ai/member`,
+        {
+          message: data.message,
+          user_id: user.id,
+          name: user.name?.slice(0, 120),
+          history: (data.history || []).slice(-10),
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: request.headers.authorization || '',
+            'X-Internal-Token': internalToken,
+          },
+          timeout: 90000,
+        }
+      );
+      return new ResponseDto({
+        data: {
+          type: response.data?.type === 'refusal' ? 'refusal' : 'answer',
+          message: String(response.data?.message || '').slice(0, 6000),
+          actions: sanitizeMemberActions(response.data?.actions),
+        },
+      });
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+      const status = error.response?.status;
+      const message =
+        error.response?.data?.detail ||
+        (error.code === 'ECONNABORTED' ? 'Trợ lý AI phản hồi quá lâu. Vui lòng thử lại.' : 'Trợ lý AI đang tạm thời không khả dụng.');
+      throw new HttpException(
+        typeof message === 'string' ? message : 'Trợ lý AI đang tạm thời không khả dụng.',
+        status === 503 || status === 504 ? status : HttpStatus.BAD_GATEWAY
+      );
+    }
   }
 
   @Post('rag')

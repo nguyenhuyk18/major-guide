@@ -152,6 +152,24 @@ export class BookingController {
         return new ResponseDto({ data: result.data });
     }
 
+    @Get('ai-overview')
+    @Authorization({ secured: true })
+    @Roles([ROLE.ADMIN, ROLE.EXPERT, ROLE.MEMBER])
+    @ApiOperation({ summary: 'Lịch sắp tới / lịch vừa đặt cho trợ lý AI; tự giới hạn theo tài khoản đang đăng nhập' })
+    async getBookingOverview(
+        @ProcessId() processId: string,
+        @UserInfo() userInfo: User,
+        @Query('scope') scope?: string,
+        @Query('limit') limit?: string,
+    ) {
+        const role = [ROLE.ADMIN, ROLE.EXPERT, ROLE.MEMBER].includes(userInfo.roleName as ROLE) ? userInfo.roleName : ROLE.MEMBER;
+        const result = await firstValueFrom(this.bookingService.send<any, any>(
+            TCP_BOOKING_SERVICE_MESSAGE.GET_BOOKING_OVERVIEW,
+            { data: { role, userId: userInfo.id, scope: scope === 'recent' ? 'recent' : 'upcoming', limit: Number(limit) || 10 }, processId }
+        ));
+        return new ResponseDto({ data: result.data });
+    }
+
     @Get(':bookingId/video-access')
     @Authorization({ secured: true })
     @Roles([ROLE.MEMBER, ROLE.EXPERT])
