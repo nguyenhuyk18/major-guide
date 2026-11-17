@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigModule } from '@nestjs/config';
 import {
   getConnectionToken,
   getModelToken,
@@ -23,6 +24,8 @@ integration('Accounting MongoDB persistence (isolated test database)', () => {
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [
+        // AccountingService reads the platform fee from ConfigService.
+        ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }),
         MongooseModule.forRoot(process.env['ACCOUNTING_TEST_MONGO_URI']!, {
           dbName: database,
           serverSelectionTimeoutMS: 5000,
