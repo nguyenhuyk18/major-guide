@@ -70,6 +70,9 @@ function clock(value: unknown): string | null {
 export function toOverviewRow(booking: any, viewer: BookingOverviewViewer) {
   return {
     bookingId: booking.id_reverse,
+    // Internal ids so the gateway can fill in names missing on older bookings; it strips them before replying.
+    memberId: booking.id_member || null,
+    expertId: booking.id_expert || null,
     day: booking.day_support,
     start: clock(booking.time_start),
     end: clock(booking.time_end),

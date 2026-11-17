@@ -6,7 +6,7 @@ import { TCP_SERVICE, TcpProvider } from "@common/configuration/tcp.config";
 import { PaymentController } from "./controllers/payment.controller";
 
 @Module({
-    imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.BOOKING_SERVICE)])],
+    imports: [ClientsModule.registerAsync([TcpProvider(TCP_SERVICE.BOOKING_SERVICE), TcpProvider(TCP_SERVICE.USER_ACCESS_SERVICE)])],
     controllers: [BookingController, PaymentController, AccountingController]
 })
 export class BookingModule {

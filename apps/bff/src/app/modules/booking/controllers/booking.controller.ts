@@ -1,5 +1,6 @@
 import { TCP_SERVICE } from "@common/configuration/tcp.config";
-import { TCP_BOOKING_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
+import { TCP_BOOKING_SERVICE_MESSAGE, TCP_USER_ACCESS_SERVICE_MESSAGE } from "@common/constant/enum/tcp-message-pattern.constant";
+import { idsMissingNames, withNames } from "../ai-overview";
 import { ProcessId } from "@common/decorators/processid.decorator";
 import { TcpClient } from "@common/interfaces/tcp/common/tcp-client.interface";
 import { Body, Controller, Get, Inject, Param, Post, Put, Query, Version } from "@nestjs/common";
@@ -24,7 +25,10 @@ import { PaginationResponse } from '@common/interfaces/tcp/common/pagegination-t
 @Controller('book')
 export class BookingController {
 
-    constructor(@Inject(TCP_SERVICE.BOOKING_SERVICE) private readonly bookingService: TcpClient) { }
+    constructor(
+        @Inject(TCP_SERVICE.BOOKING_SERVICE) private readonly bookingService: TcpClient,
+        @Inject(TCP_SERVICE.USER_ACCESS_SERVICE) private readonly userAccessService: TcpClient,
+    ) { }
 
     @Post()
     @ApiOkResponse({ type: ResponseDto })
@@ -167,7 +171,19 @@ export class BookingController {
             TCP_BOOKING_SERVICE_MESSAGE.GET_BOOKING_OVERVIEW,
             { data: { role, userId: userInfo.id, scope: scope === 'recent' ? 'recent' : 'upcoming', limit: Number(limit) || 10 }, processId }
         ));
-        return new ResponseDto({ data: result.data });
+        const overview = result.data || { items: [] };
+        const ids = idsMissingNames(overview.items || [], role);
+        let users: Record<string, any> = {};
+        if (ids.length) {
+            try {
+                const found = await firstValueFrom(this.userAccessService.send<Record<string, any>, { ids: string[] }>(
+                    TCP_USER_ACCESS_SERVICE_MESSAGE.GET_USER_BY_IDS, { data: { ids }, processId }));
+                users = found?.data || {};
+            } catch {
+                users = {};
+            }
+        }
+        return new ResponseDto({ data: { ...overview, items: withNames(overview.items || [], users, role) } });
     }
 
     @Get(':bookingId/video-access')
